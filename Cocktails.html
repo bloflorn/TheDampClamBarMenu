@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam — Cocktail Menu</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.75);
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --neon-purple: #c042ff;
+      --neon-pink: #ff2a8d;
+      --neon-gold: #ffd700;
+      --neon-red: #ff3344;
+      --gold-amber: #e5b567;
+      --off-white: #f8fafc;
+      --border: #16382c;
+      --font: "Georgia", Times, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--off-white);
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    nav.site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.35);
+      background: rgba(0, 247, 255, 0.08);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 7vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.45rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover { background: rgba(229, 181, 103, 0.12); }
+
+    .filter-btn.active {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 5px rgba(0, 247, 255, 0.6);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 247, 255, 0.5);
+      box-shadow: 0 0 18px rgba(0, 247, 255, 0.2);
+    }
+
+    .card.out-of-stock {
+      opacity: 0.6;
+      border-color: rgba(255, 51, 68, 0.35);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-category {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--neon-pink);
+      font-weight: bold;
+    }
+
+    .badge-out {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(255, 51, 68, 0.25);
+      border: 1px solid var(--neon-red);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-style: italic;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .card-details {
+      font-size: 0.85rem;
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+
+    .card-details strong { color: var(--gold-amber); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="spirits.html" class="nav-link">Spirits & Whiskeys</a>
+      <a href="cocktails.html" class="nav-link active">Cocktail Menu</a>
+      <a href="beer-wine.html" class="nav-link">Beer & Wine</a>
+    </nav>
+
+    <header>
+      <h1>Cocktail Menu</h1>
+    </header>
+
+    <div class="controls">
+      <div class="filters" id="filterContainer"></div>
+    </div>
+
+    <main class="grid" id="cocktailGrid"></main>
+  </div>
+
+  <script>
+    const cocktails = [
+      {
+        name: "Smoked Old Fashioned",
+        category: "House Signatures",
+        desc: "Rich, aromatic, and finished with charred Michigan applewood smoke.",
+        ingredients: "Baker's 7-Year Single Barrel, Demerara Syrup, Angostura & Orange Bitters",
+        glass: "Rocks Glass with Large Clear Ice Sphere",
+        garnish: "Expressed Orange Peel & Luxardo Cherry",
+        inStock: true
+      },
+      {
+        name: "Solstice Empress Sour",
+        category: "House Signatures",
+        desc: "Bright floral citrus that naturally transforms color in the glass.",
+        ingredients: "Empress 1908 Indigo Gin, Fresh Lemon Juice, Simple Syrup, Egg White Foam",
+        glass: "Coupe",
+        garnish: "Dehydrated Lemon Wheel & Lavender Bitters",
+        inStock: true
+      },
+      {
+        name: "Blackberry Bramble",
+        category: "House Signatures",
+        desc: "Tart, refreshing gin cocktail laced with sweet dark berry liqueur.",
+        ingredients: "The Botanist Islay Dry Gin, Fresh Lemon Juice, Simple Syrup, Crown Royal Blackberry float",
+        glass: "Rocks Glass with Crushed Ice",
+        garnish: "Fresh Blackberry & Mint Sprig",
+        inStock: true
+      },
+      {
+        name: "Maple Boulevardier",
+        category: "Classics",
+        desc: "A northern twist on the classic bitter-sweet stirred cocktail.",
+        ingredients: "Iron Fish Maple Bourbon, Campari, Sweet Vermouth",
+        glass: "Nick & Nora",
+        garnish: "Expressed Orange Twist",
+        inStock: true
+      },
+      {
+        name: "Transylvanian Mule",
+        category: "Classics",
+        desc: "Crisp, spicy, and served ice cold in copper.",
+        ingredients: "Dracula Băutură Spirtoasă, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Copper Mug",
+        garnish: "Lime Wheel & Candied Ginger",
+        inStock: true
+      },
+      {
+        name: "Wild Botanical Zero-Proof Fizz",
+        category: "Mocktails & Zero-Proof",
+        desc: "Crisp, sparkling herbal cooler with no alcohol.",
+        ingredients: "St. Elder Elderflower Essence, Fresh Lime Juice, Cucumber Ribbons, Club Soda",
+        glass: "Highball",
+        garnish: "Mint Bouquet & Lime Wheel",
+        inStock: true
+      }
+    ];
+
+    let currentCategory = "All";
+
+    function init() {
+      renderFilters();
+      renderGrid();
+    }
+
+    function renderFilters() {
+      const categories = ["All", "House Signatures", "Classics", "Mocktails & Zero-Proof"];
+      const container = document.getElementById("filterContainer");
+      container.innerHTML = categories
+        .map(cat => `<button class="filter-btn ${cat === currentCategory ? "active" : ""}" data-category="${cat}">${cat}</button>`)
+        .join("");
+
+      container.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentCategory = btn.dataset.category;
+          renderFilters();
+          renderGrid();
+        });
+      });
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("cocktailGrid");
+      const filtered = cocktails.filter(c => currentCategory === "All" || c.category === currentCategory);
+
+      grid.innerHTML = filtered.map(c => `
+        <div class="card ${!c.inStock ? 'out-of-stock' : ''}">
+          <div>
+            <div class="card-top">
+              <span class="card-category">${c.category}</span>
+              ${!c.inStock ? `<span class="badge-out">Out of Stock</span>` : ''}
+            </div>
+            <div class="card-title">${c.name}</div>
+            <div class="card-desc">${c.desc}</div>
+          </div>
+          <div class="card-details">
+            <div><strong>Ingredients:</strong> ${c.ingredients}</div>
+            <div><strong>Glassware:</strong> ${c.glass}</div>
+            <div><strong>Garnish:</strong> ${c.garnish}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    init();
+  </script>
+</body>
+</html>
