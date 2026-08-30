@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam — Spirits Inventory</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.75);
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --neon-purple: #c042ff;
+      --neon-pink: #ff2a8d;
+      --neon-gold: #ffd700;
+      --neon-red: #ff3344;
+      --gold-amber: #e5b567;
+      --off-white: #f8fafc;
+      --border: #16382c;
+      --font: "Georgia", Times, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--off-white);
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    nav.site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.35);
+      background: rgba(0, 247, 255, 0.08);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 7vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
+    }
+
+    .stats {
+      font-size: 0.85rem;
+      color: var(--gold-amber);
+      background: var(--card-bg);
+      padding: 0.4rem 1.15rem;
+      border-radius: 20px;
+      border: 1px solid var(--gold-amber);
+      margin-top: 0.3rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 480px;
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--off-white);
+      font-size: 0.9rem;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .search-bar:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.5);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.45rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover { background: rgba(229, 181, 103, 0.12); }
+
+    .filter-btn.active {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 5px rgba(0, 247, 255, 0.6), 0 0 12px rgba(0, 247, 255, 0.3);
+    }
+
+    .subfilters {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.45rem;
+      width: 100%;
+      padding-top: 0.25rem;
+    }
+
+    .subfilters.visible { display: flex; }
+
+    .subfilter-btn {
+      background: rgba(0, 0, 0, 0.25);
+      color: #94a3b8;
+      border: 1px solid #1e4a3b;
+      padding: 0.3rem 0.85rem;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .subfilter-btn:hover { color: var(--neon-green); border-color: var(--neon-green); }
+
+    .subfilter-btn.active {
+      background: rgba(57, 255, 20, 0.12);
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+      box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+    }
+
+    .category-header-panel {
+      background: rgba(2, 22, 17, 0.85);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .category-header-panel.sub-panel { border-left-color: var(--neon-green); }
+    .category-header-panel.special-panel { border-left-color: var(--neon-gold); }
+    .category-header-panel.gifted-panel { border-left-color: var(--neon-pink); }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-desc { font-size: 0.88rem; color: #e2e8f0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .card.interactive { cursor: pointer; }
+    .card.interactive:hover {
+      border-color: rgba(0, 247, 255, 0.5);
+      box-shadow: 0 0 18px rgba(0, 247, 255, 0.25);
+    }
+
+    .card.is-special {
+      border-color: rgba(255, 215, 0, 0.45);
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
+      background: linear-gradient(145deg, rgba(20, 36, 26, 0.85) 0%, rgba(2, 22, 17, 0.9) 100%);
+    }
+
+    /* Out of Stock Styling */
+    .card.out-of-stock {
+      opacity: 0.6;
+      border-color: rgba(255, 51, 68, 0.35);
+    }
+
+    .card.out-of-stock:hover {
+      border-color: var(--neon-red);
+      box-shadow: 0 0 15px rgba(255, 51, 68, 0.25);
+    }
+
+    .badge-out {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(255, 51, 68, 0.25);
+      border: 1px solid var(--neon-red);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px var(--neon-red);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    .card-badges-left {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .card-category {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--neon-pink);
+      font-weight: bold;
+    }
+
+    .card-subcategory {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--neon-green);
+      border: 1px solid rgba(57, 255, 20, 0.4);
+      background: rgba(57, 255, 20, 0.08);
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .badge-gifted {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-pink);
+      border: 1px solid rgba(255, 42, 141, 0.6);
+      background: rgba(255, 42, 141, 0.12);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(255, 42, 141, 0.5);
+    }
+
+    .badge-special {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-gold);
+      border: 1px solid rgba(255, 215, 0, 0.6);
+      background: rgba(255, 215, 0, 0.12);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    .badge-expand {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 247, 255, 0.4);
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(0, 247, 255, 0.08);
+      white-space: nowrap;
+    }
+
+    .card.expanded .badge-expand {
+      background: rgba(0, 247, 255, 0.2);
+      border-color: var(--neon-cyan);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.85rem;
+      line-height: 1.3;
+    }
+
+    .card-details {
+      font-size: 0.85rem;
+      color: var(--off-white);
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+
+    .card-details div { margin-bottom: 0.35rem; }
+    .card-details strong { color: var(--gold-amber); font-weight: 600; }
+
+    .extra-details {
+      display: none;
+      margin-top: 0.6rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      padding: 0.6rem;
+    }
+
+    .card.expanded .extra-details { display: block; }
+
+    .extra-item {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      margin-bottom: 0.35rem;
+      color: #e2e8f0;
+    }
+
+    .extra-item strong { color: var(--neon-cyan); }
+
+    .extra-item.gift-highlight {
+      background: rgba(255, 42, 141, 0.08);
+      border-left: 2px solid var(--neon-pink);
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.45rem;
+    }
+
+    .extra-item.gift-highlight strong { color: var(--neon-pink); }
+
+    .extra-item.special-highlight {
+      background: rgba(255, 215, 0, 0.08);
+      border-left: 2px solid var(--neon-gold);
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.45rem;
+    }
+
+    .extra-item.special-highlight strong { color: var(--neon-gold); }
+
+    .tasting-notes { font-style: italic; color: #cbd5e1; }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--gold-amber);
+      grid-column: 1 / -1;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="spirits.html" class="nav-link active">Spirits & Whiskeys</a>
+      <a href="cocktails.html" class="nav-link">Cocktail Menu</a>
+      <a href="beer-wine.html" class="nav-link">Beer & Wine</a>
+    </nav>
+
+    <header>
+      <h1>Spirits & Bottles</h1>
+      <div class="stats" id="totalCount">Inventory Bottles: <strong>0</strong></div>
+    </header>
+
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-bar" placeholder="SEARCH ALL SPIRITS..." />
+      <div class="filters" id="filterContainer"></div>
+      <div class="subfilters" id="subFilterContainer"></div>
+    </div>
+
+    <section id="categoryHeaderContainer"></section>
+    <main class="grid" id="inventoryGrid"></main>
+  </div>
+
+  <script>
+    const categoryInfo = {
+      "Bourbon & American Whiskey": {
+        title: "Bourbon & American Whiskies",
+        desc: "By legal definition, <strong>Bourbon</strong> must be produced in the United States from a mashbill of at least 51% corn, distilled at no higher than 160 proof, entered into new charred oak at no higher than 125 proof, and bottled at a minimum of 80 proof without added flavoring or coloring. <em>Straight Bourbon</em> requires at least two years oak aging.",
+        subs: {
+          "Straight Bourbon": "Aged in new charred oak barrels for at least two years. Emphasizes rich caramel, vanilla, and sweet corn sweetness.",
+          "Single Barrel": "Bottled individually from an unblended single cask, highlighting unique rickhouse aging variances.",
+          "Barrel Proof": "Bottled uncut and unfiltered directly at barrel proof, retaining full essential oils and bold warmth.",
+          "Finished Bourbon": "Straight bourbon matured in oak and finished in specialty casks for layered flavor notes.",
+          "Private Selection": "Exclusive single-barrel or custom stave recipe barrels hand-selected for unique flavor profiles.",
+          "Bottled in Bond": "Distilled in a single season by a single distiller, aged at least 4 years in a bonded warehouse, and bottled at 100 proof.",
+          "Rye": "Crafted from at least 51% rye, delivering crisp black pepper, peppermint, and dry baking spices.",
+          "Wheat Whiskey": "Dominant wheat mashbill that produces soft pastry sweetness and mellow oak vanilla.",
+          "American Single Malt": "Distilled from 100% malted barley at a single American distillery.",
+          "Canadian Whisky": "Smooth, light-bodied blended whisky with gentle cereal grain warmth.",
+          "Finished Whiskey": "American whiskies finished in specialty port or wine barrels for rich fruit and oak tannins.",
+          "Flavored Whiskey": "Crafted whiskey infused with natural orchard or dessert flavors.",
+          "Blended Whiskey": "A balanced marriage of straight whiskies."
+        }
+      },
+      "Scotch Whisky": {
+        title: "Scotch Whisky & Regional Profiles",
+        desc: "Mashed, fermented, distilled, and aged in oak casks for at least 3 years in Scotland across distinct regional terroir.",
+        subs: {
+          "Speyside": "World-renowned for elegant orchard fruit, heather honey sweetness, and rich sherry oak casks.",
+          "Islay": "Hebridean island known for super-heavily peated malts, bonfire smoke, maritime brine, and iodine.",
+          "Highland": "Scotland's largest region, producing robust malt, heather honey, and gentle coastal earthiness.",
+          "Lowlands": "Soft, grassy, and floral malt characteristics historically shaped by triple distillation.",
+          "Campbeltown": "Distinctive maritime salinity, subtle peat smoke, and full-bodied oily malt."
+        }
+      },
+      "Irish Whiskey": {
+        title: "Irish Whiskey Heritage",
+        desc: "Distilled and aged in Ireland for at least 3 years, celebrated for its smoothness and copper pot still tradition.",
+        subs: {
+          "Pot Still & Malt": "Combines Single Pot Still (malted & unmalted barley) with Single Malt for a velvety, spiced finish."
+        }
+      },
+      "Rum & Aquavit": {
+        title: "Cane Spirits & Nordic Botanicals",
+        desc: "Sugarcane distillates alongside Scandinavian caraway and herbal spirits.",
+        subs: {
+          "Aquavit": "Traditional Nordic spirit distilled with caraway and anise. Served ice cold.",
+          "Aged Rum": "Cask-aged rums offering coconut, banana, vanilla, and Cognac complexity.",
+          "Spiced Rum": "Infused with island spices and vanilla for punches and highballs.",
+          "White Rum": "Clean, crisp column-distilled rum for light cocktails."
+        }
+      },
+      "Gin, Vodka & Liqueurs": {
+        title: "Botanicals, Pure Spirits & Cordials",
+        desc: "Botanical gins, clean vodkas, and premium cocktail liqueurs.",
+        subs: {
+          "Dry Gin": "Classic juniper and aromatic wild botanicals.",
+          "Botanical Gin": "Modern gins infused with rare florals (like butterfly pea blossoms).",
+          "Vodka": "Clean, multi-distilled neutral spirit.",
+          "Flavored Vodka": "Infused with natural fruits and botanicals.",
+          "Liqueur": "Artisanal sweet and herbal cordials for classic cocktails."
+        }
+      },
+      "Special Bottles": {
+        title: "★ Special & Reserve Bottles",
+        desc: "A curated collection of single-barrel picks, limited cask strength bottlings, custom private stave selections, rare distillery editions, and highly allocated spirits held in The Damp Clam, which hold a particularly special place in our hearts for many reasons.",
+        subs: {}
+      },
+      "Gifted Bottles": {
+        title: "🎁 Gifted Bottles",
+        desc: "A special corner of The Damp Clam is reserved for gifts from our favorite people. Birthdays, holidays, milestones, or just because—these pours taste best shared with friends. So grab a drink, pull up a chair, and sit back—we’ve got a story to share.",
+        subs: {}
+      }
+    };
+
+    const inventory = [
+      { name: "Baker's 7-Year Single Barrel", category: "Bourbon & American Whiskey", subCategory: "Straight Bourbon", proof: "107 Proof (53.5% ABV)", size: "750 mL", details: "Single Barrel Kentucky Straight Bourbon", isSpecial: false, isGifted: false, inStock: true, extra: { age: "7 Years Old", mash: "Jim Beam High-Rye Bourbon Mash", notes: "Vanilla bean, toasted oak, brown sugar, and warm spice." } },
+      { name: "Basil Hayden Kentucky Straight Bourbon", category: "Bourbon & American Whiskey", subCategory: "Straight Bourbon", proof: "80 Proof (40% ABV)", size: "750 mL", details: "Artfully Aged, Small Batch Bourbon", isSpecial: false, isGifted: false, inStock: true },
+      { name: "Blanton's Single Barrel", category: "Bourbon & American Whiskey", subCategory: "Single Barrel", proof: "93 Proof (46.5% ABV)", size: "750 mL", details: "Single Barrel Bourbon Selection", isSpecial: false, isGifted: false, inStock: true, extra: { barrel: "Barrel #64, Rick #109, Warehouse H", dumpDate: "Dumped 7-29-24", notes: "Sweet citrus, caramel, baking spices, creamy vanilla, and light tobacco." } },
+      { name: "Bulleit Bourbon Single Barrel", category: "Bourbon & American Whiskey", subCategory: "Single Barrel", proof: "104 Proof (52% ABV)", size: "750 mL", details: "Total Wine & More MI Selection", isSpecial: false, isGifted: false, inStock: true, extra: { barrel: "Barrel #2-E4-1364", notes: "Bold oak char, orchard fruit, leather, and peppercorn rye spice." } },
+      { name: "Bulleit American Single Malt", category: "Bourbon & American Whiskey", subCategory: "American Single Malt", proof: "90 Proof (45% ABV)", size: "750 mL", details: "Frontier Whiskey", isSpecial: false, isGifted: false, inStock: true },
+      { name: "Calumet Farm 15-Year Single Rack Black", category: "Bourbon & American Whiskey", subCategory: "Straight Bourbon", proof: "105 Proof (52.5% ABV)", size: "750 mL", details: "Kentucky Straight Bourbon Whiskey, Aged 15 Years", isSpecial: true, isGifted: true, inStock: true, extra: { giftNotes: "Gifted by Kyle for André's 34th birthday.", barrel: "Hand Selected Single Rack (Center Cut), Mash: 74% Corn, 18% Rye, 8% Malted Barley", notes: "Deep rich cherry, vintage oak, dark molasses, leather, vanilla pipe tobacco, and cocoa." } },
+      { name: "Canada House Canadian Whisky", category: "Bourbon & American Whiskey", subCategory: "Canadian Whisky", proof: "80 Proof (40% ABV)", size: "750 mL", details: "Imported Canadian Whisky", isSpecial: false, isGifted: false, inStock: true },
+      { name: "Grit City Straight Bourbon Whiskey", category: "Bourbon & American Whiskey", subCategory: "Straight Bourbon", proof: "90 Proof (45% ABV)", size: "750 mL", details: "Crafted by BOTLD, Detroit / Motor City", isSpecial: false, isGifted: false, inStock: true },
+      { name: "Iron Fish Bourbon Finished in Maple Syrup Barrels", category: "Bourbon & American Whiskey", subCategory: "Finished Bourbon", proof: "86 Proof (43% ABV)", size: "750 mL", details: "Farm Blended, Batch #80, Bottled by KS", isSpecial: false, isGifted: false, inStock: true, extra: { cask: "Aged in Oak, Finished in Charred Maple Syrup Barrels", notes: "Rich maple syrup richness, butterscotch, toasted pecan, and vanilla." } },
+      { name: "J. Henry & Sons Wisconsin Straight Bourbon (Batch 83)", category: "Bourbon & American Whiskey", subCategory: "Straight Bourbon", proof: "92 Proof (46% ABV)", size: "750 mL", details: "Small Batch, Batch #83, Bottle #5072", isSpecial: false, isGifted: false, inStock: true, extra: { grain: "Heritage Red Heirloom Corn,
