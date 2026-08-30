@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Damp Clam Inventory</title>
+  <title>The Damp Clam — Home</title>
   <style>
     :root {
-      /* Speakeasy Theme Colors */
       --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
       --card-bg: rgba(2, 22, 17, 0.75);
-      
-      /* Neon Accent Palette */
       --neon-cyan: #00f7ff;
       --neon-green: #39ff14;
       --neon-purple: #c042ff;
@@ -19,21 +16,212 @@
       --gold-amber: #e5b567;
       --off-white: #f8fafc;
       --border: #16382c;
-
       --font: "Georgia", Times, serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: var(--font);
       background-image: var(--bg-gradient);
       background-attachment: fixed;
       color: var(--off-white);
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    /* Top Global Navigation Bar */
+    nav.site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.35);
+      background: rgba(0, 247, 255, 0.08);
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .logo-circle-container {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      padding: 3px;
+      background: radial-gradient(circle, rgba(0, 247, 255, 0.25) 0%, transparent 70%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan), 0 0 25px rgba(0, 247, 255, 0.45);
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .logo-circle-container img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
+    }
+
+    .header-subtext {
+      font-size: 0.95rem;
+      color: var(--gold-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    /* Navigation Hub Cards */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .hub-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .hub-card:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .hub-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hub-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hub-desc {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .hub-btn {
+      align-self: center;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.4rem 1.25rem;
+      border-radius: 20px;
+      background: rgba(229, 181, 103, 0.08);
+      transition: all 0.2s ease;
+    }
+
+    .hub-card:hover .hub-btn {
+      color: #fff;
+      border-color: var(--neon-cyan);
+      background: rgba(0, 247, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="spirits.html" class="nav-link">Spirits & Whiskeys</a>
+      <a href="cocktails.html" class="nav-link">Cocktail Menu</a>
+      <a href="beer-wine.html" class="nav-link">Beer & Wine</a>
+    </nav>
+
+    <header>
+      <div class="logo-circle-container">
+        <img src="logo.jpg" alt="The Damp Clam Logo" />
+      </div>
+      <h1>The Damp Clam</h1>
+      <div class="header-subtext">Speakeasy & Lounge</div>
+    </header>
+
+    <main class="hub-grid">
+      <a href="spirits.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🥃</div>
+          <div class="hub-title">Spirits & Whiskeys</div>
+          <div class="hub-desc">Explore single barrels, rare Scotch regions, custom stave recipes, and allocated reserve pours.</div>
+        </div>
+        <span class="hub-btn">View Spirits</span>
+      </a>
+
+      <a href="cocktails.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🍸</div>
+          <div class="hub-title">Craft Cocktails</div>
+          <div class="hub-desc">House signatures, speakeasy classics, seasonal specials, and zero-proof mocktails.</div>
+        </div>
+        <span class="hub-btn">View Cocktails</span>
+      </a>
+
+      <a href="beer-wine.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🍺</div>
+          <div class="hub-title">Beer & Wine</div>
+          <div class="hub-desc">Craft drafts, crisp lagers, IPAs, ciders, and rotating wine selections.</div>
+        </div>
+        <span class="hub-btn">View Taps & Cans</span>
+      </a>
+    </main>
+  </div>
+</body>
+</html>
       padding: 1.5rem 1rem;
       min-height: 100vh;
     }
