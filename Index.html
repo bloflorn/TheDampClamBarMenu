@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam Inventory</title>
+  <style>
+    :root {
+      /* Speakeasy Theme Colors */
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.75);
+      
+      /* Neon Accent Palette */
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --neon-purple: #c042ff;
+      --neon-pink: #ff2a8d;
+      --neon-gold: #ffd700;
+      --gold-amber: #e5b567;
+      --off-white: #f8fafc;
+      --border: #16382c;
+
+      --font: "Georgia", Times, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--off-white);
+      padding: 1.5rem 1rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header & Circular Masked Neon Clam Sign */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      width: 100%;
+    }
+
+    .logo-circle-container {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      padding: 3px;
+      background: radial-gradient(circle, rgba(0, 247, 255, 0.25) 0%, transparent 70%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 
+        0 0 10px var(--neon-cyan),
+        0 0 25px rgba(0, 247, 255, 0.45),
+        inset 0 0 12px var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .logo-circle-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 7vw, 2.75rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-align: center;
+      width: 100%;
+      line-height: 1.15;
+      padding-left: 0.12em;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--neon-cyan),
+        0 0 35px var(--neon-purple);
+    }
+
+    .header-subtext {
+      font-family: var(--font);
+      font-size: clamp(0.75rem, 3vw, 0.95rem);
+      color: var(--gold-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      text-align: center;
+      width: 100%;
+      padding-left: 0.2em;
+    }
+
+    .stats {
+      font-size: 0.9rem;
+      color: var(--gold-amber);
+      background: var(--card-bg);
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--gold-amber);
+      margin-top: 0.5rem;
+    }
+
+    .stats strong {
+      color: #fff;
+    }
+
+    /* Controls & Search */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 480px;
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--off-white);
+      font-size: 0.9rem;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .search-bar:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.5);
+    }
+
+    /* Main Category Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.45rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: inherit;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .filter-btn:hover {
+      background: rgba(229, 181, 103, 0.12);
+    }
+
+    .filter-btn.active {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 
+        0 0 5px rgba(0, 247, 255, 0.6),
+        0 0 12px rgba(0, 247, 255, 0.3);
+    }
+
+    /* Subcategory Filter Pill Row */
+    .subfilters {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.45rem;
+      width: 100%;
+      padding-top: 0.25rem;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .subfilters.visible {
+      display: flex;
+    }
+
+    .subfilter-btn {
+      background: rgba(0, 0, 0, 0.25);
+      color: #94a3b8;
+      border: 1px solid #1e4a3b;
+      padding: 0.3rem 0.85rem;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: inherit;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .subfilter-btn:hover {
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+    }
+
+    .subfilter-btn.active {
+      background: rgba(57, 255, 20, 0.12);
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+      box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+    }
+
+    /* Educational / Category Info Sub-Header Panel */
+    .category-header-panel {
+      background: rgba(2, 22, 17, 0.85);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .category-header-panel.sub-panel {
+      border-left-color: var(--neon-green);
+    }
+
+    .category-header-panel.special-panel {
+      border-left-color: var(--neon-gold);
+    }
+
+    .category-header-panel.gifted-panel {
+      border-left-color: var(--neon-pink);
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-desc {
+      font-size: 0.88rem;
+      color: #e2e8f0;
+    }
+
+    /* Card Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .card.interactive {
+      cursor: pointer;
+    }
+
+    .card.interactive:hover {
+      border-color: rgba(0, 247, 255, 0.5);
+      box-shadow: 0 0 18px rgba(0, 247, 255, 0.25);
+    }
+
+    /* Special Bottle Card Highlighting */
+    .card.is-special {
+      border-color: rgba(255, 215, 0, 0.45);
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
+      background: linear-gradient(145deg, rgba(20, 36, 26, 0.85) 0%, rgba(2, 22, 17, 0.9) 100%);
+    }
+
+    .card.is-special.interactive:hover {
+      border-color: var(--neon-gold);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    .card-badges-left {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .card-category {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--neon-pink);
+      font-weight: bold;
+    }
+
+    .card-subcategory {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--neon-green);
+      border: 1px solid rgba(57, 255, 20, 0.4);
+      background: rgba(57, 255, 20, 0.08);
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .badge-gifted {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-pink);
+      border: 1px solid rgba(255, 42, 141, 0.6);
+      background: rgba(255, 42, 141, 0.12);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(255, 42, 141, 0.5);
+    }
+
+    .badge-special {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-gold);
+      border: 1px solid rgba(255, 215, 0, 0.6);
+      background: rgba(255, 215, 0, 0.12);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    .badge-expand {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 247, 255, 0.4);
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(0, 247, 255, 0.08);
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .card.expanded .badge-expand {
+      background: rgba(0, 247, 255, 0.2);
+      border-color: var(--neon-cyan);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.85rem;
+      line-height: 1.3;
+    }
+
+    .card-details {
+      font-size: 0.85rem;
+      color: var(--off-white);
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+
+    .card-details div {
+      margin-bottom: 0.35rem;
+    }
+
+    .card-details strong {
+      color: var(--gold-amber);
+      font-weight: 600;
+    }
+
+    /* Extended Interactive Section */
+    .extra-details {
+      display: none;
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed rgba(229, 181, 103, 0.3);
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      padding: 0.6rem;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .card.expanded .extra-details {
+      display: block;
+    }
+
+    .extra-item {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      margin-bottom: 0.35rem;
+      color: #e2e8f0;
+    }
+
+    .extra-item strong {
+      color: var(--neon-cyan);
+    }
+
+    .extra-item.gift-highlight {
+      background: rgba(255, 42, 141, 0.08);
+      border-left: 2px solid var(--neon-pink);
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.45rem;
+    }
+
+    .extra-item.gift-highlight strong {
+      color: var(--neon-pink);
+    }
+
+    .extra-item.special-highlight {
+      background: rgba(255, 215, 0, 0.08);
+      border-left: 2px solid var(--neon-gold);
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.45rem;
+    }
+
+    .extra-item.special-highlight strong {
+      color: var(--neon-gold);
+    }
+
+    .tasting-notes {
+      font-style: italic;
+      color: #cbd5e1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--gold-amber);
+      grid-column: 1 / -1;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-circle-container">
+        <img src="logo.jpg" alt="The Damp Clam Logo" />
+      </div>
+
+      <h1>The Damp Clam</h1>
+      <div class="header-subtext">Speakeasy & Lounge</div>
+      <div class="stats" id="totalCount">Inventory Bottles: <strong>0</strong></div>
+    </header>
+
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-bar" placeholder="SEARCH ALL SPIRITS..." />
+      <div class="filters" id="filterContainer"></div>
+      <div class="subfilters" id="subFilterContainer"></div>
+    </div>
+
+    <section id="categoryHeaderContainer"></section>
+
+    <main class="grid" id="inventoryGrid"></main>
+  </div>
+
+  <script>
+    // Primary Category & Granular Subcategory Descriptions
+    const categoryInfo = {
+      "Bourbon & American Whiskey": {
+        title: "Bourbon & American Whiskies",
+        desc: "By legal definition, <strong>Bourbon</strong> must be produced in the United States from a mashbill of at least 51% corn, distilled at no higher than 160 proof (80% ABV), entered into new charred oak containers at no higher than 125 proof (62.5% ABV), and bottled at a minimum of 80 proof without added coloring or flavoring. <em>Straight Bourbon</em> requires a minimum of two years of oak aging, while <em>Bottled in Bond</em> mandates distillation in a single season by a single distiller, aged at least four years in a federally bonded warehouse, and bottled at exactly 100 proof.",
+        subs: {
+          "Straight Bourbon": "Aged in new charred oak barrels for at least two years. The traditional heart of American whiskey, emphasizing rich caramel, toasted wood, vanilla, and sweet corn sweetness.",
+          "Single Barrel": "Bottled individually from an unblended single oak cask rather than married batches, highlighting unique rickhouse position nuances and distinct flavor variance.",
+          "Barrel Proof": "Bottled uncut and unfiltered directly at the exact proof drawn from the barrel, retaining maximum essential barrel oils, depth, and bold warmth.",
+          "Finished Bourbon": "Straight bourbon matured in traditional charred oak and transferred into secondary specialty casks (such as Maple Syrup or Virgin Oak Staves) for layered complexity.",
+          "Private Selection": "Exclusive single-barrel or custom stave recipe barrels hand-selected by purveyors and stewards, offering one-of-a-kind flavor expressions.",
+          "Bottled in Bond": "Adhering to the historic 1897 standards: distilled in a single season by a single distiller, aged at least 4 years in a bonded warehouse, and bottled at 100 proof.",
+          "Rye": "Crafted from a grain bill of at least 51% rye, delivering a crisp, bold spirit accented by cracked peppercorn, peppermint, nutmeg, and dry baking spices.",
+          "Wheat Whiskey": "Made with a dominant proportion of wheat in the mashbill, softening harsh alcohol edges to produce a gentle, creamy sweetness and warm honey pastry notes.",
+          "American Single Malt": "Distilled in the United States from 100% malted barley at a single distillery, presenting clean grain characteristics and distinct American terroir.",
+          "Canadian Whisky": "Blended imported whisky renowned for smooth, light-bodied drinkability and gentle cereal grain warmth.",
+          "Finished Whiskey": "American whiskies finished in fortified wine or spirit barrels (such as Ruby Port) to impart rich stone fruit, dark chocolate, and wine tannin accents.",
+          "Flavored Whiskey": "Crafted whiskey infused with natural dessert and orchard notes for cocktails and easy sipping.",
+          "Blended Whiskey": "A harmonious blend of distinct straight whiskies balanced for smooth, versatile character."
+        }
+      },
+      "Scotch Whisky": {
+        title: "Scotch Whisky & Regional Profiles",
+        desc: "Scotch whisky must be mashed, fermented, distilled, and aged in oak casks for a minimum of 3 years in Scotland. Across the traditional and recognized distilling regions, local peat sources, microclimates, and water shape distinct regional flavor expressions.",
+        subs: {
+          "Speyside": "Densely populated along the River Spey; world-renowned for elegant orchard fruits (crisp apple, pear), floral honey, gentle malt sweetness, and rich sherry oak casks.",
+          "Islay": "Exposed, windswept Hebridean island legendary for super-heavily peated single malts, pungent bonfire smoke, maritime sea spray, iodine, and brine.",
+          "Highland": "Scotland's largest geographical whisky region, producing rich, diverse profiles with notes of heather honey, citrus, malted barley, and gentle coastal earthiness.",
+          "Highlands": "Scotland's largest geographical whisky region, producing rich, diverse profiles with notes of heather honey, citrus, malted barley, and gentle coastal earthiness.",
+          "Lowlands": "Known for gentle grassy meadows, citrus zest, toast, and an approachable, soft malt profile historically shaped by triple distillation.",
+          "Campbeltown": "Once Scotland's whisky capital; famous for distinctive maritime brine, wet rope, subtle peat smoke, and full-bodied oily malt.",
+          "Islands": "Coastal island single malts (Orkney, Skye, Mull, Jura, Arran) offering maritime salinity, sweet heather honey, and subtle peat smoke."
+        }
+      },
+      "Irish Whiskey": {
+        title: "Irish Whiskey Heritage",
+        desc: "Distilled and aged on the island of Ireland for at least three years in wooden casks. Celebrated for its smooth drinkability, Irish whiskey pioneered the signature copper pot still method.",
+        subs: {
+          "Pot Still & Malt": "A classic blend marrying silky Single Pot Still (malted & unmalted barley) with Single Malt, delivering creaminess, orchard fruit, and a vibrant pot-still spice kick."
+        }
+      },
+      "Rum & Aquavit": {
+        title: "Cane Spirits & Nordic Botanicals",
+        desc: "Essential tropical sugarcane distillates alongside classic caraway-infused Scandinavian spirits.",
+        subs: {
+          "Aquavit": "The traditional spirit of Scandinavia and Iceland, distilled with caraway, anise, and regional herbs. Served ice cold (Drekkist Ískalt).",
+          "Aged Rum": "Sugarcane and molasses rums aged in oak casks across the Caribbean, developing layers of toasted coconut, ripe banana, vanilla, and Cognac complexity.",
+          "Spiced Rum": "Rum infused with natural spices, vanilla, and island aromatics tailored for highballs and tropical punches.",
+          "White Rum": "Light, clean column-distilled rum filtered for smooth, crisp cocktail mixing."
+        }
+      },
+      "Gin, Vodka & Liqueurs": {
+        title: "Botanicals, Pure Spirits & Cordials",
+        desc: "Vapor-infused botanical gins, crisp multi-distilled grain vodkas, and premium artisanal cordial liqueurs for mixology.",
+        subs: {
+          "Dry Gin": "Classic juniper-forward gin distilled with wild botanicals for a clean, aromatic herbal backbone.",
+          "Botanical Gin": "Modern gins infused with rare florals and blossoms (like Butterfly Pea Flower) that shift color when mixed.",
+          "Vodka": "Ultra-pure, multi-distilled clean grain spirits crafted for ultimate smoothness.",
+          "Flavored Vodka": "Natural fruit and botanical infused vodkas designed for creative cocktails.",
+          "Liqueur": "Artisanal sweet and herbal cordials infused with elderflower, citrus peels, and regional spices."
+        }
+      },
+      "Special Bottles": {
+        title: "★ Special & Reserve Bottles",
+        desc: "A curated collection of single-barrel picks, limited cask strength bottlings, custom private stave selections, rare distillery editions, and highly allocated spirits held in The Damp Clam, which hold a particularly special place in our hearts for many reasons.",
+        subs: {}
+      },
+      "Gifted Bottles": {
+        title: "🎁 Gifted Bottles",
+        desc: "A special corner of The Damp Clam is reserved for gifts from our favorite people. Birthdays, holidays, milestones, or just because—these pours taste best shared with friends. So grab a drink, pull up a chair, and sit back—we’ve got a story to share.",
+        subs: {}
+      }
+    };
+
+    const inventory = [
+      // Bourbon & American Whiskey
+      { 
+        name: "Baker's 7-Year Single Barrel", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "107 Proof (53.5% ABV)", 
+        size: "750 mL", 
+        details: "Single Barrel Kentucky Straight Bourbon",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          age: "7 Years Old",
+          mash: "Jim Beam High-Rye Bourbon Mash",
+          notes: "Vanilla bean, toasted oak, caramelized brown sugar, nutmeg, and warm spice finish."
+        }
+      },
+      { 
+        name: "Basil Hayden Kentucky Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "80 Proof (40% ABV)", 
+        size: "750 mL", 
+        details: "Artfully Aged, Small Batch Bourbon",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Blanton's Single Barrel", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "93 Proof (46.5% ABV)", 
+        size: "750 mL", 
+        details: "Single Barrel Bourbon Selection",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          barrel: "Barrel #64, Rick #109, Warehouse H",
+          dumpDate: "Dumped 7-29-24",
+          notes: "Sweet citrus, caramel, baking spices, creamy vanilla, and light tobacco."
+        }
+      },
+      { 
+        name: "Bulleit Bourbon Single Barrel", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "104 Proof (52% ABV)", 
+        size: "750 mL", 
+        details: "Total Wine & More MI Selection",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          barrel: "Barrel #2-E4-1364",
+          notes: "Bold oak char, orchard fruit, leather, and prominent peppercorn rye spice."
+        }
+      },
+      { 
+        name: "Bulleit American Single Malt", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "American Single Malt",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Frontier Whiskey",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Calumet Farm 15-Year Single Rack Black", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "105 Proof (52.5% ABV)", 
+        size: "750 mL", 
+        details: "Kentucky Straight Bourbon Whiskey, Aged 15 Years",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by Kyle for André's 34th birthday.",
+          barrel: "Hand Selected Single Rack (Center Cut), Mash: 74% Corn, 18% Rye, 8% Malted Barley",
+          notes: "Deep rich cherry, vintage oak, dark molasses, leather, vanilla pipe tobacco, and lingering cocoa."
+        }
+      },
+      { 
+        name: "Canada House Canadian Whisky", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Canadian Whisky",
+        proof: "80 Proof (40% ABV)", 
+        size: "750 mL", 
+        details: "Imported Canadian Whisky",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Grit City Straight Bourbon Whiskey", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Crafted by BOTLD, Detroit / Motor City",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Iron Fish Bourbon Finished in Maple Syrup Barrels", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Finished Bourbon",
+        proof: "86 Proof (43% ABV)", 
+        size: "750 mL", 
+        details: "Farm Blended, Batch #80, Bottled by KS",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          cask: "Aged in Oak, Finished in Charred Northern Michigan Maple Syrup Barrels",
+          notes: "Rich maple syrup richness, butterscotch, toasted pecan, and warm vanilla."
+        }
+      },
+      { 
+        name: "J. Henry & Sons Wisconsin Straight Bourbon (Batch 83)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "Small Batch, Batch #83, Bottle #5072",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          grain: "Heritage Red Heirloom Corn, Spooner Rye, and Malted Barley",
+          notes: "Earthy spice, sweet dried apricot, honey, dark chocolate, and toasted marshmallow."
+        }
+      },
+      { 
+        name: "J. Henry & Sons Wisconsin Straight Bourbon (Batch 88)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "Small Batch, Batch #88, Bottle #3464",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          grain: "Heritage Red Heirloom Corn grown in Dane County, WI",
+          notes: "Caramelized dates, cedar wood, cinnamon bread, and roasted walnut."
+        }
+      },
+      { 
+        name: "Journeyman Last Feather Rye Whiskey", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Rye",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Handmade Organic, Batch #180, Bottle #225",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          mash: "60% Organic Rye, 40% Organic Wheat",
+          notes: "Banana bread, cereal grain, clove, black pepper, and silky wheat mouthfeel."
+        }
+      },
+      { 
+        name: "Kirkland Signature Small Batch Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "92 Proof (46% ABV)", 
+        size: "1 L", 
+        details: "Kentucky Straight Bourbon, Barton 1792 Master Distillers",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Lincoln Straight Bourbon Whiskey", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "112 Proof (56% ABV)", 
+        size: "750 mL", 
+        details: "Straight Bourbon Whiskey",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Maker's Mark Kentucky Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Star Hill Farm, Handmade Kentucky Straight Bourbon",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Maker's Mark 101 Proof Limited Release", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "101 Proof (50.5% ABV)", 
+        size: "750 mL", 
+        details: "Signature Family Recipe Bottled at a Higher Proof, Handmade Kentucky Straight Bourbon",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Maker's Mark Cask Strength (Batch 23-01)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Barrel Proof",
+        proof: "110.0 Proof (55.0% ABV)", 
+        size: "375 mL", 
+        details: "Kentucky Straight Bourbon Whisky, Undiluted Representation of Maker's Mark at Barrel Proof",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          barrel: "Batch 23-01",
+          notes: "Rich oak, deep vanilla, spiced fruit, caramel, and a robust barrel-proof finish."
+        }
+      },
+      { 
+        name: "Maker's Mark Wood Finishing Series: The Steward's Release 2026", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Finished Bourbon",
+        proof: "110.8 Proof (55.4% ABV)", 
+        size: "750 mL", 
+        details: "Batch BRX-26, Finished with 10 Virgin Oak Staves",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          staves: "10 Virgin Toasted Oak Staves",
+          notes: "Intense toasted oak, dark plum, bittersweet baker's chocolate, and warming allspice."
+        }
+      },
+      { 
+        name: "Maker's Mark 2023 Private Selection", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "109.4 Proof (54.7% ABV)", 
+        size: "375 mL", 
+        details: "Custom Barrel Selection",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          staves: "0-2-0-4-4 (0 Pure, 2 Cuvee, 0 MM46, 4 Mendiant, 4 Spice)",
+          id: "110-AZX0412 (April 2023)",
+          notes: "Mendiant chocolate, dried fruit, confectioner's sugar, and clove."
+        }
+      },
+      { 
+        name: "Maker's Mark Private Selection - Grandpa's Cigar Box", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "109.8 Proof (54.9% ABV)", 
+        size: "375 mL", 
+        details: "Custom Barrel Stave Recipe Selection",
+        isSpecial: true,
+        isGifted: false,
+        extra: {
+          staves: "0-2-0-4-4 (0 Pure, 2 Cuvee, 0 MM46, 4 Mocha, 4 Spice) | ID: 110-AZX0411 (April 2023)",
+          notes: "Rich cedar humidor, roasted coffee beans, dark baker's chocolate, charred vanilla, and bold clove spice."
+        }
+      },
+      { 
+        name: "Maker's Mark Private Selection - Grandpa's New Cigar Box", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "110.5 Proof (55.25% ABV)", 
+        size: "750 mL", 
+        details: "National Beverage of Kalamazoo-KBC Selection, Finished with 10 Selected Oak Staves",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by Chris for André for Christmas 2024.",
+          bottle: "Bottle No. 007 / 246",
+          staves: "0-3-2-3-2 (0 Baked American Pure 2, 3 Seared French Cuvee, 2 Maker's Mark 46, 3 Roasted French Mendiant, 2 Toasted French Spice)",
+          date: "October 2023 | ID: 110-AZX010",
+          notes: "Cedar cigar box aromatics, toasted caramel, baking spices, rich mendiant cocoa, and lingering sweet French oak spice."
+        }
+      },
+      { 
+        name: "Maker's Mark Private Selection - Selected by MEGA-BEV", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "111.8 Proof (55.9% ABV)", 
+        size: "750 mL", 
+        details: "Limited Edition Series, Finished with 10 Oak Staves",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          bottle: "No. 202 / 246",
+          staves: "1-3-0-4-2 (1 Baked American Pure 2, 3 Seared French Cuvee, 0 Maker's Mark 46, 4 Roasted French Mocha, 2 Toasted French Spice)",
+          id: "110-AZX0110",
+          notes: "Dark chocolate mocha, toasted caramel, rich almond, warm clove, and sweet vanilla honeycomb."
+        }
+      },
+      { 
+        name: "Maker's Mark Private Selection - Meijer Steward Select (Ole Kentucky Farm)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "112.0 Proof (56.0% ABV)", 
+        size: "750 mL", 
+        details: "Limited Edition Series, Finished with 10 Oak Staves",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          bottle: "No. 002 / 252",
+          staves: "3-2-2-0-3 (3 Baked American Pure 2, 2 Seared French Cuvee, 2 Maker's Mark 46, 0 Roasted French Mendiant, 3 Toasted French Spice)",
+          id: "110-AZX019",
+          notes: "Bright orchard fruit, vanilla bean, baking spice warmth, creamy caramel, and toasted oak."
+        }
+      },
+      { 
+        name: "Maker's Mark Private Selection - Meijer Steward Select (Spring Training)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Private Selection",
+        proof: "112.4 Proof (56.2% ABV)", 
+        size: "750 mL", 
+        details: "Limited Edition Series, Finished with 10 Oak Staves",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          bottle: "No. 245 / 246",
+          staves: "3-3-1-2-1 (3 Baked American Pure 2, 3 Seared French Cuvee, 1 Maker's Mark 46, 2 Roasted French Mendiant, 1 Toasted French Spice)",
+          id: "110-AZX019",
+          notes: "Layered vanilla honey, toasted caramel, almond, baking spices, milk chocolate, and orange peel with clove."
+        }
+      },
+      { 
+        name: "New Riff Bottled in Bond Straight Bourbon (Spring 2016)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Bottled in Bond",
+        proof: "100 Proof (50% ABV)", 
+        size: "750 mL", 
+        details: "Distilled Spring 2016, Sour Mash, Bottled in Bond",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          mash: "65% Corn, 30% Rye, 5% Malted Barley (Non-Chill Filtered)",
+          notes: "Spiced cherry, butterscotch, roasted corn sweetness, and minty rye kick."
+        }
+      },
+      { 
+        name: "New Riff 8-Year Kentucky Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Barrel Proof",
+        proof: "Barrel Proof", 
+        size: "750 mL", 
+        details: "Aged 8 Years, Non-Chill Filtered",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          age: "8 Years Aged in Kentucky",
+          notes: "Deep leather, cured tobacco, blackberry jam, dark honey, and seasoned oak."
+        }
+      },
+      { 
+        name: "New Riff Single Barrel Bourbon (Barrel 29683)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "110.3 Proof (55.15% ABV)", 
+        size: "750 mL", 
+        details: "Single Barrel Selection, Non-Chill Filtered",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          barrel: "Barrel #29683",
+          notes: "Toffee, black cherry, cinnamon stick, and long warming oak spice."
+        }
+      },
+      { 
+        name: "New Riff Single Barrel Bourbon (Barrel 16-10206)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "103.6 Proof (51.8% ABV)", 
+        size: "750 mL", 
+        details: "Sour Mash, Barrel #16-10206",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "New Riff Single Barrel Bourbon (Distiller David Miller)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "109.4 Proof (54.7% ABV)", 
+        size: "750 mL", 
+        details: "Distilled Feb 2020 / Bottled Mar 2024",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          distiller: "David Miller | Barrel #25492",
+          notes: "Vanilla pudding, charred cedar, brown sugar glaze, and allspice."
+        }
+      },
+      { 
+        name: "New Riff Single Barrel Bourbon (Distiller Mac Harris)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "116 Proof (58% ABV)", 
+        size: "750 mL", 
+        details: "Distilled Feb 2020 / Bottled Mar 2024",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          distiller: "Mac Harris | Barrel #25168",
+          notes: "High heat spice, molasses, espresso bean, and dark caramel."
+        }
+      },
+      { 
+        name: "New Riff Single Barrel Bourbon (Barrel Proof)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "Barrel Proof", 
+        size: "750 mL", 
+        details: "Single Barrel Selection",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "St. Julian Caramel Apple Whiskey", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Flavored Whiskey",
+        proof: "70 Proof (35% ABV)", 
+        size: "750 mL", 
+        details: "Handcrafted in Small Batches",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Town Branch Kentucky Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Lexington Distilling Co., Small Batch",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Traverse City Whiskey Co. XXX Bourbon Single Barrel", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Single Barrel",
+        proof: "95 Proof (47.5% ABV)", 
+        size: "750 mL", 
+        details: "Aged 5 Years",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          barrel: "Barrel #20-1046, Rack E7, Bottle #160/186",
+          notes: "Sweet corn, toasted coconut, honey butter, and light oak."
+        }
+      },
+      { 
+        name: "Traverse City Whiskey Co. Barrel Proof Straight Bourbon 9 Years", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Barrel Proof",
+        proof: "118 Proof (59% ABV)", 
+        size: "750 mL", 
+        details: "Signature Edition / Stillhouse Exclusive",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          bottle: "Bottle #150/162 (9 Years Old)",
+          notes: "Viscous caramel, stewed black fruit, leather, pipe tobacco, and rich vanilla."
+        }
+      },
+      { 
+        name: "Traverse City Whiskey Co. Barrel Proof Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Barrel Proof",
+        proof: "112.74 Proof (56.37% ABV)", 
+        size: "750 mL", 
+        details: "Signature Edition",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Traverse City Whiskey Co. Straight Wheat Whiskey Barrel Proof (Meijer Steward Select)", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Wheat Whiskey",
+        proof: "116.2 Proof (58.1% ABV)", 
+        size: "750 mL", 
+        details: "Signature Edition / Meijer Steward Select, Aged 5 Years",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          bottle: "Bottle #94 / 206",
+          aging: "Aged 5 Years, Uncut and Bottled at Full Barrel Proof",
+          distillation: "Distilled in Indiana, Produced and Bottled in Traverse City, MI",
+          notes: "Creamy soft wheat sweetness, warm honey, vanilla cream, toasted pastry, and rich barrel oak spice."
+        }
+      },
+      { 
+        name: "Traveller Whiskey Blend No. 40", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Blended Whiskey",
+        proof: "90 Proof (45% ABV)", 
+        size: "750 mL", 
+        details: "Blended Whiskey by Chris Stapleton & Buffalo Trace",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Woodford Reserve Distiller's Select Straight Bourbon", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Straight Bourbon",
+        proof: "90.4 Proof (45.2% ABV)", 
+        size: "1.75 L", 
+        details: "Proprietary Batch, Label Batch #3462, Bottle #0043",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Woodford Reserve Distillery Series Blended Malt", 
+        category: "Bourbon & American Whiskey", 
+        subCategory: "Finished Whiskey",
+        proof: "90.4 Proof (45.2% ABV)", 
+        size: "375 mL", 
+        details: "Finished in Ruby Port Barrels, Bottling Date 2024",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          cask: "Finished in Ruby Port Casks",
+          notes: "Rich red berry compote, dark cacao, hazelnut, and lingering wine tannin."
+        }
+      },
+
+      // Scotch Whisky
+      { 
+        name: "Benromach 15-Year Speyside Single Malt", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "86 Proof (43% ABV)", 
+        size: "700 mL", 
+        details: "First-Fill Cask Matured, Speyside Single Malt",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by Kyle as a housewarming gift for the elective eviction from the Cloisters.",
+          cask: "Matured exclusively in First-Fill Bourbon and First-Fill Sherry Casks",
+          notes: "Cracked black pepper, charred Seville orange, dried fruit cake, stewed plum, and whisper of delicate peat smoke."
+        }
+      },
+      { 
+        name: "Craigellachie 13-Year Speyside Single Malt", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "No Chill-Filtering, Natural Colour, Speyside",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          notes: "Baked apples, grilled pineapple, sulfurous complexity, malt sweetness, and a touch of bonfire smoke."
+        }
+      },
+      { 
+        name: "Glenfiddich 12-Year Amontillado Sherry Cask Finish", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "86 Proof (43% ABV)", 
+        size: "750 mL", 
+        details: "Special Edition Twelve, Malt Master Brian Kinsman",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          cask: "Finished in Amontillado Sherry Casks",
+          notes: "Nutty almond complexity, fresh pear, crisp apple, cinnamon, and subtle fruit sweetness."
+        }
+      },
+      { 
+        name: "Glenfiddich 14-Year Our Bourbon Barrel Reserve", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "86 Proof (43% ABV)", 
+        size: "375 mL", 
+        details: "Special Edition Fourteen, US Exclusive Gift Pack",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          cask: "Finished in Deep-Char New American Oak Barrels",
+          notes: "Vanilla fudge, baked apple, toasted coconut, creamy toffee, and caramelized oak."
+        }
+      },
+      { 
+        name: "Octomore Edition 15.1 Super Heavily Peated Single Malt", 
+        category: "Scotch Whisky", 
+        subCategory: "Islay",
+        proof: "118.2 Proof (59.1% ABV)", 
+        size: "700 mL", 
+        details: "Bruichladdich Distillery, Islay Single Malt",
+        isSpecial: true,
+        isGifted: false,
+        extra: {
+          specialNotes: "André's first Octomore. He's very proud of it.",
+          specs: "108.2 PPM Peat, 5 Years Old, 100% Scottish Mainland Barley (Concerto Grain), First-Fill Ex-Bourbon Casks",
+          notes: "Explosive bonfire peat, smoked bacon, caramelized lemon peel, vanilla custard, mango, and intense sea spray."
+        }
+      },
+      { 
+        name: "Tamdhu 10-Year Speyside Single Malt", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "86 Proof (43% ABV)", 
+        size: "750 mL", 
+        details: "Matured in Sherry Casks, Speyside",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          cask: "100% Sherry Oak Casks",
+          notes: "Sugared almonds, dried orange peel, raisin bread, cinnamon spice, and clean malt."
+        }
+      },
+      { 
+        name: "The Exclusive Malts Tomintoul 10-Year Single Cask", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "112.4 Proof (56.2% ABV)", 
+        size: "750 mL", 
+        details: "Speyside Single Malt, Distilled 24th March 2006, Bottled May 2016",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by Kyle for the late night assistance of installing a dryer at the house on retard street.",
+          cask: "Cask #21012 (Refill Butt), 1 of only 324 Bottles worldwide. Cask Strength & Natural Colour.",
+          notes: "Sherry sweetness, rich dried sultanas, candied citrus peel, toasted malt, and gentle warming oak spice."
+        }
+      },
+      { 
+        name: "The Glen Grant 12-Year Speyside Single Malt", 
+        category: "Scotch Whisky", 
+        subCategory: "Speyside",
+        proof: "86 Proof (43% ABV)", 
+        size: "750 mL", 
+        details: "Rothes Speyside Single Malt",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Tomatin Single Malt Scotch Whisky", 
+        category: "Scotch Whisky", 
+        subCategory: "Highland",
+        proof: "86 Proof (43% ABV)", 
+        size: "750 mL", 
+        details: "Highland Single Malt Scotch Whisky",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by Kyle for André's 33rd birthday.",
+          cask: "Bourbon and Spanish Sherry Casks",
+          notes: "Fresh green apples, pear drops, golden syrup, light malted barley, and creamy vanilla custard."
+        }
+      },
+
+      // Irish Whiskey
+      { 
+        name: "Writers' Tears Double Oak Irish Whiskey", 
+        category: "Irish Whiskey", 
+        subCategory: "Pot Still & Malt",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "Aged in American Oak and French Cognac Casks",
+        isSpecial: true,
+        isGifted: true,
+        extra: {
+          giftNotes: "Gifted by the DeLisle Associates staff to André for Bosses Day.",
+          blend: "Single Pot Still & Single Malt Irish Whiskey",
+          notes: "Sweet vanilla, poached pear, spiced citrus, plum compote, toasted oak, and lingering chocolate fruit finish."
+        }
+      },
+
+      // Rum & Aquavit
+      { 
+        name: "Bacardi Superior White Rum", 
+        category: "Rum & Aquavit", 
+        subCategory: "White Rum",
+        proof: "80 Proof (40% ABV)", 
+        size: "1.75 L", 
+        details: "Ron Superior Carta Blanca, Puerto Rico",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Brennivín The Original Icelandic Spirit Aquavit", 
+        category: "Rum & Aquavit", 
+        subCategory: "Aquavit",
+        proof: "75 Proof (37.5% ABV)", 
+        size: "500 mL", 
+        details: "The Original Icelandic Spirit, Produced and Bottled in Iceland (Síðan 1935)",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          origin: "Ölgerðin Egill Skallagrímsson, Reykjavík, Iceland",
+          notes: "Pure caraway seed, soft herbal notes, crisp anise, and a smooth, clean arctic finish. Drekkist Ískalt (serve ice cold)."
+        }
+      },
+      { 
+        name: "Brennivín Rúgbrauð Edition Aquavit", 
+        category: "Rum & Aquavit", 
+        subCategory: "Aquavit",
+        proof: "80 Proof (40% ABV)", 
+        size: "700 mL", 
+        details: "Icelandic Aquavit Infused with Rye Bread",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          origin: "Reykjavík, Iceland",
+          notes: "Caraway seed, anise, freshly baked dense rye bread, molasses, and subtle botanicals."
+        }
+      },
+      { 
+        name: "Planteray Barbados Rum Aged 5 Years", 
+        category: "Rum & Aquavit", 
+        subCategory: "Aged Rum",
+        proof: "80 Proof (40% ABV)", 
+        size: "750 mL", 
+        details: "Old Traditional Rum, Double Aged",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          aging: "Bourbon barrels in Barbados, then French Cognac casks in France",
+          notes: "Toasted coconut, roasted banana, vanilla bean, dried fruits, and light baking spices."
+        }
+      },
+      { 
+        name: "Sailor Jerry Spiced Rum", 
+        category: "Rum & Aquavit", 
+        subCategory: "Spiced Rum",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "Norman 'Sailor Jerry' Collins Tattoo Edition",
+        isSpecial: false,
+        isGifted: false 
+      },
+
+      // Gin, Vodka & Liqueurs
+      { 
+        name: "Dracula Băutură Spirtoasă", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Liqueur",
+        proof: "36 Proof (18% ABV)", 
+        size: "200 mL", 
+        details: "European Drinks Speciality from Transylvania (Băutură Spirtoasă)",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          origin: "Transylvania, Romania (European Drinks)",
+          notes: "Unique regional Romanian spirit specialty crafted with traditional Transylvanian botanicals and spirits."
+        }
+      },
+      { 
+        name: "Empress 1908 Indigo Gin", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Botanical Gin",
+        proof: "85 Proof (42.5% ABV)", 
+        size: "750 mL", 
+        details: "Infused with Butterfly Pea Blossom, Victoria Distillers",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          botanicals: "Butterfly Pea Blossom, Fairmont Empress Tea, Juniper, Grapefruit Peel, Coriander, Ginger Root, Cinnamon",
+          notes: "Bright floral juniper, gentle warm citrus, delicate earthiness, natural indigo color-changing profile."
+        }
+      },
+      { 
+        name: "Fireball Cinnamon Whisky", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Liqueur",
+        proof: "66 Proof (33% ABV)", 
+        size: "750 mL", 
+        details: "Whisky with Natural Cinnamon Flavor",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Kirkland Signature American Vodka", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Vodka",
+        proof: "80 Proof (40% ABV)", 
+        size: "1.75 L", 
+        details: "Distilled Six Times, Gluten Free",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Mr. Boston Blue Curaçao Liqueur", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Liqueur",
+        proof: "30 Proof (15% ABV)", 
+        size: "750 mL", 
+        details: "Master Mixologist Series",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Smirnoff Peppermint Twist Limited Edition", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Flavored Vodka",
+        proof: "60 Proof (30% ABV)", 
+        size: "750 mL", 
+        details: "Vodka with Peppermint, Scratch & Sniff Bottle",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "St. Elder Natural Elderflower Liqueur", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Liqueur",
+        proof: "40 Proof (20% ABV)", 
+        size: "750 mL", 
+        details: "Natural Premium Artisanal Liqueur",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "The Botanist Islay Dry Gin", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Dry Gin",
+        proof: "92 Proof (46% ABV)", 
+        size: "750 mL", 
+        details: "22 Foraged Island Botanicals, Bruichladdich",
+        isSpecial: false,
+        isGifted: false,
+        extra: {
+          botanicals: "22 hand-foraged wild Islay herbs, flowers, and lichens (Bruichladdich Ugly Betty pot still)",
+          notes: "Sweet delicate menthol, apple mint, spring woodlands, coriander, citrus anise, and herbal juniper."
+        }
+      },
+      { 
+        name: "UV Blue Raspberry Flavored Vodka", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Flavored Vodka",
+        proof: "60 Proof (30% ABV)", 
+        size: "750 mL", 
+        details: "Raspberry Flavored Vodka",
+        isSpecial: false,
+        isGifted: false 
+      },
+      { 
+        name: "Crown Royal Blackberry Flavored Whisky", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Flavored Whisky",
+        proof: "70 Proof (35% ABV)", 
+        size: "750 mL", 
+        details: "Limited Edition Summer Release",
+        isSpecial: false,
+        isGifted: false 
+      }
+    ];
+
+    let currentCategory = "All";
+    let currentSubCategory = "All";
+    let searchQuery = "";
+
+    function init() {
+      renderFilters();
+      renderSubFilters();
+      renderCategoryHeader();
+      renderGrid();
+    }
+
+    function renderFilters() {
+      const definedCategories = [
+        "All",
+        "Bourbon & American Whiskey",
+        "Scotch Whisky",
+        "Irish Whiskey",
+        "Rum & Aquavit",
+        "Gin, Vodka & Liqueurs",
+        "Special Bottles"
+      ];
+
+      const container = document.getElementById("filterContainer");
+      container.innerHTML = definedCategories
+        .map(
+          (cat) => `<button class="filter-btn ${cat === currentCategory ? "active" : ""}" data-category="${cat}">${cat}</button>`
+        )
+        .join("");
+
+      container.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentCategory = btn.dataset.category;
+          currentSubCategory = "All";
+          renderFilters();
+          renderSubFilters();
+          renderCategoryHeader();
+          renderGrid();
+        });
+      });
+    }
+
+    function renderSubFilters() {
+      const subContainer = document.getElementById("subFilterContainer");
+
+      if (currentCategory === "All") {
+        subContainer.className = "subfilters";
+        subContainer.innerHTML = "";
+        return;
+      }
+
+      const subList = new Set();
+      inventory.forEach((item) => {
+        let inView = false;
+        if (currentCategory === "Special Bottles") {
+          inView = item.isSpecial;
+        } else {
+          inView = item.category === currentCategory;
+        }
+
+        if (inView && item.subCategory) {
+          subList.add(item.subCategory);
+        }
+        if (inView && item.isGifted) {
+          subList.add("Gifted Bottles");
+        }
+      });
+
+      if (subList.size <= 1 && !subList.has("Gifted Bottles")) {
+        subContainer.className = "subfilters";
+        subContainer.innerHTML = "";
+        return;
+      }
+
+      const subs = ["All", ...Array.from(subList).sort()];
+      subContainer.className = "subfilters visible";
+      subContainer.innerHTML = subs
+        .map(
+          (sub) => `<button class="subfilter-btn ${sub === currentSubCategory ? "active" : ""}" data-subcategory="${sub}">${sub}</button>`
+        )
+        .join("");
+
+      subContainer.querySelectorAll(".subfilter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentSubCategory = btn.dataset.subcategory;
+          renderSubFilters();
+          renderCategoryHeader();
+          renderGrid();
+        });
+      });
+    }
+
+    function renderCategoryHeader() {
+      const headerContainer = document.getElementById("categoryHeaderContainer");
+
+      // Gifted Bottles subcategory banner
+      if (currentSubCategory === "Gifted Bottles") {
+        const giftedInfo = categoryInfo["Gifted Bottles"];
+        headerContainer.innerHTML = `
+          <div class="category-header-panel gifted-panel">
+            <div class="panel-title">${giftedInfo.title}</div>
+            <div class="panel-desc">${giftedInfo.desc}</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentCategory === "All" || !categoryInfo[currentCategory]) {
+        headerContainer.innerHTML = "";
+        return;
+      }
+
+      const catObj = categoryInfo[currentCategory];
+      const isSpecial = currentCategory === "Special Bottles";
+
+      // Top-level "All" selected: Show Main Category Description
+      if (currentSubCategory === "All") {
+        headerContainer.innerHTML = `
+          <div class="category-header-panel ${isSpecial ? "special-panel" : ""}">
+            <div class="panel-title">${catObj.title}</div>
+            <div class="panel-desc">${catObj.desc}</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Specific Subcategory selected: Show Dedicated Subcategory Description
+      if (catObj.subs && catObj.subs[currentSubCategory]) {
+        headerContainer.innerHTML = `
+          <div class="category-header-panel sub-panel">
+            <div class="panel-title">${currentSubCategory}</div>
+            <div class="panel-desc">${catObj.subs[currentSubCategory]}</div>
+          </div>
+        `;
+      } else {
+        headerContainer.innerHTML = "";
+      }
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("inventoryGrid");
+      
+      const filtered = inventory.filter((item) => {
+        let matchesCategory = false;
+        if (currentCategory === "All") {
+          matchesCategory = true;
+        } else if (currentCategory === "Special Bottles") {
+          matchesCategory = item.isSpecial === true;
+        } else {
+          matchesCategory = item.category === currentCategory;
+        }
+
+        let matchesSub = false;
+        if (currentSubCategory === "All") {
+          matchesSub = true;
+        } else if (currentSubCategory === "Gifted Bottles") {
+          matchesSub = item.isGifted === true;
+        } else {
+          matchesSub = item.subCategory === currentSubCategory;
+        }
+
+        const extraText = item.extra ? Object.values(item.extra).join(" ") : "";
+        const specialText = item.isSpecial ? "special bottle" : "";
+        const giftedText = item.isGifted ? "gifted bottle gift" : "";
+        const subCatText = item.subCategory || "";
+        const fullText = `${item.name} ${item.category} ${subCatText} ${item.proof} ${item.size} ${item.details} ${extraText} ${specialText} ${giftedText}`.toLowerCase();
+        const matchesSearch = fullText.includes(searchQuery.toLowerCase());
+        
+        return matchesCategory && matchesSub && matchesSearch;
+      });
+
+      document.getElementById("totalCount").innerHTML = `Inventory Bottles: <strong>${inventory.length}</strong>`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state">No matching spirits found for '${currentSubCategory !== 'All' ? currentSubCategory : currentCategory}'.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered
+        .map((item) => {
+          const hasExtra = !!item.extra;
+          const specialClass = item.isSpecial ? "is-special" : "";
+
+          let extraHtml = "";
+          if (hasExtra) {
+            extraHtml = `
+              <div class="extra-details">
+                ${item.extra.giftNotes ? `<div class="extra-item gift-highlight"><strong>Gift Story:</strong> ${item.extra.giftNotes}</div>` : ""}
+                ${item.extra.specialNotes ? `<div class="extra-item special-highlight"><strong>Special Note:</strong> ${item.extra.specialNotes}</div>` : ""}
+                ${item.extra.bottle ? `<div class="extra-item"><strong>Bottle Number:</strong> ${item.extra.bottle}</div>` : ""}
+                ${item.extra.barrel ? `<div class="extra-item"><strong>Barrel / Cask:</strong> ${item.extra.barrel}</div>` : ""}
+                ${item.extra.cask ? `<div class="extra-item"><strong>Cask Type:</strong> ${item.extra.cask}</div>` : ""}
+                ${item.extra.staves ? `<div class="extra-item"><strong>Stave Profile:</strong> ${item.extra.staves}</div>` : ""}
+                ${item.extra.date ? `<div class="extra-item"><strong>Date / Selection:</strong> ${item.extra.date}</div>` : ""}
+                ${item.extra.id ? `<div class="extra-item"><strong>Selection ID:</strong> ${item.extra.id}</div>` : ""}
+                ${item.extra.mash ? `<div class="extra-item"><strong>Mashbill:</strong> ${item.extra.mash}</div>` : ""}
+                ${item.extra.grain ? `<div class="extra-item"><strong>Grain / Mash:</strong> ${item.extra.grain}</div>` : ""}
+                ${item.extra.aging ? `<div class="extra-item"><strong>Aging:</strong> ${item.extra.aging}</div>` : ""}
+                ${item.extra.distillation ? `<div class="extra-item"><strong>Distillation / Production:</strong> ${item.extra.distillation}</div>` : ""}
+                ${item.extra.specs ? `<div class="extra-item"><strong>Specifications:</strong> ${item.extra.specs}</div>` : ""}
+                ${item.extra.distiller ? `<div class="extra-item"><strong>Distiller:</strong> ${item.extra.distiller}</div>` : ""}
+                ${item.extra.botanicals ? `<div class="extra-item"><strong>Botanicals:</strong> ${item.extra.botanicals}</div>` : ""}
+                ${item.extra.notes ? `<div class="extra-item tasting-notes"><strong>Tasting Notes:</strong> ${item.extra.notes}</div>` : ""}
+              </div>
+            `;
+          }
+
+          return `
+            <div class="card ${specialClass} ${hasExtra ? 'interactive' : ''}" ${hasExtra ? `onclick="toggleCard(this)"` : ''}>
+              <div>
+                <div class="card-top">
+                  <div class="card-badges-left">
+                    <span class="card-category">${item.category}</span>
+                    ${item.subCategory ? `<span class="card-subcategory">${item.subCategory}</span>` : ''}
+                    ${item.isGifted ? `<span class="badge-gifted">🎁 Gifted</span>` : ''}
+                    ${item.isSpecial ? `<span class="badge-special">★ Special Bottle</span>` : ''}
+                  </div>
+                  ${hasExtra ? `<span class="badge-expand">+ Details</span>` : ''}
+                </div>
+                <div class="card-title">${item.name}</div>
+              </div>
+              <div class="card-details">
+                <div><strong>Proof / ABV:</strong> ${item.proof}</div>
+                <div><strong>Size:</strong> ${item.size}</div>
+                <div><strong>Details:</strong> ${item.details}</div>
+                ${extraHtml}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function toggleCard(cardElement) {
+      const isExpanded = cardElement.classList.toggle('expanded');
+      const badge = cardElement.querySelector('.badge-expand');
+      if (badge) {
+        badge.textContent = isExpanded ? '− Less' : '+ Details';
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderGrid();
+    });
+
+    init();
+  </script>
+</body>
+</html>
