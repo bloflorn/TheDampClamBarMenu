@@ -567,6 +567,21 @@
       { name: "Sailor Jerry Spiced Rum", category: "Rum & Aquavit", subCategory: "Spiced Rum", proof: "92 Proof (46% ABV)", size: "750 mL", details: "Norman 'Sailor Jerry' Collins Tattoo Edition", isSpecial: false, isGifted: false, inStock: true },
 
       // Gin, Vodka & Liqueurs
+      { 
+        name: "Caravella Limoncello Originale d'Italia", 
+        category: "Gin, Vodka & Liqueurs", 
+        subCategory: "Liqueur", 
+        proof: "56 Proof (28% ABV)", 
+        size: "750 mL", 
+        details: "Product of Italy, Produced & Bottled by Giacomo Sperone S.P.A.", 
+        isSpecial: false, 
+        isGifted: false, 
+        inStock: true, 
+        extra: { 
+          origin: "Italy (Giacomo Sperone S.P.A.)", 
+          notes: "Sweet, intensely zesty Italian lemon peel infusion with a rich, velvety citrus finish. Best served ice cold straight from the freezer." 
+        } 
+      },
       { name: "Dracula Băutură Spirtoasă", category: "Gin, Vodka & Liqueurs", subCategory: "Liqueur", proof: "36 Proof (18% ABV)", size: "200 mL", details: "European Drinks Speciality from Transylvania", isSpecial: false, isGifted: false, inStock: true, extra: { origin: "Transylvania, Romania", notes: "Traditional regional spirit specialty." } },
       { name: "Empress 1908 Indigo Gin", category: "Gin, Vodka & Liqueurs", subCategory: "Botanical Gin", proof: "85 Proof (42.5% ABV)", size: "750 mL", details: "Infused with Butterfly Pea Blossom", isSpecial: false, isGifted: false, inStock: true, extra: { botanicals: "Fairmont Empress Tea, Juniper, Grapefruit Peel, Coriander", notes: "Floral juniper, citrus, and natural color-changing profile." } },
       { name: "Fireball Cinnamon Whisky", category: "Gin, Vodka & Liqueurs", subCategory: "Liqueur", proof: "66 Proof (33% ABV)", size: "750 mL", details: "Whisky with Natural Cinnamon", isSpecial: false, isGifted: false, inStock: true },
@@ -783,7 +798,6 @@
       renderGrid();
     });
 
-    // Run initialization
     init();
   </script>
 </body>
