@@ -81,6 +81,16 @@
       text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
     }
 
+    .stats {
+      font-size: 0.85rem;
+      color: var(--gold-amber);
+      background: var(--card-bg);
+      padding: 0.4rem 1.15rem;
+      border-radius: 20px;
+      border: 1px solid var(--gold-amber);
+      margin-top: 0.3rem;
+    }
+
     .controls {
       display: flex;
       flex-direction: column;
@@ -195,6 +205,7 @@
       padding-top: 0.75rem;
     }
 
+    .card-details div { margin-bottom: 0.35rem; }
     .card-details strong { color: var(--gold-amber); }
   </style>
 </head>
@@ -209,6 +220,7 @@
 
     <header>
       <h1>Cocktail Menu</h1>
+      <div class="stats" id="totalCount">Total Cocktails: <strong>0</strong></div>
     </header>
 
     <div class="controls">
@@ -220,19 +232,20 @@
 
   <script>
     const cocktails = [
+      // House Signatures
       {
-        name: "Smoked Old Fashioned",
+        name: "Skeleton Key",
         category: "House Signatures",
-        desc: "Rich, aromatic, and finished with charred Michigan applewood smoke.",
-        ingredients: "Baker's 7-Year Single Barrel, Demerara Syrup, Angostura & Orange Bitters",
-        glass: "Rocks Glass with Large Clear Ice Sphere",
-        garnish: "Expressed Orange Peel & Luxardo Cherry",
+        desc: "A bold, aromatic modern classic crowned with a dramatic float of dark aromatic bitters.",
+        ingredients: "Baker's 7-Year Single Barrel Bourbon, St. Elder Natural Elderflower Liqueur, Fresh Lemon Juice, Spicy Ginger Beer, Heavy Angostura Bitters Float",
+        glass: "Collins Glass with Cubed Ice",
+        garnish: "Expressed Lemon Wheel & Aromatic Bitters Crown",
         inStock: true
       },
       {
         name: "Solstice Empress Sour",
         category: "House Signatures",
-        desc: "Bright floral citrus that naturally transforms color in the glass.",
+        desc: "Bright floral citrus with a silky foam cap that naturally transforms color in the glass.",
         ingredients: "Empress 1908 Indigo Gin, Fresh Lemon Juice, Simple Syrup, Egg White Foam",
         glass: "Coupe",
         garnish: "Dehydrated Lemon Wheel & Lavender Bitters",
@@ -241,36 +254,105 @@
       {
         name: "Blackberry Bramble",
         category: "House Signatures",
-        desc: "Tart, refreshing gin cocktail laced with sweet dark berry liqueur.",
-        ingredients: "The Botanist Islay Dry Gin, Fresh Lemon Juice, Simple Syrup, Crown Royal Blackberry float",
+        desc: "Tart, refreshing gin cocktail laced with sweet dark berry liqueur over crushed ice.",
+        ingredients: "The Botanist Islay Dry Gin, Fresh Lemon Juice, Simple Syrup, Crown Royal Blackberry Float",
         glass: "Rocks Glass with Crushed Ice",
         garnish: "Fresh Blackberry & Mint Sprig",
+        inStock: true
+      },
+
+      // Classics & Spritzes
+      {
+        name: "Dark & Stormy",
+        category: "Classics",
+        desc: "Rich, stormy dark cane rum layered over fiery ginger beer and fresh tart lime.",
+        ingredients: "Planteray Barbados Aged Rum / Sailor Jerry Spiced Rum, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Highball Glass over Ice",
+        garnish: "Fresh Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Limoncello Spritz",
+        category: "Classics",
+        desc: "Effervescent, sunshine-bright Italian aperitivo with sweet lemon zest and crisp bubbles.",
+        ingredients: "Limoncello, Prosecco / Dry Sparkling Wine, Club Soda",
+        glass: "Wine Glass over Ice",
+        garnish: "Lemon Wheel & Fresh Mint Sprig",
         inStock: true
       },
       {
         name: "Maple Boulevardier",
         category: "Classics",
-        desc: "A northern twist on the classic bitter-sweet stirred cocktail.",
+        desc: "A northern twist on the classic bittersweet stirred whiskey cocktail.",
         ingredients: "Iron Fish Maple Bourbon, Campari, Sweet Vermouth",
         glass: "Nick & Nora",
         garnish: "Expressed Orange Twist",
         inStock: true
       },
       {
-        name: "Transylvanian Mule",
+        name: "Smoked Old Fashioned",
         category: "Classics",
-        desc: "Crisp, spicy, and served ice cold in copper.",
-        ingredients: "Dracula Băutură Spirtoasă, Fresh Lime Juice, Fiery Ginger Beer",
-        glass: "Copper Mug",
-        garnish: "Lime Wheel & Candied Ginger",
+        desc: "Rich, spirit-forward, and finished under charred Michigan applewood smoke.",
+        ingredients: "Baker's 7-Year Single Barrel Bourbon, Demerara Syrup, Angostura & Orange Bitters",
+        glass: "Rocks Glass with Large Clear Ice Sphere",
+        garnish: "Expressed Orange Peel & Luxardo Cherry",
+        inStock: true
+      },
+
+      // Mule Collection
+      {
+        name: "Moscow Mule",
+        category: "Mule Collection",
+        desc: "The timeless 1941 classic: clean, crisp, and served biting cold in solid copper.",
+        ingredients: "Kirkland Signature American Vodka, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Copper Mug with Crushed Ice",
+        garnish: "Fresh Lime Wheel & Mint Sprig",
         inStock: true
       },
       {
+        name: "Kentucky Mule",
+        category: "Mule Collection",
+        desc: "Warm caramel and oak sweetness balanced by zesty lime and sharp ginger heat.",
+        ingredients: "Maker's Mark Kentucky Straight Bourbon, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Copper Mug with Crushed Ice",
+        garnish: "Fresh Lime Wheel & Mint Sprig",
+        inStock: true
+      },
+      {
+        name: "Michigan Mule",
+        category: "Mule Collection",
+        desc: "Local Traverse City spirit enriched with tart Michigan Montmorency cherry sweetness.",
+        ingredients: "Traverse City Straight Bourbon, Tart Michigan Cherry Juice, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Copper Mug with Crushed Ice",
+        garnish: "Brandied Cherry & Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Washington Mule",
+        category: "Mule Collection",
+        desc: "Crisp green apple warmth backed by zesty lime and fiery ginger effervescence.",
+        ingredients: "Crown Royal Regal Apple Whisky, Fresh Lime Juice, Fiery Ginger Beer, Splash of Cranberry",
+        glass: "Copper Mug with Crushed Ice",
+        garnish: "Crisp Apple Slice & Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Transylvanian Mule",
+        category: "Mule Collection",
+        desc: "Unique botanical regional spirit from Romania paired with spicy ginger beer.",
+        ingredients: "Dracula Băutură Spirtoasă, Fresh Lime Juice, Fiery Ginger Beer",
+        glass: "Copper Mug with Crushed Ice",
+        garnish: "Lime Wheel & Candied Ginger",
+        inStock: true
+      },
+
+      // Mocktails & Zero-Proof
+      {
         name: "Wild Botanical Zero-Proof Fizz",
         category: "Mocktails & Zero-Proof",
-        desc: "Crisp, sparkling herbal cooler with no alcohol.",
+        desc: "Crisp, sparkling herbal cooler with cooling garden botanicals and no alcohol.",
         ingredients: "St. Elder Elderflower Essence, Fresh Lime Juice, Cucumber Ribbons, Club Soda",
-        glass: "Highball",
+        glass: "Highball Glass",
         garnish: "Mint Bouquet & Lime Wheel",
         inStock: true
       }
@@ -284,7 +366,7 @@
     }
 
     function renderFilters() {
-      const categories = ["All", "House Signatures", "Classics", "Mocktails & Zero-Proof"];
+      const categories = ["All", "House Signatures", "Classics", "Mule Collection", "Mocktails & Zero-Proof"];
       const container = document.getElementById("filterContainer");
       container.innerHTML = categories
         .map(cat => `<button class="filter-btn ${cat === currentCategory ? "active" : ""}" data-category="${cat}">${cat}</button>`)
@@ -302,6 +384,8 @@
     function renderGrid() {
       const grid = document.getElementById("cocktailGrid");
       const filtered = cocktails.filter(c => currentCategory === "All" || c.category === currentCategory);
+
+      document.getElementById("totalCount").innerHTML = `Total Cocktails: <strong>${cocktails.length}</strong>`;
 
       grid.innerHTML = filtered.map(c => `
         <div class="card ${!c.inStock ? 'out-of-stock' : ''}">
