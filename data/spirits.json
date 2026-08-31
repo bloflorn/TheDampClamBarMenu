@@ -924,6 +924,17 @@
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
       "subCategory": "Straight Bourbon"
+    },
+    {
+      "name": "Licor 43",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "",
+      "proof": "31%",
+      "size": "750 mL",
+      "details": "Product of Spain",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
     }
   ]
 }
