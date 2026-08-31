@@ -13,8 +13,6 @@
       --input-bg: #01130d;
       --neon-cyan: #00f7ff;
       --neon-green: #39ff14;
-      --neon-purple: #c042ff;
-      --neon-pink: #ff2a8d;
       --neon-gold: #ffd700;
       --neon-red: #ff3344;
       --gold-amber: #e5b567;
@@ -63,7 +61,6 @@
       letter-spacing: 0.08em;
     }
 
-    /* Top Tabs */
     .tabs {
       display: flex;
       justify-content: center;
@@ -94,7 +91,6 @@
       box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
     }
 
-    /* Action Toolbar */
     .toolbar {
       display: flex;
       justify-content: space-between;
@@ -135,7 +131,6 @@
     .btn-add:hover { background: #fff; box-shadow: 0 0 15px rgba(57, 255, 20, 0.7); }
     .btn-scanner { background: var(--neon-cyan); color: #03140f; box-shadow: 0 0 10px rgba(0, 247, 255, 0.3); }
 
-    /* Manager Item Row / Card */
     .item-list { display: flex; flex-direction: column; gap: 0.65rem; }
 
     .item-row {
@@ -170,23 +165,68 @@
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
+      align-items: center;
     }
     .item-meta span { color: var(--gold-amber); }
 
-    /* Action Controls Right */
     .item-controls {
       display: flex;
       align-items: center;
       gap: 0.6rem;
       flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    /* Switch Toggle */
+    /* Size Stepper Badges */
+    .size-steppers {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .size-stepper-box {
+      display: inline-flex;
+      align-items: center;
+      background: #01130d;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1px 4px;
+      gap: 3px;
+    }
+    .size-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      padding: 0 3px;
+    }
+    .qty-btn {
+      background: transparent;
+      border: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      font-weight: bold;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .qty-btn:hover { background: rgba(0, 247, 255, 0.2); color: #fff; }
+    .qty-val {
+      font-size: 0.75rem;
+      font-weight: 700;
+      min-width: 14px;
+      text-align: center;
+      color: #fff;
+    }
+
     .switch {
       position: relative;
       display: inline-block;
-      width: 42px;
-      height: 22px;
+      width: 38px;
+      height: 20px;
     }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
@@ -195,14 +235,14 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #16382c;
       transition: .25s;
-      border-radius: 22px;
+      border-radius: 20px;
       border: 1px solid var(--border);
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 16px;
-      width: 16px;
+      height: 14px;
+      width: 14px;
       left: 2px;
       bottom: 2px;
       background-color: #94a3b8;
@@ -214,30 +254,28 @@
       border-color: var(--neon-green);
     }
     input:checked + .slider:before {
-      transform: translateX(20px);
+      transform: translateX(18px);
       background-color: var(--neon-green);
       box-shadow: 0 0 6px var(--neon-green);
     }
 
-    /* Icon Buttons */
     .icon-btn {
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       color: #cbd5e1;
       border-radius: 6px;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.2s ease;
     }
     .icon-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
     .icon-btn.delete:hover { color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 8px rgba(255,51,68,0.4); }
 
-    /* Slide Modal for Edit/Add */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -304,7 +342,6 @@
     .btn-save-modal { flex: 1; background: var(--neon-green); color: #03140f; padding: 9px; border-radius: 20px; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
     .btn-save-modal:hover { background: #fff; }
 
-    /* Saving Toast */
     #toast {
       position: fixed;
       bottom: 20px;
@@ -331,7 +368,6 @@
       <div class="subtext">The Damp Clam Control Center</div>
     </header>
 
-    <!-- Collection Switcher -->
     <div class="tabs">
       <button class="tab-btn active" data-col="spirits">🥃 Spirits</button>
       <button class="tab-btn" data-col="cocktails">🍸 Cocktails</button>
@@ -339,7 +375,6 @@
       <button class="tab-btn" data-col="merch">👕 Merch</button>
     </div>
 
-    <!-- Actions & Filter -->
     <div class="toolbar">
       <input type="text" id="searchBox" class="search-input" placeholder="Search inventory..." />
       <div style="display: flex; gap: 0.5rem;">
@@ -348,11 +383,9 @@
       </div>
     </div>
 
-    <!-- Live Item Feed -->
     <div class="item-list" id="itemsContainer"></div>
   </div>
 
-  <!-- Edit / Add Modal -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -384,7 +417,6 @@
     let activeSha = "";
     let editingIndex = -1;
 
-    // Retrieve PAT
     function getGhToken() {
       const stored = localStorage.getItem("decap-cms-user");
       if (stored) {
@@ -399,7 +431,6 @@
     const token = getGhToken();
     if (token) localStorage.setItem("decap-cms-user", JSON.stringify({ token: token, backendName: "github" }));
 
-    // Tab Switching
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -426,6 +457,14 @@
       }
     }
 
+    // Helper: Normalize bottle sizes object
+    function getBottleSizes(item) {
+      if (item.sizes && typeof item.sizes === "object") return item.sizes;
+      const defaultSize = item.size || "750 mL";
+      const defaultQty = item.quantity || (item.inStock ? 1 : 0);
+      return { [defaultSize]: defaultQty };
+    }
+
     function renderList() {
       const container = document.getElementById("itemsContainer");
       const query = (document.getElementById("searchBox").value || "").toLowerCase();
@@ -438,8 +477,12 @@
         return;
       }
 
-      container.innerHTML = filtered.map(item => `
-        <div class="item-row ${!item.inStock ? 'out-of-stock' : ''}">
+      container.innerHTML = filtered.map(item => {
+        const sizesObj = activeCol === 'spirits' ? getBottleSizes(item) : null;
+        const totalQty = sizesObj ? Object.values(sizesObj).reduce((a, b) => a + b, 0) : (item.inStock ? 1 : 0);
+
+        return `
+        <div class="item-row ${!item.inStock || totalQty === 0 ? 'out-of-stock' : ''}">
           <div class="item-info">
             <div class="item-title">${item.name}</div>
             <div class="item-meta">
@@ -451,25 +494,70 @@
             </div>
           </div>
           <div class="item-controls">
+            ${activeCol === 'spirits' ? `
+              <div class="size-steppers">
+                ${Object.entries(sizesObj).map(([sz, count]) => `
+                  <div class="size-stepper-box" title="${sz}">
+                    <span class="size-label">${sz}</span>
+                    <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', -1)">−</button>
+                    <span class="qty-val">${count}</span>
+                    <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', 1)">+</button>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
             <label class="switch" title="Toggle Stock">
-              <input type="checkbox" ${item.inStock ? 'checked' : ''} onchange="toggleStock(${item._idx}, this.checked)" />
+              <input type="checkbox" ${item.inStock && totalQty > 0 ? 'checked' : ''} onchange="toggleStock(${item._idx}, this.checked)" />
               <span class="slider"></span>
             </label>
             <button class="icon-btn" onclick="openEditModal(${item._idx})" title="Edit Details">✏️</button>
             <button class="icon-btn delete" onclick="deleteItem(${item._idx})" title="Delete Item">🗑️</button>
           </div>
         </div>
-      `).join("");
+      `}).join("");
     }
 
-    // Toggle In/Out of Stock instantly
-    async function toggleStock(index, newStatus) {
-      activeData.items[index].inStock = newStatus;
+    // Step a specific size up or down
+    async function stepSizeQty(index, sizeKey, delta) {
+      const item = activeData.items[index];
+      if (!item.sizes) item.sizes = getBottleSizes(item);
+
+      let currentVal = item.sizes[sizeKey] || 0;
+      let newVal = currentVal + delta;
+      if (newVal < 0) newVal = 0;
+
+      item.sizes[sizeKey] = newVal;
+
+      const total = Object.values(item.sizes).reduce((a, b) => a + b, 0);
+      item.quantity = total;
+      item.inStock = total > 0;
+
+      // Update primary size label to active available sizes
+      const activeSizes = Object.keys(item.sizes).filter(k => item.sizes[k] > 0);
+      item.size = activeSizes.length > 0 ? activeSizes.join(", ") : Object.keys(item.sizes)[0];
+
       renderList();
-      await pushDataToGithub(`Update stock status for ${activeData.items[index].name}`);
+      await pushDataToGithub(`Adjust ${item.name} (${sizeKey}) to ${newVal}`);
     }
 
-    // Delete Item
+    async function toggleStock(index, newStatus) {
+      const item = activeData.items[index];
+      item.inStock = newStatus;
+      if (activeCol === 'spirits') {
+        if (!item.sizes) item.sizes = getBottleSizes(item);
+        if (!newStatus) {
+          Object.keys(item.sizes).forEach(k => item.sizes[k] = 0);
+          item.quantity = 0;
+        } else {
+          const firstKey = Object.keys(item.sizes)[0] || "750 mL";
+          item.sizes[firstKey] = Math.max(item.sizes[firstKey], 1);
+          item.quantity = Object.values(item.sizes).reduce((a, b) => a + b, 0);
+        }
+      }
+      renderList();
+      await pushDataToGithub(`Update stock status for ${item.name}`);
+    }
+
     async function deleteItem(index) {
       const name = activeData.items[index].name;
       if (!confirm(`Are you sure you want to permanently delete "${name}"?`)) return;
@@ -478,7 +566,6 @@
       await pushDataToGithub(`Delete ${name}`);
     }
 
-    // Save changes to GitHub
     async function pushDataToGithub(commitMsg) {
       showToast("Syncing with GitHub...");
       try {
@@ -506,7 +593,6 @@
       }
     }
 
-    // Modal Form Generator
     const modal = document.getElementById("editModal");
     document.getElementById("closeModalBtn").onclick = () => modal.style.display = "none";
     document.getElementById("addItemBtn").onclick = () => openAddModal();
@@ -530,12 +616,13 @@
     function buildFormFields(data) {
       const container = document.getElementById("dynamicFields");
       if (activeCol === "spirits") {
+        const sizes = data.sizes ? JSON.stringify(data.sizes).replace(/[{}"\s]/g, '').replace(/:/g, ': ').replace(/,/g, ', ') : (data.size || '750 mL: 1');
         container.innerHTML = `
           <div class="form-group"><label>Bottle Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
           <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Bourbon & American Whiskey'}" required /></div>
           <div class="form-group"><label>Sub-Category</label><input type="text" id="f_sub" value="${data.subCategory || ''}" /></div>
           <div class="form-group"><label>Proof / ABV</label><input type="text" id="f_proof" value="${data.proof || ''}" /></div>
-          <div class="form-group"><label>Size</label><input type="text" id="f_size" value="${data.size || '750 mL'}" /></div>
+          <div class="form-group"><label>Sizes & Counts (e.g. 750 mL: 1, 375 mL: 1)</label><input type="text" id="f_sizes" value="${sizes}" /></div>
           <div class="form-group"><label>Details</label><input type="text" id="f_details" value="${data.details || ''}" /></div>
           <div class="form-group"><label>Tasting Notes</label><textarea id="f_notes" rows="2">${data.extra?.notes || ''}</textarea></div>
         `;
@@ -580,8 +667,29 @@
       if (activeCol === "spirits") {
         updatedObj.subCategory = document.getElementById("f_sub").value.trim();
         updatedObj.proof = document.getElementById("f_proof").value.trim();
-        updatedObj.size = document.getElementById("f_size").value.trim();
         updatedObj.details = document.getElementById("f_details").value.trim();
+
+        // Parse custom sizes string "750 mL: 2, 375 mL: 1"
+        const rawSizes = document.getElementById("f_sizes").value.split(",");
+        const sizesMap = {};
+        let totalCount = 0;
+        rawSizes.forEach(pair => {
+          const parts = pair.split(":");
+          if (parts.length === 2) {
+            const sz = parts[0].trim();
+            const cnt = parseInt(parts[1].trim()) || 0;
+            sizesMap[sz] = cnt;
+            totalCount += cnt;
+          } else if (parts[0].trim()) {
+            sizesMap[parts[0].trim()] = 1;
+            totalCount += 1;
+          }
+        });
+        updatedObj.sizes = sizesMap;
+        updatedObj.quantity = totalCount;
+        updatedObj.inStock = totalCount > 0;
+        updatedObj.size = Object.keys(sizesMap).join(", ");
+
         const notes = document.getElementById("f_notes").value.trim();
         if (notes) {
           if (!updatedObj.extra) updatedObj.extra = {};
