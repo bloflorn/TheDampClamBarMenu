@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Damp Clam — Merch & Apparel</title>
   
-  <!-- Website Favicon -->
   <link rel="icon" type="image/jpeg" href="logo.jpg" />
   <link rel="apple-touch-icon" href="logo.jpg" />
 
@@ -38,7 +37,6 @@
 
     .container { max-width: 1100px; margin: 0 auto; }
 
-    /* Top Global Navigation */
     nav.site-nav {
       display: flex;
       justify-content: center;
@@ -135,7 +133,6 @@
       margin-top: 0.3rem;
     }
 
-    /* Controls & Filters */
     .controls {
       display: flex;
       flex-direction: column;
@@ -174,7 +171,6 @@
       box-shadow: 0 0 5px rgba(0, 247, 255, 0.6);
     }
 
-    /* Merch Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -335,89 +331,19 @@
   </div>
 
   <script>
-    const ETSY_STORE_URL = "https://www.etsy.com/shop/AshAndAuroraStudio";
-
-    const merchItems = [
-      {
-        name: "Shuck Around and Find Out T-shirt | The Damp Clam Special",
-        category: "T-Shirts",
-        desc: "Premium ring-spun graphic tee featuring The Damp Clam insignia and signature tagline.",
-        logoOptions: ["Full Color Neon", "Monochrome White", "Monochrome Black"],
-        materials: "100% Airlume Combed & Ring-Spun Cotton (Bella+Canvas 3001)",
-        fit: "Unisex Retail Fit",
-        price: "$27.40 – $39.99",
-        etsyUrl: "https://www.etsy.com/listing/4565956176/shuck-around-and-find-out-t-shirt-the",
-        inStock: true
-      },
-      {
-        name: "Women's Shuck Around and Find Out Racerback Tank",
-        category: "Tanks",
-        desc: "Lightweight and breathable racerback tank with The Damp Clam 'Shuck Around and Find Out' graphic.",
-        logoOptions: ["Full Color Neon", "Monochrome White", "Monochrome Black"],
-        materials: "60% Combed Ring-Spun Cotton / 40% Polyester Lightweight Jersey",
-        fit: "Women's Slim Fit Racerback",
-        price: "$29.05 – $32.23",
-        etsyUrl: "https://www.etsy.com/listing/4565938589/womens-ideal-racerback-tank-shuck-around",
-        inStock: true
-      },
-      {
-        name: "Unisex Shuck Around and Find Out Hoodie",
-        category: "Sweatshirts",
-        desc: "Classic cozy pullover hoodie featuring front pouch pocket and matching drawstrings with The Damp Clam insignia.",
-        logoOptions: ["Full Color Neon", "Monochrome White"],
-        materials: "50% Cotton / 50% Polyester Heavy Blend Fleece (Gildan 18500)",
-        fit: "Standard Unisex Relaxed Fit",
-        price: "$34.81 – $47.45",
-        etsyUrl: "https://www.etsy.com/listing/4565956032/unisex-heavy-blend-hooded-sweatshirt",
-        inStock: true
-      },
-      {
-        name: "The Damp Clam Premium Pocket Tee",
-        category: "T-Shirts",
-        desc: "Ultra-soft ring-spun cotton tee featuring The Damp Clam insignia across the chest pocket.",
-        logoOptions: ["Full Color Neon", "Monochrome White", "Monochrome Black"],
-        materials: "100% Airlume Combed & Ring-Spun Cotton (Bella+Canvas 3001)",
-        fit: "Unisex Tailored Fit",
-        price: "$28.00",
-        etsyUrl: ETSY_STORE_URL,
-        inStock: false
-      },
-      {
-        name: "Embroidered Dad Hat",
-        category: "Hats",
-        desc: "Low-profile unstructured cotton twill cap with clean embroidered front logo detail.",
-        logoOptions: ["Monochrome White Thread", "Neon Cyan Thread", "Monochrome Black Thread"],
-        materials: "100% Chino Cotton Twill with Brass Buckle Closure",
-        fit: "Adjustable One Size Fits Most",
-        price: "$26.00",
-        etsyUrl: ETSY_STORE_URL,
-        inStock: false
-      },
-      {
-        name: "Snapback Trucker Cap",
-        category: "Hats",
-        desc: "Structured front panel with breathable mesh back and bold logo badge.",
-        logoOptions: ["Neon Colorway Badge", "Monochrome Black"],
-        materials: "Cotton Poly Front / Breathable Poly Mesh Back",
-        fit: "Classic Snapback Closure",
-        price: "$28.00",
-        etsyUrl: ETSY_STORE_URL,
-        inStock: false
-      },
-      {
-        name: "Damp Clam Bar Runner Mat",
-        category: "Barware & Accessories",
-        desc: "Commercial-grade non-slip rubber spill mat designed for home bar counters.",
-        logoOptions: ["Full Neon Colorway"],
-        materials: "Heavy Duty Molded Non-Slip PVC Rubber",
-        fit: "6\" x 24\" Standard Bar Rail Dimensions",
-        price: "$24.00",
-        etsyUrl: ETSY_STORE_URL,
-        inStock: false
-      }
-    ];
-
+    let merchItems = [];
     let currentCategory = "All";
+
+    async function loadDataAndInit() {
+      try {
+        const res = await fetch("data/merch.json");
+        const data = await res.json();
+        merchItems = data.items || [];
+      } catch (err) {
+        console.error("Error loading merch data:", err);
+      }
+      init();
+    }
 
     function init() {
       renderFilters();
@@ -464,7 +390,7 @@
               <div>
                 <strong>Logo Options:</strong>
                 <div class="colorway-pills">
-                  ${item.logoOptions.map(opt => `<span class="colorway-pill">${opt}</span>`).join("")}
+                  ${(item.logoOptions || []).map(opt => `<span class="colorway-pill">${opt}</span>`).join("")}
                 </div>
               </div>
             </div>
@@ -476,7 +402,7 @@
       `).join("");
     }
 
-    init();
+    loadDataAndInit();
   </script>
 </body>
 </html>
