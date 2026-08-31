@@ -1,0 +1,47 @@
+backend:
+  name: github
+  repo: thedampclam/TheDampClamBarMenu # Replace with your exact GitHub username and repo name (e.g. AndreDeLisle/damp-clam)
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "spirits"
+    label: "Spirits & Bottles"
+    files:
+      - label: "Spirits Inventory"
+        name: "spirits_data"
+        file: "data/spirits.json"
+        fields:
+          - label: "Bottles List"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Bottle Name", name: "name", widget: "string" }
+              - { label: "In Stock?", name: "inStock", widget: "boolean", default: true }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "Bourbon & American Whiskey"
+                  - "Scotch Whisky"
+                  - "Irish Whiskey"
+                  - "Rum & Aquavit"
+                  - "Gin, Vodka & Liqueurs"
+              - { label: "Sub-Category", name: "subCategory", widget: "string", required: false }
+              - { label: "Proof / ABV", name: "proof", widget: "string" }
+              - { label: "Bottle Size", name: "size", widget: "string", default: "750 mL" }
+              - { label: "Details", name: "details", widget: "string" }
+              - { label: "Special Bottle?", name: "isSpecial", widget: "boolean", default: false }
+              - { label: "Gifted Bottle?", name: "isGifted", widget: "boolean", default: false }
+              - label: "Extra Details"
+                name: "extra"
+                widget: "object"
+                required: false
+                fields:
+                  - { label: "Tasting Notes", name: "notes", widget: "string", required: false }
+                  - { label: "Gift Story", name: "giftNotes", widget: "string", required: false }
+                  - { label: "Special Note", name: "specialNotes", widget: "string", required: false }
+                  - { label: "Bottle Number", name: "bottle", widget: "string", required: false }
+                  - { label: "Barrel / Cask", name: "barrel", widget: "string", required: false }
