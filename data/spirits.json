@@ -1,0 +1,918 @@
+{
+  "items": [
+    {
+      "name": "Baker's 7-Year Single Barrel",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "107 Proof (53.5% ABV)",
+      "size": "750 mL",
+      "details": "Single Barrel Kentucky Straight Bourbon",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "age": "7 Years Old",
+        "mash": "Jim Beam High-Rye Bourbon Mash",
+        "notes": "Vanilla bean, toasted oak, brown sugar, and warm spice."
+      }
+    },
+    {
+      "name": "Basil Hayden Kentucky Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "80 Proof (40% ABV)",
+      "size": "750 mL",
+      "details": "Artfully Aged, Small Batch Bourbon",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Blanton's Single Barrel",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "93 Proof (46.5% ABV)",
+      "size": "750 mL",
+      "details": "Single Barrel Bourbon Selection",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "barrel": "Barrel #64, Rick #109, Warehouse H",
+        "dumpDate": "Dumped 7-29-24",
+        "notes": "Sweet citrus, caramel, baking spices, creamy vanilla, and light tobacco."
+      }
+    },
+    {
+      "name": "Bulleit Bourbon Single Barrel",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "104 Proof (52% ABV)",
+      "size": "750 mL",
+      "details": "Total Wine & More MI Selection",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "barrel": "Barrel #2-E4-1364",
+        "notes": "Bold oak char, orchard fruit, leather, and peppercorn rye spice."
+      }
+    },
+    {
+      "name": "Bulleit American Single Malt",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "American Single Malt",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Frontier Whiskey",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Calumet Farm 15-Year Single Rack Black",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "105 Proof (52.5% ABV)",
+      "size": "750 mL",
+      "details": "Kentucky Straight Bourbon Whiskey, Aged 15 Years",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by Kyle for André's 34th birthday.",
+        "barrel": "Hand Selected Single Rack (Center Cut), Mash: 74% Corn, 18% Rye, 8% Malted Barley",
+        "notes": "Deep rich cherry, vintage oak, dark molasses, leather, vanilla pipe tobacco, and cocoa."
+      }
+    },
+    {
+      "name": "Canada House Canadian Whisky",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Canadian Whisky",
+      "proof": "80 Proof (40% ABV)",
+      "size": "750 mL",
+      "details": "Imported Canadian Whisky",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Grit City Straight Bourbon Whiskey",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Crafted by BOTLD, Detroit / Motor City",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Iron Fish Bourbon Finished in Maple Syrup Barrels",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Finished Bourbon",
+      "proof": "86 Proof (43% ABV)",
+      "size": "750 mL",
+      "details": "Farm Blended, Batch #80, Bottled by KS",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "cask": "Aged in Oak, Finished in Charred Maple Syrup Barrels",
+        "notes": "Rich maple syrup richness, butterscotch, toasted pecan, and vanilla."
+      }
+    },
+    {
+      "name": "J. Henry & Sons Wisconsin Straight Bourbon (Batch 83)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "Small Batch, Batch #83, Bottle #5072",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "grain": "Heritage Red Heirloom Corn, Spooner Rye, and Malted Barley",
+        "notes": "Earthy spice, sweet dried apricot, honey, dark chocolate, and toasted marshmallow."
+      }
+    },
+    {
+      "name": "J. Henry & Sons Wisconsin Straight Bourbon (Batch 88)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "Small Batch, Batch #88, Bottle #3464",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "grain": "Heritage Red Heirloom Corn grown in Dane County, WI",
+        "notes": "Caramelized dates, cedar wood, cinnamon bread, and roasted walnut."
+      }
+    },
+    {
+      "name": "Journeyman Last Feather Rye Whiskey",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Rye",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Handmade Organic, Batch #180, Bottle #225",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "mash": "60% Organic Rye, 40% Organic Wheat",
+        "notes": "Banana bread, cereal grain, clove, black pepper, and silky wheat mouthfeel."
+      }
+    },
+    {
+      "name": "Kirkland Signature Small Batch Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "92 Proof (46% ABV)",
+      "size": "1 L",
+      "details": "Kentucky Straight Bourbon, Barton 1792 Master Distillers",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Lincoln Straight Bourbon Whiskey",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "112 Proof (56% ABV)",
+      "size": "750 mL",
+      "details": "Straight Bourbon Whiskey",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Maker's Mark Kentucky Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Star Hill Farm, Handmade Kentucky Straight Bourbon",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Maker's Mark 101 Proof Limited Release",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "101 Proof (50.5% ABV)",
+      "size": "750 mL",
+      "details": "Signature Family Recipe Bottled at a Higher Proof",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Maker's Mark Cask Strength (Batch 23-01)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Barrel Proof",
+      "proof": "110.0 Proof (55.0% ABV)",
+      "size": "375 mL",
+      "details": "Kentucky Straight Bourbon Whisky, Undiluted Representation",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "barrel": "Batch 23-01",
+        "notes": "Rich oak, deep vanilla, spiced fruit, caramel, and a robust finish."
+      }
+    },
+    {
+      "name": "Maker's Mark Wood Finishing Series: The Steward's Release 2026",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Finished Bourbon",
+      "proof": "110.8 Proof (55.4% ABV)",
+      "size": "750 mL",
+      "details": "Batch BRX-26, Finished with 10 Virgin Oak Staves",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "staves": "10 Virgin Toasted Oak Staves",
+        "notes": "Intense toasted oak, dark plum, chocolate, and warming allspice."
+      }
+    },
+    {
+      "name": "Maker's Mark 2023 Private Selection",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "109.4 Proof (54.7% ABV)",
+      "size": "375 mL",
+      "details": "Custom Barrel Selection",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "staves": "0-2-0-4-4",
+        "id": "110-AZX0412 (April 2023)",
+        "notes": "Mendiant chocolate, dried fruit, confectioner's sugar, and clove."
+      }
+    },
+    {
+      "name": "Maker's Mark Private Selection - Grandpa's Cigar Box",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "109.8 Proof (54.9% ABV)",
+      "size": "375 mL",
+      "details": "Custom Barrel Stave Recipe Selection",
+      "isSpecial": true,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "staves": "0-2-0-4-4 (April 2023)",
+        "notes": "Rich cedar humidor, roasted coffee beans, dark chocolate, and clove."
+      }
+    },
+    {
+      "name": "Maker's Mark Private Selection - Grandpa's New Cigar Box",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "110.5 Proof (55.25% ABV)",
+      "size": "750 mL",
+      "details": "National Beverage of Kalamazoo-KBC Selection",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by Chris for André for Christmas 2024.",
+        "bottle": "Bottle No. 007 / 246",
+        "staves": "0-3-2-3-2 (October 2023)",
+        "notes": "Cedar cigar box aromatics, toasted caramel, baking spices, and cocoa."
+      }
+    },
+    {
+      "name": "Maker's Mark Private Selection - Selected by MEGA-BEV",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "111.8 Proof (55.9% ABV)",
+      "size": "750 mL",
+      "details": "Limited Edition Series, Finished with 10 Oak Staves",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "bottle": "No. 202 / 246",
+        "staves": "1-3-0-4-2",
+        "notes": "Dark chocolate mocha, toasted caramel, almond, and vanilla honeycomb."
+      }
+    },
+    {
+      "name": "Maker's Mark Private Selection - Meijer Steward Select (Ole Kentucky Farm)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "112.0 Proof (56.0% ABV)",
+      "size": "750 mL",
+      "details": "Limited Edition Series, Finished with 10 Oak Staves",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "bottle": "No. 002 / 252",
+        "staves": "3-2-2-0-3",
+        "notes": "Bright orchard fruit, vanilla bean, baking spice warmth, and toasted oak."
+      }
+    },
+    {
+      "name": "Maker's Mark Private Selection - Meijer Steward Select (Spring Training)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Private Selection",
+      "proof": "112.4 Proof (56.2% ABV)",
+      "size": "750 mL",
+      "details": "Limited Edition Series, Finished with 10 Oak Staves",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "bottle": "No. 245 / 246",
+        "staves": "3-3-1-2-1",
+        "notes": "Layered vanilla honey, toasted caramel, milk chocolate, and orange peel."
+      }
+    },
+    {
+      "name": "New Riff Bottled in Bond Straight Bourbon (Spring 2016)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Bottled in Bond",
+      "proof": "100 Proof (50% ABV)",
+      "size": "750 mL",
+      "details": "Distilled Spring 2016, Sour Mash, Bottled in Bond",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "mash": "65% Corn, 30% Rye, 5% Malted Barley",
+        "notes": "Spiced cherry, butterscotch, and minty rye kick."
+      }
+    },
+    {
+      "name": "New Riff 8-Year Kentucky Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Barrel Proof",
+      "proof": "Barrel Proof",
+      "size": "750 mL",
+      "details": "Aged 8 Years, Non-Chill Filtered",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "age": "8 Years Aged in Kentucky",
+        "notes": "Deep leather, cured tobacco, blackberry jam, and seasoned oak."
+      }
+    },
+    {
+      "name": "New Riff Single Barrel Bourbon (Barrel 29683)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "110.3 Proof (55.15% ABV)",
+      "size": "750 mL",
+      "details": "Single Barrel Selection",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "barrel": "Barrel #29683",
+        "notes": "Toffee, black cherry, cinnamon stick, and oak spice."
+      }
+    },
+    {
+      "name": "New Riff Single Barrel Bourbon (Barrel 16-10206)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "103.6 Proof (51.8% ABV)",
+      "size": "750 mL",
+      "details": "Sour Mash, Barrel #16-10206",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "New Riff Single Barrel Bourbon (Distiller David Miller)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "109.4 Proof (54.7% ABV)",
+      "size": "750 mL",
+      "details": "Distilled Feb 2020 / Bottled Mar 2024",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "distiller": "David Miller | Barrel #25492",
+        "notes": "Vanilla pudding, charred cedar, brown sugar, and allspice."
+      }
+    },
+    {
+      "name": "New Riff Single Barrel Bourbon (Distiller Mac Harris)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "116 Proof (58% ABV)",
+      "size": "750 mL",
+      "details": "Distilled Feb 2020 / Bottled Mar 2024",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "distiller": "Mac Harris | Barrel #25168",
+        "notes": "High heat spice, molasses, espresso bean, and dark caramel."
+      }
+    },
+    {
+      "name": "New Riff Single Barrel Bourbon (Barrel Proof)",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "Barrel Proof",
+      "size": "750 mL",
+      "details": "Single Barrel Selection",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "St. Julian Caramel Apple Whiskey",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Flavored Whiskey",
+      "proof": "70 Proof (35% ABV)",
+      "size": "750 mL",
+      "details": "Handcrafted in Small Batches",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Town Branch Kentucky Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Lexington Distilling Co., Small Batch",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Traverse City Whiskey Co. XXX Bourbon Single Barrel",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Single Barrel",
+      "proof": "95 Proof (47.5% ABV)",
+      "size": "750 mL",
+      "details": "Aged 5 Years",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "barrel": "Barrel #20-1046, Rack E7",
+        "notes": "Sweet corn, toasted coconut, honey butter, and light oak."
+      }
+    },
+    {
+      "name": "Traverse City Whiskey Co. Barrel Proof Straight Bourbon 9 Years",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Barrel Proof",
+      "proof": "118 Proof (59% ABV)",
+      "size": "750 mL",
+      "details": "Signature Edition / Stillhouse Exclusive",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "bottle": "Bottle #150/162",
+        "notes": "Viscous caramel, stewed black fruit, leather, and vanilla."
+      }
+    },
+    {
+      "name": "Traverse City Whiskey Co. Barrel Proof Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Barrel Proof",
+      "proof": "112.74 Proof (56.37% ABV)",
+      "size": "750 mL",
+      "details": "Signature Edition",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Traverse City Whiskey Co. Straight Wheat Whiskey Barrel Proof",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Wheat Whiskey",
+      "proof": "116.2 Proof (58.1% ABV)",
+      "size": "750 mL",
+      "details": "Signature Edition / Meijer Steward Select, Aged 5 Years",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "bottle": "Bottle #94 / 206",
+        "notes": "Creamy soft wheat sweetness, warm honey, vanilla cream, and pastry."
+      }
+    },
+    {
+      "name": "Traveller Whiskey Blend No. 40",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Blended Whiskey",
+      "proof": "90 Proof (45% ABV)",
+      "size": "750 mL",
+      "details": "Blended Whiskey by Chris Stapleton & Buffalo Trace",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Woodford Reserve Distiller's Select Straight Bourbon",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Straight Bourbon",
+      "proof": "90.4 Proof (45.2% ABV)",
+      "size": "1.75 L",
+      "details": "Proprietary Batch",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Woodford Reserve Distillery Series Blended Malt",
+      "category": "Bourbon & American Whiskey",
+      "subCategory": "Finished Whiskey",
+      "proof": "90.4 Proof (45.2% ABV)",
+      "size": "375 mL",
+      "details": "Finished in Ruby Port Barrels",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "cask": "Ruby Port Casks",
+        "notes": "Red berry compote, dark cacao, hazelnut, and wine tannin."
+      }
+    },
+    {
+      "name": "Benromach 15-Year Speyside Single Malt",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "86 Proof (43% ABV)",
+      "size": "700 mL",
+      "details": "First-Fill Cask Matured Speyside Single Malt",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by Kyle as a housewarming gift for the elective eviction from the Cloisters.",
+        "notes": "Cracked black pepper, charred Seville orange, dried fruit cake, and delicate peat smoke."
+      }
+    },
+    {
+      "name": "Craigellachie 13-Year Speyside Single Malt",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "No Chill-Filtering, Natural Colour",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Baked apples, grilled pineapple, sulfurous complexity, and smoke."
+      }
+    },
+    {
+      "name": "Glenfiddich 12-Year Amontillado Sherry Cask Finish",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "86 Proof (43% ABV)",
+      "size": "750 mL",
+      "details": "Special Edition Twelve",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "cask": "Amontillado Sherry Casks",
+        "notes": "Nutty almond complexity, fresh pear, crisp apple, and cinnamon."
+      }
+    },
+    {
+      "name": "Glenfiddich 14-Year Our Bourbon Barrel Reserve",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "86 Proof (43% ABV)",
+      "size": "375 mL",
+      "details": "Special Edition Fourteen",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "cask": "Deep-Char New American Oak Barrels",
+        "notes": "Vanilla fudge, baked apple, toasted coconut, and caramel."
+      }
+    },
+    {
+      "name": "Octomore Edition 15.1 Super Heavily Peated Single Malt",
+      "category": "Scotch Whisky",
+      "subCategory": "Islay",
+      "proof": "118.2 Proof (59.1% ABV)",
+      "size": "700 mL",
+      "details": "Bruichladdich Distillery, Islay Single Malt",
+      "isSpecial": true,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "specialNotes": "André's first Octomore. He's very proud of it.",
+        "specs": "108.2 PPM Peat, 5 Years Old, First-Fill Ex-Bourbon Casks",
+        "notes": "Explosive bonfire peat, smoked bacon, lemon peel, and sea spray."
+      }
+    },
+    {
+      "name": "Tamdhu 10-Year Speyside Single Malt",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "86 Proof (43% ABV)",
+      "size": "750 mL",
+      "details": "Matured in Sherry Casks",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "cask": "100% Sherry Oak Casks",
+        "notes": "Sugared almonds, dried orange peel, raisin bread, and cinnamon."
+      }
+    },
+    {
+      "name": "The Exclusive Malts Tomintoul 10-Year Single Cask",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "112.4 Proof (56.2% ABV)",
+      "size": "750 mL",
+      "details": "Speyside Single Malt, Refill Butt Cask #21012",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by Kyle for the late night assistance of installing a dryer at the house on retard street.",
+        "notes": "Sherry sweetness, dried sultanas, candied citrus peel, and toasted malt."
+      }
+    },
+    {
+      "name": "The Glen Grant 12-Year Speyside Single Malt",
+      "category": "Scotch Whisky",
+      "subCategory": "Speyside",
+      "proof": "86 Proof (43% ABV)",
+      "size": "750 mL",
+      "details": "Rothes Speyside Single Malt",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Tomatin Single Malt Scotch Whisky",
+      "category": "Scotch Whisky",
+      "subCategory": "Highland",
+      "proof": "86 Proof (43% ABV)",
+      "size": "750 mL",
+      "details": "Highland Single Malt Scotch Whisky",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by Kyle for André's 33rd birthday.",
+        "cask": "Bourbon and Spanish Sherry Casks",
+        "notes": "Fresh green apples, pear drops, golden syrup, and vanilla custard."
+      }
+    },
+    {
+      "name": "Writers' Tears Double Oak Irish Whiskey",
+      "category": "Irish Whiskey",
+      "subCategory": "Pot Still & Malt",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "Aged in American Oak and French Cognac Casks",
+      "isSpecial": true,
+      "isGifted": true,
+      "inStock": true,
+      "extra": {
+        "giftNotes": "Gifted by the DeLisle Associates staff to André for Bosses Day.",
+        "notes": "Sweet vanilla, poached pear, spiced citrus, and chocolate fruit."
+      }
+    },
+    {
+      "name": "Bacardi Superior White Rum",
+      "category": "Rum & Aquavit",
+      "subCategory": "White Rum",
+      "proof": "80 Proof (40% ABV)",
+      "size": "1.75 L",
+      "details": "Ron Superior Carta Blanca",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Brennivín The Original Icelandic Spirit Aquavit",
+      "category": "Rum & Aquavit",
+      "subCategory": "Aquavit",
+      "proof": "75 Proof (37.5% ABV)",
+      "size": "500 mL",
+      "details": "The Original Icelandic Spirit (Síðan 1935)",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "origin": "Reykjavík, Iceland",
+        "notes": "Caraway seed, herbal botanicals, and crisp anise. Serve ice cold."
+      }
+    },
+    {
+      "name": "Brennivín Rúgbrauð Edition Aquavit",
+      "category": "Rum & Aquavit",
+      "subCategory": "Aquavit",
+      "proof": "80 Proof (40% ABV)",
+      "size": "700 mL",
+      "details": "Icelandic Aquavit Infused with Rye Bread",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "origin": "Reykjavík, Iceland",
+        "notes": "Caraway seed, anise, dense rye bread, and molasses."
+      }
+    },
+    {
+      "name": "Planteray Barbados Rum Aged 5 Years",
+      "category": "Rum & Aquavit",
+      "subCategory": "Aged Rum",
+      "proof": "80 Proof (40% ABV)",
+      "size": "750 mL",
+      "details": "Old Traditional Rum, Double Aged",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Toasted coconut, roasted banana, vanilla bean, and baking spices."
+      }
+    },
+    {
+      "name": "Sailor Jerry Spiced Rum",
+      "category": "Rum & Aquavit",
+      "subCategory": "Spiced Rum",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "Norman 'Sailor Jerry' Collins Tattoo Edition",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Licor 43 (Cuarenta y Tres) Original Liqueur",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "62 Proof (31% ABV)",
+      "size": "750 mL",
+      "details": "Product of Spain, Secret Spanish Family Recipe",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "origin": "Cartagena, Spain",
+        "botanicals": "43 Secret Natural Ingredients (Mediterranean Citrus, Selected Botanicals, Vanilla)",
+        "notes": "Complex golden liqueur bursting with rich vanilla bean, candied orange and Mediterranean citrus peel, warm baking spice, and delicate floral botanical undertones. Famous in Spanish Carajillos and poured over ice."
+      }
+    },
+    {
+      "name": "Caravella Limoncello Originale d'Italia",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "56 Proof (28% ABV)",
+      "size": "750 mL",
+      "details": "Product of Italy, Produced & Bottled by Giacomo Sperone S.P.A.",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "origin": "Italy (Giacomo Sperone S.P.A.)",
+        "notes": "Sweet, intensely zesty Italian lemon peel infusion with a rich, velvety citrus finish. Best served ice cold straight from the freezer."
+      }
+    },
+    {
+      "name": "Dracula Băutură Spirtoasă",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "36 Proof (18% ABV)",
+      "size": "200 mL",
+      "details": "European Drinks Speciality from Transylvania",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "origin": "Transylvania, Romania",
+        "notes": "Traditional regional spirit specialty."
+      }
+    },
+    {
+      "name": "Empress 1908 Indigo Gin",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Botanical Gin",
+      "proof": "85 Proof (42.5% ABV)",
+      "size": "750 mL",
+      "details": "Infused with Butterfly Pea Blossom",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "botanicals": "Fairmont Empress Tea, Juniper, Grapefruit Peel, Coriander",
+        "notes": "Floral juniper, citrus, and natural color-changing profile."
+      }
+    },
+    {
+      "name": "Fireball Cinnamon Whisky",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "66 Proof (33% ABV)",
+      "size": "750 mL",
+      "details": "Whisky with Natural Cinnamon",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Kirkland Signature American Vodka",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Vodka",
+      "proof": "80 Proof (40% ABV)",
+      "size": "1.75 L",
+      "details": "Distilled Six Times, Gluten Free",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Mr. Boston Blue Curaçao Liqueur",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "30 Proof (15% ABV)",
+      "size": "750 mL",
+      "details": "Master Mixologist Series",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Smirnoff Peppermint Twist Limited Edition",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Flavored Vodka",
+      "proof": "60 Proof (30% ABV)",
+      "size": "750 mL",
+      "details": "Vodka with Peppermint",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "St. Elder Natural Elderflower Liqueur",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Liqueur",
+      "proof": "40 Proof (20% ABV)",
+      "size": "750 mL",
+      "details": "Natural Artisanal Liqueur",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "The Botanist Islay Dry Gin",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Dry Gin",
+      "proof": "92 Proof (46% ABV)",
+      "size": "750 mL",
+      "details": "22 Foraged Island Botanicals",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Apple mint, menthol, coriander, and herbal juniper."
+      }
+    },
+    {
+      "name": "UV Blue Raspberry Flavored Vodka",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Flavored Vodka",
+      "proof": "60 Proof (30% ABV)",
+      "size": "750 mL",
+      "details": "Raspberry Flavored Vodka",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    },
+    {
+      "name": "Crown Royal Blackberry Flavored Whisky",
+      "category": "Gin, Vodka & Liqueurs",
+      "subCategory": "Flavored Whisky",
+      "proof": "70 Proof (35% ABV)",
+      "size": "750 mL",
+      "details": "Limited Edition Summer Release",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true
+    }
+  ]
+}
