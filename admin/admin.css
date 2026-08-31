@@ -1,11 +1,11 @@
 /* ==========================================================================
-   The Damp Clam Speakeasy — Ultra-Compact Decap CMS Overhaul
+   The Damp Clam Speakeasy — Decap CMS Clean Theme & Layout Fix
    ========================================================================== */
 
 :root {
   --bg-dark: #03140f;
   --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
-  --card-bg: rgba(2, 22, 17, 0.88);
+  --card-bg: rgba(2, 22, 17, 0.92);
   --input-bg: #01130d;
   --neon-cyan: #00f7ff;
   --neon-green: #39ff14;
@@ -16,7 +16,6 @@
   --gold-amber: #e5b567;
   --off-white: #f8fafc;
   --border: #16382c;
-  --border-subtle: rgba(22, 56, 44, 0.6);
   --font-serif: "Georgia", Times, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -28,32 +27,60 @@ body, html, #nc-root {
   background-attachment: fixed !important;
   color: var(--off-white) !important;
   font-family: var(--font-sans) !important;
+  min-height: 100vh !important;
 }
 
 /* ==========================================================================
-   Header & Sidebar Trimming
+   Top Header Bar
    ========================================================================== */
 
 header[class*="AppHeader"] {
-  background: rgba(2, 22, 17, 0.95) !important;
+  background: rgba(2, 22, 17, 0.98) !important;
   border-bottom: 1px solid var(--border) !important;
-  height: 52px !important;
-  min-height: 52px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-aside[class*="SidebarContainer"], aside[class*="Sidebar"] {
-  background: rgba(1, 18, 13, 0.98) !important;
+header[class*="AppHeader"] * {
+  color: #fff !important;
+}
+
+/* ==========================================================================
+   Left Sidebar & Navigation Links
+   ========================================================================== */
+
+aside, [class*="SidebarContainer"], [class*="Sidebar-"] {
+  background: rgba(1, 18, 13, 0.95) !important;
   border-right: 1px solid var(--border) !important;
-  width: 220px !important;
+  overflow-y: auto !important;
+  height: auto !important;
 }
 
-[class*="SidebarNavLink"], a[class*="Sidebar"] {
+/* Fix sidebar header & search input */
+[class*="SidebarHeading"], [class*="SidebarHeading"] * {
   color: var(--gold-amber) !important;
   font-family: var(--font-serif) !important;
-  font-size: 0.85rem !important;
-  margin: 2px 6px !important;
-  padding: 6px 10px !important;
+}
+
+[class*="SearchContainer"] input,
+input[placeholder*="Search"] {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  color: #fff !important;
   border-radius: 6px !important;
+}
+
+/* Sidebar Navigation Items */
+[class*="SidebarNavLink"], 
+a[class*="SidebarNav"] {
+  color: var(--gold-amber) !important;
+  font-family: var(--font-serif) !important;
+  font-size: 0.88rem !important;
+  padding: 8px 12px !important;
+  margin: 4px 8px !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: all 0.2s ease !important;
 }
 
 [class*="SidebarNavLink"]:hover {
@@ -62,78 +89,89 @@ aside[class*="SidebarContainer"], aside[class*="Sidebar"] {
 }
 
 [class*="SidebarNavLink"][class*="active"], 
-a[class*="Sidebar"][aria-current="page"] {
-  background: rgba(0, 247, 255, 0.12) !important;
+a[class*="SidebarNav"][aria-current="page"] {
+  background: rgba(0, 247, 255, 0.14) !important;
   color: var(--neon-cyan) !important;
   border-left: 3px solid var(--neon-cyan) !important;
 }
 
 /* ==========================================================================
-   Main Form Layout & Grid Modernization
+   Main Content Views & Entry Cards (Fix White Boxes)
    ========================================================================== */
 
 main, [class*="AppMainContainer"] {
   background: transparent !important;
-  padding: 1rem 1.5rem !important;
 }
 
-[class*="EditorContainer"] {
-  background: transparent !important;
-  max-width: 1200px !important;
-}
-
-/* Transform object sub-forms into multi-column layouts */
-[class*="ObjectWidgetTopBarContainer"] + div {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-  gap: 0.65rem 0.85rem !important;
-  padding: 0.75rem !important;
-}
-
-/* Individual Field Container */
-[class*="ControlContainer"], 
-[class*="Field-root"],
-[class*="Field-root-"] {
+/* Collection Index Cards & Containers */
+[class*="Card"], 
+[class*="CollectionContainer"], 
+[class*="CardsGrid"],
+[class*="ListCard"],
+[class*="GridCard"] {
   background: var(--card-bg) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 6px !important;
-  padding: 0.45rem 0.65rem !important;
-  margin: 0 !important;
-  box-shadow: none !important;
+  border-radius: 8px !important;
+  color: var(--off-white) !important;
 }
 
-/* Compact Labels */
+/* Fix Card Top Headers & Titles */
+[class*="Card"] h2,
+[class*="Card"] h3,
+[class*="CardHeading"],
+[class*="Card"] * {
+  color: #fff !important;
+}
+
+[class*="Card"]:hover {
+  border-color: rgba(0, 247, 255, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 247, 255, 0.2) !important;
+}
+
+/* Sort & View Controls */
+[class*="ViewControls"] button,
+[class*="SortControl"] button {
+  color: var(--gold-amber) !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   Form Fields, Inputs & Buttons
+   ========================================================================== */
+
+/* Form Control Containers */
+[class*="ControlContainer"], 
+[class*="Field-root"] {
+  background: rgba(2, 22, 17, 0.85) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  padding: 0.65rem 0.85rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
 label, [class*="ControlLabel"] {
   color: var(--gold-amber) !important;
   font-family: var(--font-serif) !important;
-  font-size: 0.72rem !important;
+  font-size: 0.75rem !important;
   letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
-  margin-bottom: 2px !important;
+  margin-bottom: 4px !important;
   font-weight: 600 !important;
 }
 
-/* Compact Inputs & Dropdowns */
 input[type="text"],
 input[type="password"],
 input[type="number"],
 textarea,
 select {
   background: var(--input-bg) !important;
-  border: 1px solid var(--border-subtle) !important;
+  border: 1px solid var(--border) !important;
   border-radius: 4px !important;
   color: #fff !important;
-  font-size: 0.82rem !important;
-  padding: 5px 8px !important;
-  height: 32px !important;
-  line-height: 1.3 !important;
+  font-size: 0.85rem !important;
+  padding: 6px 10px !important;
+  width: 100% !important;
   box-sizing: border-box !important;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5) !important;
-}
-
-textarea {
-  height: 60px !important;
-  min-height: 60px !important;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -142,83 +180,44 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 8px rgba(0, 247, 255, 0.4) !important;
 }
 
-/* ==========================================================================
-   List Item (Repeater) Card Slimming
-   ========================================================================== */
-
-/* The Accordion Bar for Each Bottle / Item */
+/* List Repeater Rows */
 [class*="ListItemContainer"], 
 [class*="NestedObjectContainer"] {
-  background: rgba(2, 22, 17, 0.95) !important;
+  background: rgba(1, 18, 13, 0.95) !important;
   border: 1px solid var(--border) !important;
   border-radius: 6px !important;
-  margin-bottom: 6px !important;
-  padding: 0 !important;
-  overflow: hidden !important;
+  margin-bottom: 8px !important;
 }
 
 [class*="TopBarContainer"], [class*="ListCardTopBar"] {
-  background: rgba(13, 40, 34, 0.6) !important;
+  background: rgba(13, 40, 34, 0.7) !important;
   border-bottom: 1px solid var(--border) !important;
-  padding: 6px 12px !important;
-  min-height: 36px !important;
-  font-size: 0.85rem !important;
   color: var(--gold-amber) !important;
-  cursor: pointer !important;
+  padding: 8px 12px !important;
 }
 
-[class*="TopBarContainer"]:hover {
-  background: rgba(0, 247, 255, 0.08) !important;
-}
-
-/* ==========================================================================
-   Buttons & Status Toggles
-   ========================================================================== */
-
-/* Main Publish / Save Button */
+/* Action Buttons */
 button[class*="PublishButton"], 
 button[class*="SaveButton"] {
   background: var(--neon-cyan) !important;
   color: #03140f !important;
   font-weight: 700 !important;
-  font-size: 0.78rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.08em !important;
   border-radius: 18px !important;
-  padding: 6px 16px !important;
   border: none !important;
-  box-shadow: 0 0 10px rgba(0, 247, 255, 0.35) !important;
+  padding: 6px 16px !important;
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.4) !important;
 }
 
-button[class*="PublishButton"]:hover {
-  background: #fff !important;
-  box-shadow: 0 0 16px rgba(0, 247, 255, 0.7) !important;
-}
-
-/* Compact Add Button */
 button[class*="AddButton"], 
 [class*="button-secondary"] {
-  background: rgba(0, 247, 255, 0.06) !important;
+  background: rgba(0, 247, 255, 0.08) !important;
   color: var(--neon-cyan) !important;
   border: 1px solid var(--neon-cyan) !important;
-  border-radius: 15px !important;
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
+  border-radius: 16px !important;
   padding: 5px 12px !important;
 }
 
-/* Slimmed Boolean Toggle Switch */
-[class*="ToggleBackground"] {
-  background: #16382c !important;
-  height: 20px !important;
-  width: 36px !important;
-}
-
-[class*="ToggleHandle"] {
-  height: 16px !important;
-  width: 16px !important;
-}
-
+/* Toggles */
 [class*="ToggleBackground"][class*="active"] {
   background: var(--neon-green) !important;
   box-shadow: 0 0 8px rgba(57, 255, 20, 0.5) !important;
