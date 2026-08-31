@@ -191,18 +191,19 @@
             <option>Irish Whiskey</option>
             <option>Rum & Aquavit</option>
             <option>Gin, Vodka & Liqueurs</option>
+            <option>Wine</option>
           </select>
         </div>
         <div>
-          <label>Sub-Category</label>
-          <input type="text" id="b-sub" placeholder="e.g. Straight Bourbon" />
+          <label>Sub-Category / Style</label>
+          <input type="text" id="b-sub" placeholder="e.g. Straight Bourbon or Cabernet Sauvignon" />
         </div>
         <div>
           <label>Proof / ABV</label>
           <input type="text" id="b-proof" placeholder="e.g. 90 Proof (45% ABV)" />
         </div>
         <div>
-          <label>Bottle Size</label>
+          <label>Bottle Size / Unit</label>
           <input type="text" id="b-size" value="750 mL" />
         </div>
         <div>
@@ -210,7 +211,7 @@
           <input type="number" id="b-qty" value="1" min="1" />
         </div>
         <div class="full-width">
-          <label>Details / Bottler / Distiller</label>
+          <label>Details / Bottler / Distiller / Vineyard</label>
           <input type="text" id="b-details" placeholder="e.g. Kentucky Straight Bourbon, Aged 10 Years" />
         </div>
         <div class="full-width">
@@ -218,12 +219,12 @@
           <textarea id="b-notes" rows="2" placeholder="Toasted oak, vanilla, rich caramel, and cherries."></textarea>
         </div>
         <div>
-          <label>Mashbill / Botanicals (Optional)</label>
-          <input type="text" id="b-mash" placeholder="e.g. Buffalo Trace Mash #1" />
+          <label>Mashbill / Botanicals / Origin (Optional)</label>
+          <input type="text" id="b-mash" placeholder="e.g. Buffalo Trace Mash #1 or Napa Valley, CA" />
         </div>
         <div>
           <label>Barrel / Cask (Optional)</label>
-          <input type="text" id="b-barrel" placeholder="e.g. Barrel #14, Rickhouse K" />
+          <input type="text" id="b-barrel" placeholder="e.g. French Oak Casks" />
         </div>
         <div class="full-width checkbox-row">
           <input type="checkbox" id="b-special" />
@@ -235,7 +236,7 @@
         </div>
         <div class="full-width" id="gift-notes-row" style="display: none;">
           <label>Gift Story / Occasion</label>
-          <input type="text" id="b-giftnotes" placeholder="e.g. Gifted by Kyle for André's birthday." />
+          <input type="text" id="b-giftnotes" placeholder="e.g. Gifted for anniversary." />
         </div>
       </div>
 
@@ -246,7 +247,6 @@
 
   <script>
     const REPO = "thedampclam/TheDampClamBarMenu";
-    const FILE_PATH = "data/spirits.json";
     
     let existingSpirits = [];
 
@@ -263,7 +263,7 @@
 
     async function preloadInventory() {
       try {
-        const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${FILE_PATH}`);
+        const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/data/spirits.json`);
         const data = await res.json();
         existingSpirits = data.items || [];
       } catch(e) {
@@ -372,21 +372,21 @@
 
     async function analyzeBottleLabel(base64Data) {
       const gKey = document.getElementById("gemini-key").value.trim();
-      const prompt = `Analyze this liquor bottle photo. Extract details and return ONLY a valid JSON object matching this schema without any markdown formatting:
+      const prompt = `Analyze this beverage bottle photo (liquor, wine, or beer). Extract details and return ONLY a valid JSON object matching this schema without markdown fences:
       {
-        "name": "Full Bottle Name",
-        "category": "One of: Bourbon & American Whiskey, Scotch Whisky, Irish Whiskey, Rum & Aquavit, Gin, Vodka & Liqueurs",
-        "subCategory": "e.g. Straight Bourbon, Speyside, Single Barrel, Rye, Liqueur, etc.",
-        "proof": "e.g. 90 Proof (45% ABV)",
-        "size": "e.g. 750 mL",
-        "details": "e.g. Kentucky Straight Bourbon Whiskey or Single Barrel Selection",
-        "mash": "Mashbill or botanicals if shown",
-        "barrel": "Barrel number, cask finish, or rickhouse info if shown",
-        "notes": "Tasting notes summary if shown or standard notes for this bottle"
+        "name": "Full Product/Bottle Name",
+        "category": "One of: Bourbon & American Whiskey, Scotch Whisky, Irish Whiskey, Rum & Aquavit, Gin, Vodka & Liqueurs, Wine",
+        "subCategory": "e.g. Straight Bourbon, Speyside, Cabernet Sauvignon, Pinot Noir, Liqueur, etc.",
+        "proof": "e.g. 90 Proof (45% ABV) or 13.5% ABV",
+        "size": "e.g. 750 mL or Bottle",
+        "details": "e.g. Producer, Vintage, Estate, or Distiller info",
+        "mash": "Region / Appellation / Mashbill / Botanicals",
+        "barrel": "Oak / Barrel aging notes if listed",
+        "notes": "Tasting notes summary"
       }`;
 
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${gKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -474,7 +474,6 @@
       }
     }
 
-    // Add size to existing card
     window.addSizeToExistingEntry = async function(index) {
       const targetBottle = existingSpirits[index];
       const sizeToAdd = document.getElementById("b-size").value.trim() || "750 mL";
@@ -491,7 +490,8 @@
       statusDisplay.textContent = `Updating inventory for ${targetBottle.name}...`;
 
       try {
-        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+        const filePath = targetBottle.category === "Wine" ? "data/beer-wine.json" : "data/spirits.json";
+        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${filePath}`, {
           headers: {
             "Accept": "application/vnd.github+json",
             "Authorization": `Bearer ${ghToken}`
@@ -513,7 +513,7 @@
         cur.size = Object.keys(cur.sizes).join(", ");
 
         const updatedBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
-        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${filePath}`, {
           method: "PUT",
           headers: {
             "Accept": "application/vnd.github+json",
@@ -557,7 +557,6 @@
       return ghToken;
     }
 
-    // Save as distinct new card
     bottleForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       saveKeys();
@@ -572,18 +571,25 @@
         return;
       }
 
-      const inputSize = document.getElementById("b-size").value.trim() || "750 mL";
+      const inputCategory = document.getElementById("b-category").value;
+      const isWine = inputCategory === "Wine";
+      const targetFilePath = isWine ? "data/beer-wine.json" : "data/spirits.json";
+
+      const inputSize = document.getElementById("b-size").value.trim() || (isWine ? "Bottle" : "750 mL");
       const inputQty = parseInt(document.getElementById("b-qty").value) || 1;
 
       const newBottle = {
         name: document.getElementById("b-name").value.trim(),
-        category: document.getElementById("b-category").value,
+        category: inputCategory,
         subCategory: document.getElementById("b-sub").value.trim(),
+        style: document.getElementById("b-sub").value.trim(),
         proof: document.getElementById("b-proof").value.trim(),
+        abv: document.getElementById("b-proof").value.trim(),
         size: inputSize,
         sizes: { [inputSize]: inputQty },
         quantity: inputQty,
         details: document.getElementById("b-details").value.trim(),
+        origin: document.getElementById("b-mash").value.trim(),
         isSpecial: document.getElementById("b-special").checked,
         isGifted: document.getElementById("b-gifted").checked,
         inStock: true,
@@ -602,7 +608,7 @@
       if (Object.keys(newBottle.extra).length === 0) delete newBottle.extra;
 
       try {
-        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${targetFilePath}`, {
           headers: {
             "Accept": "application/vnd.github+json",
             "Authorization": `Bearer ${ghToken}`
@@ -614,14 +620,14 @@
         currentContent.items.push(newBottle);
 
         const updatedBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
-        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${targetFilePath}`, {
           method: "PUT",
           headers: {
             "Accept": "application/vnd.github+json",
             "Authorization": `Bearer ${ghToken}`
           },
           body: JSON.stringify({
-            message: `Add ${newBottle.name} as new card`,
+            message: `Add ${newBottle.name} (${inputCategory}) as new card`,
             content: updatedBase64,
             sha: fileData.sha,
             branch: "main"
