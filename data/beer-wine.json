@@ -25,7 +25,7 @@
       "abv": "14.2% ABV",
       "origin": "California, USA",
       "details": "Bold dark fruit, black cherry, subtle vanilla oak, and smooth tannins.",
-      "inStock": true
+      "inStock": false
     },
     {
       "name": "Crisp Sauvignon Blanc",
@@ -34,7 +34,7 @@
       "abv": "12.5% ABV",
       "origin": "Marlborough, NZ",
       "details": "Bright grapefruit, lemongrass, lime zest, and vibrant acidity.",
-      "inStock": true
+      "inStock": false
     },
     {
       "name": "Prosecco DOC",
