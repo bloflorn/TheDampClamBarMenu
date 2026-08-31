@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam — AI Bottle Scanner</title>
+  <link rel="icon" type="image/jpeg" href="../logo.jpg" />
+  <style>
+    :root {
+      --bg-dark: #03140f;
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.92);
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --gold-amber: #e5b567;
+      --border: #16382c;
+      --font-serif: "Georgia", Times, serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: #f8fafc;
+      font-family: var(--font-sans);
+      padding: 1rem;
+      min-height: 100vh;
+    }
+    .container { max-width: 600px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 1.25rem; }
+    h1 { font-family: var(--font-serif); font-size: 1.6rem; color: #fff; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px var(--neon-cyan); }
+    .sub { font-size: 0.8rem; color: var(--gold-amber); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    label { display: block; font-family: var(--font-serif); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-amber); margin-bottom: 4px; font-weight: 600; }
+    input[type="text"], select, textarea, input[type="password"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #01130d;
+      color: #fff;
+      font-size: 0.88rem;
+      margin-bottom: 0.75rem;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 8px rgba(0,247,255,0.4); }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-camera { background: var(--neon-cyan); color: #03140f; box-shadow: 0 0 12px rgba(0,247,255,0.4); margin-bottom: 0.75rem; }
+    .btn-camera:hover { background: #fff; box-shadow: 0 0 18px rgba(0,247,255,0.8); }
+    .btn-save { background: var(--neon-green); color: #03140f; box-shadow: 0 0 12px rgba(57,255,20,0.4); }
+    .btn-save:hover { background: #fff; box-shadow: 0 0 18px rgba(57,255,20,0.8); }
+    .btn-secondary { background: transparent; color: var(--gold-amber); border: 1px solid var(--gold-amber); margin-top: 0.5rem; }
+    
+    .status-msg { text-align: center; font-size: 0.85rem; margin: 0.75rem 0; font-style: italic; }
+    .status-msg.loading { color: var(--neon-cyan); }
+    .status-msg.success { color: var(--neon-green); font-weight: bold; }
+    .status-msg.error { color: #ff3344; font-weight: bold; }
+    
+    .preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.75rem; display: none; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .full-width { grid-column: 1 / -1; }
+    .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .checkbox-row input { width: auto; margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AI Bottle Scanner</h1>
+      <div class="sub">Direct Inventory Ingestion for The Damp Clam</div>
+    </header>
+
+    <div class="card">
+      <label for="gemini-key">Gemini AI Studio API Key</label>
+      <input type="password" id="gemini-key" placeholder="AIzaSy..." />
+
+      <label for="gh-token">GitHub Personal Access Token (for saving to repo)</label>
+      <input type="password" id="gh-token" placeholder="ghp_..." />
+
+      <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;" />
+      <button class="btn btn-camera" id="capture-btn">📷 Snap Bottle Label Photo</button>
+      
+      <img id="image-preview" class="preview-img" alt="Bottle Label" />
+      <div id="status-display" class="status-msg"></div>
+    </div>
+
+    <!-- Review Form -->
+    <form id="bottle-form" class="card" style="display: none;">
+      <h2 style="font-family: var(--font-serif); font-size: 1.1rem; color: #fff; margin-bottom: 1rem; text-transform: uppercase;">Review & Confirm Data</h2>
+      
+      <div class="form-grid">
+        <div class="full-width">
+          <label>Bottle Name</label>
+          <input type="text" id="b-name" required />
+        </div>
+        <div>
+          <label>Category</label>
+          <select id="b-category">
+            <option>Bourbon & American Whiskey</option>
+            <option>Scotch Whisky</option>
+            <option>Irish Whiskey</option>
+            <option>Rum & Aquavit</option>
+            <option>Gin, Vodka & Liqueurs</option>
+          </select>
+        </div>
+        <div>
+          <label>Sub-Category</label>
+          <input type="text" id="b-sub" />
+        </div>
+        <div>
+          <label>Proof / ABV</label>
+          <input type="text" id="b-proof" />
+        </div>
+        <div>
+          <label>Size</label>
+          <input type="text" id="b-size" value="750 mL" />
+        </div>
+        <div class="full-width">
+          <label>Details / Bottler / Distiller</label>
+          <input type="text" id="b-details" />
+        </div>
+        <div class="full-width">
+          <label>Tasting Notes</label>
+          <textarea id="b-notes" rows="2"></textarea>
+        </div>
+        <div>
+          <label>Mashbill / Botanicals (Optional)</label>
+          <input type="text" id="b-mash" />
+        </div>
+        <div>
+          <label>Barrel / Cask (Optional)</label>
+          <input type="text" id="b-barrel" />
+        </div>
+        <div class="full-width checkbox-row">
+          <input type="checkbox" id="b-special" />
+          <label for="b-special" style="margin-bottom:0; cursor:pointer;">Mark as Special / Reserve Bottle?</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-save" id="save-btn">✓ Save & Push to Website</button>
+      <a href="index.html" class="btn btn-secondary">Go to Admin Dashboard</a>
+    </form>
+  </div>
+
+  <script>
+    const REPO = "thedampclam/TheDampClamBarMenu";
+    const FILE_PATH = "data/spirits.json";
+    
+    // Auto-load cached keys
+    const storedGemini = localStorage.getItem("damp_clam_gemini_key");
+    if (storedGemini) document.getElementById("gemini-key").value = storedGemini;
+
+    const storedGh = localStorage.getItem("decap-cms-user");
+    if (storedGh) {
+      try {
+        const parsed = JSON.parse(storedGh);
+        if (parsed.token) document.getElementById("gh-token").value = parsed.token;
+      } catch (e) {}
+    }
+
+    const captureBtn = document.getElementById("capture-btn");
+    const cameraInput = document.getElementById("camera-input");
+    const preview = document.getElementById("image-preview");
+    const statusDisplay = document.getElementById("status-display");
+    const bottleForm = document.getElementById("bottle-form");
+
+    captureBtn.addEventListener("click", () => {
+      const gKey = document.getElementById("gemini-key").value.trim();
+      const ghKey = document.getElementById("gh-token").value.trim();
+      if (!gKey) {
+        alert("Please paste your Gemini API Key first.");
+        return;
+      }
+      localStorage.setItem("damp_clam_gemini_key", gKey);
+      if (ghKey) {
+        localStorage.setItem("decap-cms-user", JSON.stringify({ token: ghKey, backendName: "github" }));
+      }
+      cameraInput.click();
+    });
+
+    cameraInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+      statusDisplay.className = "status-msg loading";
+      statusDisplay.textContent = "Analyzing bottle label with AI Vision...";
+
+      const base64Data = await fileToBase64(file);
+      analyzeBottleLabel(base64Data, file.type || "image/jpeg");
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function analyzeBottleLabel(base64Data, mimeType) {
+      const gKey = document.getElementById("gemini-key").value.trim();
+      const prompt = `Analyze this liquor bottle photo. Extract details and return ONLY a valid JSON object matching this schema without any markdown wrapping:
+      {
+        "name": "Full Bottle Name",
+        "category": "One of: Bourbon & American Whiskey, Scotch Whisky, Irish Whiskey, Rum & Aquavit, Gin, Vodka & Liqueurs",
+        "subCategory": "e.g. Straight Bourbon, Speyside, Single Barrel, Rye, Liqueur, etc.",
+        "proof": "e.g. 90 Proof (45% ABV)",
+        "size": "e.g. 750 mL",
+        "details": "e.g. Kentucky Straight Bourbon Whiskey or Single Barrel Selection",
+        "mash": "Mashbill or botanicals if shown",
+        "barrel": "Barrel number, cask finish, or rickhouse info if shown",
+        "notes": "Tasting notes summary if shown or standard notes for this bottle"
+      }`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gKey}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: prompt },
+                { inline_data: { mime_type: mimeType, data: base64Data } }
+              ]
+            }],
+            generationConfig: { response_mime_type: "application/json" }
+          })
+        });
+
+        const data = await res.json();
+        const rawJson = data.candidates[0].content.parts[0].text;
+        const bottle = JSON.parse(rawJson);
+
+        // Pre-fill form
+        document.getElementById("b-name").value = bottle.name || "";
+        document.getElementById("b-category").value = bottle.category || "Bourbon & American Whiskey";
+        document.getElementById("b-sub").value = bottle.subCategory || "";
+        document.getElementById("b-proof").value = bottle.proof || "";
+        document.getElementById("b-size").value = bottle.size || "750 mL";
+        document.getElementById("b-details").value = bottle.details || "";
+        document.getElementById("b-notes").value = bottle.notes || "";
+        document.getElementById("b-mash").value = bottle.mash || "";
+        document.getElementById("b-barrel").value = bottle.barrel || "";
+
+        bottleForm.style.display = "block";
+        statusDisplay.className = "status-msg success";
+        statusDisplay.textContent = "Label analyzed! Confirm the details below.";
+        bottleForm.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        statusDisplay.className = "status-msg error";
+        statusDisplay.textContent = "Could not parse label automatically. You can enter details manually below.";
+        bottleForm.style.display = "block";
+      }
+    }
+
+    bottleForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById("save-btn");
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Saving to GitHub...";
+
+      let ghToken = document.getElementById("gh-token").value.trim();
+      if (!ghToken) {
+        const userSession = localStorage.getItem("decap-cms-user");
+        ghToken = userSession ? JSON.parse(userSession).token : null;
+      }
+
+      if (!ghToken) {
+        alert("GitHub Token not found. Please paste your GitHub Personal Access Token.");
+        saveBtn.disabled = false;
+        saveBtn.textContent = "✓ Save & Push to Website";
+        return;
+      }
+
+      const newBottle = {
+        name: document.getElementById("b-name").value.trim(),
+        category: document.getElementById("b-category").value,
+        subCategory: document.getElementById("b-sub").value.trim(),
+        proof: document.getElementById("b-proof").value.trim(),
+        size: document.getElementById("b-size").value.trim(),
+        details: document.getElementById("b-details").value.trim(),
+        isSpecial: document.getElementById("b-special").checked,
+        isGifted: false,
+        inStock: true,
+        extra: {}
+      };
+
+      const notes = document.getElementById("b-notes").value.trim();
+      const mash = document.getElementById("b-mash").value.trim();
+      const barrel = document.getElementById("b-barrel").value.trim();
+
+      if (notes) newBottle.extra.notes = notes;
+      if (mash) newBottle.extra.mash = mash;
+      if (barrel) newBottle.extra.barrel = barrel;
+      if (Object.keys(newBottle.extra).length === 0) delete newBottle.extra;
+
+      try {
+        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${ghToken}`
+          }
+        });
+        const fileData = await getRes.json();
+        const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+
+        currentContent.items.push(newBottle);
+
+        const updatedBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
+        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+          method: "PUT",
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${ghToken}`
+          },
+          body: JSON.stringify({
+            message: `Add ${newBottle.name} via AI Scanner`,
+            content: updatedBase64,
+            sha: fileData.sha,
+            branch: "main"
+          })
+        });
+
+        if (putRes.ok) {
+          statusDisplay.className = "status-msg success";
+          statusDisplay.textContent = `✓ Successfully added ${newBottle.name} to the website!`;
+          bottleForm.reset();
+          preview.style.display = "none";
+          bottleForm.style.display = "none";
+        } else {
+          throw new Error("GitHub commit failed.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error saving bottle to GitHub. Check console for details.");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "✓ Save & Push to Website";
+      }
+    });
+  </script>
+</body>
+</html>
