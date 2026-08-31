@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "name": "House IPA",
+      "category": "Beer",
+      "style": "India Pale Ale",
+      "abv": "6.8% ABV",
+      "origin": "Michigan, USA",
+      "details": "Crisp citrus notes with a balanced pine and hop bitterness.",
+      "inStock": true
+    },
+    {
+      "name": "Classic Craft Lager",
+      "category": "Beer",
+      "style": "Lager",
+      "abv": "4.8% ABV",
+      "origin": "Domestic Craft",
+      "details": "Clean, light, and refreshing golden lager served ice cold.",
+      "inStock": true
+    },
+    {
+      "name": "Cabernet Sauvignon",
+      "category": "Wine",
+      "style": "Red Wine",
+      "abv": "14.2% ABV",
+      "origin": "California, USA",
+      "details": "Bold dark fruit, black cherry, subtle vanilla oak, and smooth tannins.",
+      "inStock": true
+    },
+    {
+      "name": "Crisp Sauvignon Blanc",
+      "category": "Wine",
+      "style": "White Wine",
+      "abv": "12.5% ABV",
+      "origin": "Marlborough, NZ",
+      "details": "Bright grapefruit, lemongrass, lime zest, and vibrant acidity.",
+      "inStock": true
+    },
+    {
+      "name": "Prosecco DOC",
+      "category": "Wine",
+      "style": "Sparkling Wine",
+      "abv": "11.0% ABV",
+      "origin": "Veneto, Italy",
+      "details": "Effervescent green apple, fresh pear, and floral aromas.",
+      "inStock": true
+    }
+  ]
+}
