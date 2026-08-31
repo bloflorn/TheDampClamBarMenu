@@ -12,6 +12,8 @@
       --card-bg: rgba(2, 22, 17, 0.92);
       --neon-cyan: #00f7ff;
       --neon-green: #39ff14;
+      --neon-gold: #ffd700;
+      --neon-pink: #ff2a8d;
       --gold-amber: #e5b567;
       --border: #16382c;
       --font-serif: "Georgia", Times, serif;
@@ -41,7 +43,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
     label { display: block; font-family: var(--font-serif); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-amber); margin-bottom: 4px; font-weight: 600; }
-    input[type="text"], select, textarea, input[type="password"] {
+    input[type="text"], input[type="number"], select, textarea, input[type="password"] {
       width: 100%;
       padding: 8px 10px;
       border-radius: 6px;
@@ -95,6 +97,49 @@
     .full-width { grid-column: 1 / -1; }
     .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
     .checkbox-row input { width: auto; margin-bottom: 0; }
+
+    /* Similarity Alert Banner */
+    .match-box {
+      background: rgba(229, 181, 103, 0.1);
+      border: 1px solid var(--gold-amber);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .match-header {
+      font-size: 0.8rem;
+      color: var(--gold-amber);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+    .match-item {
+      background: #01130d;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .match-name { font-size: 0.85rem; font-weight: 600; color: #fff; }
+    .match-sub { font-size: 0.72rem; color: #94a3b8; }
+    .btn-match-action {
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: var(--neon-cyan);
+      color: #03140f;
+    }
+    .btn-match-action:hover { background: #fff; }
   </style>
 </head>
 <body>
@@ -125,6 +170,12 @@
 
     <!-- Review / Manual Form -->
     <form id="bottle-form" class="card" style="display: none;">
+      <!-- Similar Match Container -->
+      <div class="match-box" id="similar-matches-box">
+        <div class="match-header">🔍 Similar Inventory Found</div>
+        <div id="matches-list"></div>
+      </div>
+
       <h2 style="font-family: var(--font-serif); font-size: 1.1rem; color: #fff; margin-bottom: 1rem; text-transform: uppercase;">Bottle Details</h2>
       
       <div class="form-grid">
@@ -153,6 +204,10 @@
         <div>
           <label>Size</label>
           <input type="text" id="b-size" value="750 mL" />
+        </div>
+        <div>
+          <label>Quantity in Stock</label>
+          <input type="number" id="b-qty" value="1" min="1" />
         </div>
         <div class="full-width">
           <label>Details / Bottler / Distiller</label>
@@ -184,7 +239,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-save" id="save-btn">✓ Save & Push to Website</button>
+      <button type="submit" class="btn btn-save" id="save-btn">✓ Save as Unique Entry</button>
       <a href="manager.html" class="btn btn-secondary">Go to Bar Manager</a>
     </form>
   </div>
@@ -193,6 +248,8 @@
     const REPO = "thedampclam/TheDampClamBarMenu";
     const FILE_PATH = "data/spirits.json";
     
+    let existingSpirits = [];
+
     // Auto-load cached credentials
     const storedGemini = localStorage.getItem("damp_clam_gemini_key");
     if (storedGemini) document.getElementById("gemini-key").value = storedGemini;
@@ -205,6 +262,18 @@
       } catch (e) {}
     }
 
+    // Pre-fetch existing inventory for instant similarity checks
+    async function preloadInventory() {
+      try {
+        const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${FILE_PATH}`);
+        const data = await res.json();
+        existingSpirits = data.items || [];
+      } catch(e) {
+        console.warn("Could not pre-fetch spirits list:", e);
+      }
+    }
+    preloadInventory();
+
     const captureBtn = document.getElementById("capture-btn");
     const manualBtn = document.getElementById("manual-btn");
     const cameraInput = document.getElementById("camera-input");
@@ -213,9 +282,14 @@
     const bottleForm = document.getElementById("bottle-form");
     const giftedCheckbox = document.getElementById("b-gifted");
     const giftNotesRow = document.getElementById("gift-notes-row");
+    const nameInput = document.getElementById("b-name");
 
     giftedCheckbox.addEventListener("change", () => {
       giftNotesRow.style.display = giftedCheckbox.checked ? "block" : "none";
+    });
+
+    nameInput.addEventListener("input", () => {
+      checkForSimilarBottles(nameInput.value.trim());
     });
 
     manualBtn.addEventListener("click", () => {
@@ -346,7 +420,9 @@
 
         bottleForm.style.display = "block";
         statusDisplay.className = "status-msg success";
-        statusDisplay.textContent = "✓ Label analyzed! Review or edit the details below.";
+        statusDisplay.textContent = "✓ Label analyzed! Check for matches below or edit details.";
+        
+        checkForSimilarBottles(bottle.name || "");
         bottleForm.scrollIntoView({ behavior: 'smooth' });
       } catch (err) {
         console.error(err);
@@ -356,23 +432,132 @@
       }
     }
 
-    bottleForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      saveKeys();
+    // Similarity Checker Algorithm
+    function checkForSimilarBottles(targetName) {
+      const matchBox = document.getElementById("similar-matches-box");
+      const list = document.getElementById("matches-list");
+      if (!targetName || targetName.length < 3 || existingSpirits.length === 0) {
+        matchBox.style.display = "none";
+        return;
+      }
+
+      const cleanTarget = targetName.toLowerCase().replace(/[^a-z0-9]/g, " ");
+      const words = cleanTarget.split(/\s+/).filter(w => w.length > 2);
+
+      const matches = existingSpirits.map((item, idx) => {
+        const cleanItem = (item.name || "").toLowerCase().replace(/[^a-z0-9]/g, " ");
+        let score = 0;
+        
+        if (cleanItem === cleanTarget) score += 100;
+        if (cleanItem.includes(cleanTarget) || cleanTarget.includes(cleanItem)) score += 50;
+        words.forEach(w => {
+          if (cleanItem.includes(w)) score += 10;
+        });
+
+        return { item, idx, score };
+      }).filter(m => m.score >= 20).sort((a, b) => b.score - a.score).slice(0, 3);
+
+      if (matches.length > 0) {
+        matchBox.style.display = "block";
+        list.innerHTML = matches.map(m => `
+          <div class="match-item">
+            <div>
+              <div class="match-name">${m.item.name}</div>
+              <div class="match-sub">${m.item.category || ''} • Current Qty: ${m.item.quantity || 1} • ${m.item.inStock ? 'In Stock' : 'Out of Stock'}</div>
+            </div>
+            <button type="button" class="btn-match-action" onclick="incrementExistingBottle(${m.idx})">➕ Add Bottle to This</button>
+          </div>
+        `).join("");
+      } else {
+        matchBox.style.display = "none";
+      }
+    }
+
+    // Add bottle quantity to existing entry
+    window.incrementExistingBottle = async function(index) {
+      const targetBottle = existingSpirits[index];
+      if (!confirm(`Add an additional bottle of "${targetBottle.name}" and mark In Stock?`)) return;
+
+      const ghToken = getAuthToken();
+      if (!ghToken) return;
+
       const saveBtn = document.getElementById("save-btn");
       saveBtn.disabled = true;
-      saveBtn.textContent = "Saving to GitHub...";
+      statusDisplay.className = "status-msg loading";
+      statusDisplay.textContent = `Updating inventory count for ${targetBottle.name}...`;
 
+      try {
+        const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${ghToken}`
+          }
+        });
+        const fileData = await getRes.json();
+        const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+
+        // Increment count and mark in stock
+        const cur = currentContent.items[index];
+        cur.quantity = (cur.quantity || 1) + 1;
+        cur.inStock = true;
+
+        const updatedBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
+        const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+          method: "PUT",
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${ghToken}`
+          },
+          body: JSON.stringify({
+            message: `Restock / Add bottle to ${cur.name} (Qty: ${cur.quantity})`,
+            content: updatedBase64,
+            sha: fileData.sha,
+            branch: "main"
+          })
+        });
+
+        if (putRes.ok) {
+          statusDisplay.className = "status-msg success";
+          statusDisplay.textContent = `✓ Successfully updated ${cur.name} (New Qty: ${cur.quantity})!`;
+          bottleForm.reset();
+          preview.style.display = "none";
+          bottleForm.style.display = "none";
+          preloadInventory();
+        } else {
+          throw new Error("GitHub commit failed.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert(`Error updating bottle: ${err.message}`);
+      } finally {
+        saveBtn.disabled = false;
+      }
+    };
+
+    function getAuthToken() {
       let ghToken = document.getElementById("gh-token").value.trim();
       if (!ghToken) {
         const userSession = localStorage.getItem("decap-cms-user");
         ghToken = userSession ? JSON.parse(userSession).token : null;
       }
-
       if (!ghToken) {
         alert("GitHub Token not found. Please paste your GitHub Personal Access Token.");
+      }
+      return ghToken;
+    }
+
+    // Save as Unique Entry
+    bottleForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      saveKeys();
+      const saveBtn = document.getElementById("save-btn");
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Saving Unique Entry...";
+
+      const ghToken = getAuthToken();
+      if (!ghToken) {
         saveBtn.disabled = false;
-        saveBtn.textContent = "✓ Save & Push to Website";
+        saveBtn.textContent = "✓ Save as Unique Entry";
         return;
       }
 
@@ -382,6 +567,7 @@
         subCategory: document.getElementById("b-sub").value.trim(),
         proof: document.getElementById("b-proof").value.trim(),
         size: document.getElementById("b-size").value.trim(),
+        quantity: parseInt(document.getElementById("b-qty").value) || 1,
         details: document.getElementById("b-details").value.trim(),
         isSpecial: document.getElementById("b-special").checked,
         isGifted: document.getElementById("b-gifted").checked,
@@ -420,7 +606,7 @@
             "Authorization": `Bearer ${ghToken}`
           },
           body: JSON.stringify({
-            message: `Add ${newBottle.name} via Quick Form`,
+            message: `Add ${newBottle.name} as unique entry`,
             content: updatedBase64,
             sha: fileData.sha,
             branch: "main"
@@ -433,6 +619,7 @@
           bottleForm.reset();
           preview.style.display = "none";
           bottleForm.style.display = "none";
+          preloadInventory();
         } else {
           throw new Error("GitHub commit failed. Check your token permissions.");
         }
@@ -441,7 +628,7 @@
         alert(`Error saving bottle to GitHub: ${err.message}`);
       } finally {
         saveBtn.disabled = false;
-        saveBtn.textContent = "✓ Save & Push to Website";
+        saveBtn.textContent = "✓ Save as Unique Entry";
       }
     });
   </script>
