@@ -10,6 +10,8 @@ public_folder: "/images"
 collections:
   - name: "spirits"
     label: "Spirits & Bottles"
+    editor:
+      preview: false
     files:
       - label: "Spirits Inventory"
         name: "spirits_data"
@@ -54,6 +56,8 @@ collections:
 
   - name: "cocktails"
     label: "Cocktail Menu"
+    editor:
+      preview: false
     files:
       - label: "Cocktail Recipes"
         name: "cocktails_data"
@@ -82,6 +86,8 @@ collections:
 
   - name: "beer_wine"
     label: "Beer & Wine"
+    editor:
+      preview: false
     files:
       - label: "Beer & Wine Inventory"
         name: "beer_wine_data"
@@ -106,6 +112,8 @@ collections:
 
   - name: "merch"
     label: "Speakeasy Merch"
+    editor:
+      preview: false
     files:
       - label: "Merch Catalog"
         name: "merch_data"
