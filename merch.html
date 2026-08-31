@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam — Merch & Apparel</title>
+  
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <link rel="apple-touch-icon" href="logo.jpg" />
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.75);
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --neon-purple: #c042ff;
+      --neon-pink: #ff2a8d;
+      --neon-gold: #ffd700;
+      --neon-red: #ff3344;
+      --gold-amber: #e5b567;
+      --off-white: #f8fafc;
+      --border: #16382c;
+      --font: "Georgia", Times, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--off-white);
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* Top Global Navigation */
+    nav.site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.35);
+      background: rgba(0, 247, 255, 0.08);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 7vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
+    }
+
+    .header-subtext {
+      font-size: 0.9rem;
+      color: var(--gold-amber);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .stats {
+      font-size: 0.85rem;
+      color: var(--gold-amber);
+      background: var(--card-bg);
+      padding: 0.4rem 1.15rem;
+      border-radius: 20px;
+      border: 1px solid var(--gold-amber);
+      margin-top: 0.3rem;
+    }
+
+    /* Controls & Filters */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.45rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover { background: rgba(229, 181, 103, 0.12); }
+
+    .filter-btn.active {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 5px rgba(0, 247, 255, 0.6);
+    }
+
+    /* Merch Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 247, 255, 0.5);
+      box-shadow: 0 0 18px rgba(0, 247, 255, 0.25);
+    }
+
+    .card.out-of-stock {
+      opacity: 0.6;
+      border-color: rgba(255, 51, 68, 0.35);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-category {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--neon-pink);
+      font-weight: bold;
+    }
+
+    .badge-out {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(255, 51, 68, 0.25);
+      border: 1px solid var(--neon-red);
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-shadow: 0 0 5px var(--neon-red);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin-bottom: 1rem;
+    }
+
+    .card-details {
+      font-size: 0.85rem;
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-details div { margin-bottom: 0.3rem; }
+    .card-details strong { color: var(--gold-amber); }
+
+    .colorway-pills {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.4rem;
+    }
+
+    .colorway-pill {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      color: #cbd5e1;
+    }
+
+    .btn-buy {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #03140f;
+      background: var(--neon-cyan);
+      padding: 0.65rem 1.2rem;
+      border-radius: 20px;
+      border: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.4);
+    }
+
+    .btn-buy:hover {
+      background: #fff;
+      box-shadow: 0 0 18px rgba(0, 247, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-buy.disabled {
+      background: #475569;
+      color: #94a3b8;
+      box-shadow: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="spirits.html" class="nav-link">Spirits & Whiskeys</a>
+      <a href="cocktails.html" class="nav-link">Cocktail Menu</a>
+      <a href="beer-wine.html" class="nav-link">Beer & Wine</a>
+      <a href="merch.html" class="nav-link active">Merch</a>
+    </nav>
+
+    <header>
+      <h1>Speakeasy Merch</h1>
+      <div class="header-subtext">Official Damp Clam Apparel & Barware</div>
+      <div class="stats" id="totalCount">Total Items: <strong>0</strong></div>
+    </header>
+
+    <div class="controls">
+      <div class="filters" id="filterContainer"></div>
+    </div>
+
+    <main class="grid" id="merchGrid"></main>
+  </div>
+
+  <script>
+    const merchItems = [
+      {
+        name: "The Damp Clam Premium Tee",
+        category: "T-Shirts",
+        desc: "Ultra-soft ring-spun cotton tee featuring The Damp Clam insignia across the chest.",
+        logoOptions: ["Neon Colorway", "Monochrome White", "Monochrome Black"],
+        materials: "100% Airlume Combed & Ring-Spun Cotton",
+        fit: "Unisex Tailored Fit",
+        price: "$28.00",
+        etsyUrl: "https://www.etsy.com", // Replace with your Etsy listing URL
+        inStock: true
+      },
+      {
+        name: "Speakeasy Heavyweight Pullover Hoodie",
+        category: "Sweatshirts",
+        desc: "Plush fleece pullover built for cool evenings with the clam sign emblem on the front or back.",
+        logoOptions: ["Neon Colorway", "Monochrome White"],
+        materials: "80% Cotton / 20% Polyester Heavyweight Fleece",
+        fit: "Standard Unisex Relaxed Fit",
+        price: "$48.00",
+        etsyUrl: "https://www.etsy.com",
+        inStock: true
+      },
+      {
+        name: "Embroidered Dad Hat",
+        category: "Hats",
+        desc: "Low-profile unstructured cotton twill cap with clean embroidered front logo detail.",
+        logoOptions: ["Monochrome White Thread", "Neon Cyan Thread", "Monochrome Black Thread"],
+        materials: "100% Chino Cotton Twill with Brass Buckle Closure",
+        fit: "Adjustable One Size Fits Most",
+        price: "$26.00",
+        etsyUrl: "https://www.etsy.com",
+        inStock: true
+      },
+      {
+        name: "Snapback Trucker Cap",
+        category: "Hats",
+        desc: "Structured front panel with breathable mesh back and bold logo badge.",
+        logoOptions: ["Neon Colorway Badge", "Monochrome Black"],
+        materials: "Cotton Poly Front / Breathable Poly Mesh Back",
+        fit: "Classic Snapback Closure",
+        price: "$28.00",
+        etsyUrl: "https://www.etsy.com",
+        inStock: true
+      },
+      {
+        name: "Damp Clam Bar Runner Mat",
+        category: "Barware & Accessories",
+        desc: "Commercial-grade non-slip rubber spill mat designed for home bar counters.",
+        logoOptions: ["Full Neon Colorway"],
+        materials: "Heavy Duty Molded Non-Slip PVC Rubber",
+        fit: "6\" x 24\" Standard Bar Rail Dimensions",
+        price: "$24.00",
+        etsyUrl: "https://www.etsy.com",
+        inStock: true
+      }
+    ];
+
+    let currentCategory = "All";
+
+    function init() {
+      renderFilters();
+      renderGrid();
+    }
+
+    function renderFilters() {
+      const categories = ["All", "T-Shirts", "Sweatshirts", "Hats", "Barware & Accessories"];
+      const container = document.getElementById("filterContainer");
+      container.innerHTML = categories
+        .map(cat => `<button class="filter-btn ${cat === currentCategory ? "active" : ""}" data-category="${cat}">${cat}</button>`)
+        .join("");
+
+      container.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentCategory = btn.dataset.category;
+          renderFilters();
+          renderGrid();
+        });
+      });
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("merchGrid");
+      const filtered = merchItems.filter(m => currentCategory === "All" || m.category === currentCategory);
+
+      document.getElementById("totalCount").innerHTML = `Total Items: <strong>${merchItems.length}</strong>`;
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="card ${!item.inStock ? 'out-of-stock' : ''}">
+          <div>
+            <div class="card-top">
+              <span class="card-category">${item.category}</span>
+              ${!item.inStock ? `<span class="badge-out">Sold Out</span>` : ''}
+            </div>
+            <div class="card-title">${item.name}</div>
+            <div class="card-desc">${item.desc}</div>
+          </div>
+          <div>
+            <div class="card-details">
+              <div><strong>Price:</strong> ${item.price}</div>
+              <div><strong>Materials:</strong> ${item.materials}</div>
+              <div><strong>Fit / Sizing:</strong> ${item.fit}</div>
+              <div>
+                <strong>Logo Options:</strong>
+                <div class="colorway-pills">
+                  ${item.logoOptions.map(opt => `<span class="colorway-pill">${opt}</span>`).join("")}
+                </div>
+              </div>
+            </div>
+            <a href="${item.etsyUrl}" target="_blank" rel="noopener noreferrer" class="btn-buy ${!item.inStock ? 'disabled' : ''}">
+              ${item.inStock ? 'Order on Etsy ↗' : 'Out of Stock'}
+            </a>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    init();
+  </script>
+</body>
+</html>
