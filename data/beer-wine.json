@@ -89,6 +89,29 @@
         "notes": "Full-bodied with concentrated flavors of dark blackberry, cocoa, black cherry, vanilla, and warm spice.",
         "mash": "Lodi, California"
       }
+    },
+    {
+      "name": "Traverse Bay Winery Cherry Wine Sangria",
+      "category": "Wine",
+      "subCategory": "Sangria / Fruit Wine",
+      "style": "Sangria / Fruit Wine",
+      "proof": "11.8%",
+      "abv": "11.8%",
+      "size": "750 mL",
+      "sizes": {
+        "750 mL": 1
+      },
+      "quantity": 1,
+      "details": "Traverse Bay Winery, Traverse City, Michigan, USA",
+      "origin": "Michigan, USA / Cherry wine base with natural fruit flavors",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Cherry wine blended with natural fruit flavors including citrus, orange, lime, and pineapple.",
+        "mash": "Michigan, USA / Cherry wine base with natural fruit flavors",
+        "barrel": "N/A"
+      }
     }
   ]
 }
