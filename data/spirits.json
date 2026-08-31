@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "size": "750 mL",
+      "size": "750 mL, 375ml",
       "details": "Single Barrel Kentucky Straight Bourbon",
       "proof": "107 Proof (53.5% ABV)",
       "name": "Baker's 7-Year Single Barrel",
@@ -14,7 +14,12 @@
       "inStock": true,
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
-      "subCategory": "Straight Bourbon"
+      "subCategory": "Straight Bourbon",
+      "sizes": {
+        "750 mL": 1,
+        "375ml": 1
+      },
+      "quantity": 2
     },
     {
       "size": "750 mL",
