@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: thedampclam/TheDampClamBarMenu # Replace with your exact GitHub username and repo name (e.g. AndreDeLisle/damp-clam)
+  repo: thedampclam/TheDampClamBarMenu
   branch: main
 
 media_folder: "images"
@@ -45,3 +45,93 @@ collections:
                   - { label: "Special Note", name: "specialNotes", widget: "string", required: false }
                   - { label: "Bottle Number", name: "bottle", widget: "string", required: false }
                   - { label: "Barrel / Cask", name: "barrel", widget: "string", required: false }
+                  - { label: "Cask Type", name: "cask", widget: "string", required: false }
+                  - { label: "Stave Profile", name: "staves", widget: "string", required: false }
+                  - { label: "Mashbill", name: "mash", widget: "string", required: false }
+                  - { label: "Grain Profile", name: "grain", widget: "string", required: false }
+                  - { label: "Origin / Botanicals", name: "botanicals", widget: "string", required: false }
+
+  - name: "cocktails"
+    label: "Cocktail Menu"
+    files:
+      - label: "Cocktail Recipes"
+        name: "cocktails_data"
+        file: "data/cocktails.json"
+        fields:
+          - label: "Cocktails List"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Cocktail Name", name: "name", widget: "string" }
+              - { label: "In Stock?", name: "inStock", widget: "boolean", default: true }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "House Signatures"
+                  - "Classics"
+                  - "Mule Collection"
+                  - "Mocktails & Zero-Proof"
+              - { label: "Description", name: "desc", widget: "string" }
+              - { label: "Recipe / Spec", name: "recipe", widget: "string" }
+              - { label: "Ingredients", name: "ingredients", widget: "string" }
+              - { label: "Glassware", name: "glass", widget: "string" }
+              - { label: "Garnish", name: "garnish", widget: "string" }
+              - { label: "Missing Reason (if out of stock)", name: "missingReason", widget: "string", required: false }
+
+  - name: "beer_wine"
+    label: "Beer & Wine"
+    files:
+      - label: "Beer & Wine Inventory"
+        name: "beer_wine_data"
+        file: "data/beer-wine.json"
+        fields:
+          - label: "Items List"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Item Name", name: "name", widget: "string" }
+              - { label: "In Stock?", name: "inStock", widget: "boolean", default: true }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "Beer"
+                  - "Wine"
+              - { label: "Style / Type", name: "style", widget: "string" }
+              - { label: "ABV", name: "abv", widget: "string" }
+              - { label: "Origin / Region", name: "origin", widget: "string" }
+              - { label: "Tasting Notes / Description", name: "details", widget: "string" }
+
+  - name: "merch"
+    label: "Speakeasy Merch"
+    files:
+      - label: "Merch Catalog"
+        name: "merch_data"
+        file: "data/merch.json"
+        fields:
+          - label: "Products List"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Product Name", name: "name", widget: "string" }
+              - { label: "In Stock?", name: "inStock", widget: "boolean", default: true }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - "T-Shirts"
+                  - "Tanks"
+                  - "Sweatshirts"
+                  - "Hats"
+                  - "Barware & Accessories"
+              - { label: "Description", name: "desc", widget: "string" }
+              - { label: "Price / Price Range", name: "price", widget: "string" }
+              - { label: "Etsy Direct URL", name: "etsyUrl", widget: "string" }
+              - { label: "Materials", name: "materials", widget: "string" }
+              - { label: "Fit / Sizing", name: "fit", widget: "string" }
+              - label: "Logo Options"
+                name: "logoOptions"
+                widget: "list"
+                required: false
+                field: { label: "Option Name", name: "option", widget: "string" }
