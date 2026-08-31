@@ -67,6 +67,28 @@
         "mash": "Michigan, United States",
         "barrel": "N/A"
       }
+    },
+    {
+      "name": "1924 Limited Edition Double Black Cabernet Sauvignon 2018",
+      "category": "Wine",
+      "subCategory": "Cabernet Sauvignon",
+      "style": "Cabernet Sauvignon",
+      "proof": "14.5% ABV",
+      "abv": "14.5% ABV",
+      "size": "750 mL",
+      "sizes": {
+        "750 mL": 1
+      },
+      "quantity": 1,
+      "details": "Producer: Delicato Family Wines / Gnarly Head, Vintage: 2018, Limited Release No. 033",
+      "origin": "Lodi, California",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Full-bodied with concentrated flavors of dark blackberry, cocoa, black cherry, vanilla, and warm spice.",
+        "mash": "Lodi, California"
+      }
     }
   ]
 }
