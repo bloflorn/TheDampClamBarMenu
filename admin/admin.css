@@ -1,0 +1,222 @@
+/* ==========================================================================
+   The Damp Clam Speakeasy — Decap CMS Dark Theme & Compact Layout
+   ========================================================================== */
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+  --card-bg: rgba(2, 22, 17, 0.85);
+  --input-bg: #01130d;
+  --neon-cyan: #00f7ff;
+  --neon-green: #39ff14;
+  --neon-purple: #c042ff;
+  --neon-pink: #ff2a8d;
+  --neon-gold: #ffd700;
+  --neon-red: #ff3344;
+  --gold-amber: #e5b567;
+  --off-white: #f8fafc;
+  --border: #16382c;
+  --border-focus: #00f7ff;
+  --font-serif: "Georgia", Times, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Base Body & App Background */
+body, html, #nc-root {
+  background: #03140f !important;
+  background-image: var(--bg-gradient) !important;
+  color: var(--off-white) !important;
+  font-family: var(--font-sans) !important;
+}
+
+/* ==========================================================================
+   Top Header & Navigation Bar
+   ========================================================================== */
+
+/* Main Header */
+header[class*="AppHeader"] {
+  background: rgba(2, 22, 17, 0.95) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Brand / App Title */
+h1, [class*="AppHeaderContent"] {
+  font-family: var(--font-serif) !important;
+  color: #fff !important;
+}
+
+/* ==========================================================================
+   Left Sidebar & Collections Nav
+   ========================================================================== */
+
+/* Sidebar Container */
+aside, [class*="SidebarContainer"], [class*="Sidebar"] {
+  background: rgba(1, 18, 13, 0.95) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+/* Collection Sidebar Links */
+[class*="SidebarNavLink"], a[class*="Sidebar"] {
+  color: var(--gold-amber) !important;
+  font-family: var(--font-serif) !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.05em !important;
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+  padding: 8px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+[class*="SidebarNavLink"]:hover {
+  background: rgba(0, 247, 255, 0.08) !important;
+  color: var(--neon-cyan) !important;
+}
+
+[class*="SidebarNavLink"][class*="active"], 
+a[class*="Sidebar"][aria-current="page"] {
+  background: rgba(0, 247, 255, 0.12) !important;
+  color: var(--neon-cyan) !important;
+  border-left: 3px solid var(--neon-cyan) !important;
+  box-shadow: 0 0 12px rgba(0, 247, 255, 0.2) !important;
+}
+
+/* ==========================================================================
+   Main Content Area & Forms
+   ========================================================================== */
+
+main, [class*="AppMainContainer"] {
+  background: transparent !important;
+}
+
+/* Form Container Card */
+form, [class*="EditorContainer"], [class*="WorkflowContainer"] {
+  background: transparent !important;
+}
+
+/* Section Containers & Object Cards (Slimmed down) */
+[class*="ControlContainer"], 
+[class*="Field-root"], 
+[class*="ObjectWidgetTopBarContainer"] {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--off-white) !important;
+  margin-bottom: 0.85rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Form Field Labels */
+label, [class*="ControlLabel"] {
+  color: var(--gold-amber) !important;
+  font-family: var(--font-serif) !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 4px !important;
+}
+
+/* Text Inputs, Selects, and Textareas (Less Chunky) */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-size: 0.88rem !important;
+  padding: 8px 12px !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.2s ease !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.4) !important;
+}
+
+/* List Items / Repeater Rows (Tightened up) */
+[class*="ListItemContainer"], 
+[class*="NestedObjectContainer"] {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  margin-bottom: 8px !important;
+}
+
+/* List Item Drag / Header Bar */
+[class*="TopBarContainer"], [class*="StyledIconWrapper"] {
+  background: transparent !important;
+  color: var(--gold-amber) !important;
+}
+
+/* ==========================================================================
+   Buttons & Actions
+   ========================================================================== */
+
+/* Primary Publish / Save Button */
+button[class*="PublishButton"], 
+button[class*="SaveButton"], 
+[class*="button-primary"] {
+  background: var(--neon-cyan) !important;
+  color: #03140f !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  border-radius: 20px !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  box-shadow: 0 0 12px rgba(0, 247, 255, 0.4) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+button[class*="PublishButton"]:hover, 
+[class*="button-primary"]:hover {
+  background: #fff !important;
+  box-shadow: 0 0 18px rgba(0, 247, 255, 0.8) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Add Item / Secondary Buttons */
+button[class*="AddButton"], 
+[class*="button-secondary"], 
+[class*="ToolbarButton"] {
+  background: rgba(0, 247, 255, 0.08) !important;
+  color: var(--neon-cyan) !important;
+  border: 1px solid var(--neon-cyan) !important;
+  border-radius: 18px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 6px 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+button[class*="AddButton"]:hover {
+  background: rgba(0, 247, 255, 0.2) !important;
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.4) !important;
+}
+
+/* Boolean Toggle Switch */
+[class*="ToggleBackground"] {
+  background: #16382c !important;
+}
+
+[class*="ToggleBackground"][class*="active"] {
+  background: var(--neon-green) !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.5) !important;
+}
+
+/* Dropdown Menus & Cards */
+[class*="DropdownList"], [class*="Card"] {
+  background: #0d2822 !important;
+  border: 1px solid var(--border) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+}
