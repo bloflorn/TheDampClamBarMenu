@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Damp Clam — Beer & Wine</title>
- <!-- Website Favicon -->
-<link rel="icon" type="image/jpeg" href="logo.jpg" />
-<link rel="apple-touch-icon" href="logo.jpg" />
- <style>
+  
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <link rel="apple-touch-icon" href="logo.jpg" />
+
+  <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
       --card-bg: rgba(2, 22, 17, 0.75);
@@ -145,7 +146,7 @@
       padding: 1.35rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       transition: all 0.25s ease;
     }
 
@@ -159,16 +160,11 @@
       border-color: rgba(255, 51, 68, 0.35);
     }
 
-    .card.out-of-stock:hover {
-      border-color: var(--neon-red);
-      box-shadow: 0 0 15px rgba(255, 51, 68, 0.25);
-    }
-
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .card-category {
@@ -193,10 +189,10 @@
     }
 
     .card-title {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.4rem;
     }
 
     .card-details {
@@ -204,9 +200,10 @@
       line-height: 1.55;
       border-top: 1px solid var(--border);
       padding-top: 0.75rem;
+      margin-top: 0.5rem;
     }
 
-    .card-details div { margin-bottom: 0.3rem; }
+    .card-details div { margin-bottom: 0.35rem; }
     .card-details strong { color: var(--gold-amber); }
   </style>
 </head>
@@ -221,85 +218,31 @@
     </nav>
 
     <header>
-      <h1>Beer, Ciders & Wine</h1>
-      <div class="stats" id="totalCount">Total Selections: <strong>0</strong></div>
+      <h1>Beer & Wine</h1>
+      <div class="stats" id="totalCount">Total Items: <strong>0</strong></div>
     </header>
 
     <div class="controls">
       <div class="filters" id="filterContainer"></div>
     </div>
 
-    <main class="grid" id="beerGrid"></main>
+    <main class="grid" id="beerWineGrid"></main>
   </div>
 
   <script>
-    const drinks = [
-      {
-        name: "Two Hearted IPA",
-        category: "Craft Beer",
-        style: "American IPA",
-        brewery: "Bell's Brewery (Comstock, MI)",
-        abv: "7.0% ABV",
-        notes: "100% Centennial hops with intense grapefruit and pine aromas.",
-        inStock: true
-      },
-      {
-        name: "Oberon Ale",
-        category: "Craft Beer",
-        style: "American Wheat Ale",
-        brewery: "Bell's Brewery (Comstock, MI)",
-        abv: "5.8% ABV",
-        notes: "Seasonal wheat ale with spicy hop character and fruity aromas.",
-        inStock: true
-      },
-      {
-        name: "Maduro Brown Ale",
-        category: "Craft Beer",
-        style: "English Brown Ale",
-        brewery: "Cigar City Brewing",
-        abv: "5.5% ABV",
-        notes: "Toffee, caramel, chocolate, and silky flaked oats.",
-        inStock: true
-      },
-      {
-        name: "Flannel Mouth Hard Cider",
-        category: "Ciders & Seltzers",
-        style: "Hard Apple Cider",
-        brewery: "Blake's Hard Cider Co. (Armada, MI)",
-        abv: "6.5% ABV",
-        notes: "Made with 100% Michigan-grown apples. Sweet with a smooth, crisp finish.",
-        inStock: true
-      },
-      {
-        name: "Caramel Apple Hard Cider",
-        category: "Ciders & Seltzers",
-        style: "Dessert Hard Cider",
-        brewery: "Blake's Hard Cider Co. (Armada, MI)",
-        abv: "6.5% ABV",
-        notes: "Fresh-pressed Michigan apples blended with rich, buttery caramel and a crisp tart finish.",
-        inStock: false
-      },
-      {
-        name: "St. Julian Michigander Sweet Red Wine",
-        category: "Wine",
-        style: "Sweet Red Wine (Lake Michigan Shore Appellation)",
-        brewery: "St. Julian Wine Co. (Paw Paw, MI)",
-        abv: "12% ABV",
-        notes: "Celebrates all things Michigan. Fruity notes of blueberry, raspberry, and subtle eucalyptus balanced with crisp refreshing acidity.",
-        inStock: true
-      },
-      {
-        name: "Cabernet Sauvignon",
-        category: "Wine",
-        style: "Red Wine",
-        brewery: "Reserve Selection",
-        abv: "14.5% ABV",
-        notes: "Bold black cherry, cedar oak, and dark cocoa.",
-        inStock: true
-      }
-    ];
-
+    let beerWineItems = [];
     let currentCategory = "All";
+
+    async function loadDataAndInit() {
+      try {
+        const res = await fetch("data/beer-wine.json");
+        const data = await res.json();
+        beerWineItems = data.items || [];
+      } catch (err) {
+        console.error("Error loading beer and wine data:", err);
+      }
+      init();
+    }
 
     function init() {
       renderFilters();
@@ -307,7 +250,7 @@
     }
 
     function renderFilters() {
-      const categories = ["All", "Craft Beer", "Ciders & Seltzers", "Wine"];
+      const categories = ["All", "Beer", "Wine"];
       const container = document.getElementById("filterContainer");
       container.innerHTML = categories
         .map(cat => `<button class="filter-btn ${cat === currentCategory ? "active" : ""}" data-category="${cat}">${cat}</button>`)
@@ -323,31 +266,31 @@
     }
 
     function renderGrid() {
-      const grid = document.getElementById("beerGrid");
-      const filtered = drinks.filter(d => currentCategory === "All" || d.category === currentCategory);
+      const grid = document.getElementById("beerWineGrid");
+      const filtered = beerWineItems.filter(item => currentCategory === "All" || item.category === currentCategory);
 
-      document.getElementById("totalCount").innerHTML = `Total Selections: <strong>${drinks.length}</strong>`;
+      document.getElementById("totalCount").innerHTML = `Total Items: <strong>${beerWineItems.length}</strong>`;
 
-      grid.innerHTML = filtered.map(d => `
-        <div class="card ${!d.inStock ? 'out-of-stock' : ''}">
+      grid.innerHTML = filtered.map(item => `
+        <div class="card ${!item.inStock ? 'out-of-stock' : ''}">
           <div>
             <div class="card-top">
-              <span class="card-category">${d.category}</span>
-              ${!d.inStock ? `<span class="badge-out">Out of Stock</span>` : ''}
+              <span class="card-category">${item.category}</span>
+              ${!item.inStock ? `<span class="badge-out">Out of Stock</span>` : ''}
             </div>
-            <div class="card-title">${d.name}</div>
+            <div class="card-title">${item.name}</div>
           </div>
           <div class="card-details">
-            <div><strong>Style:</strong> ${d.style}</div>
-            <div><strong>Producer:</strong> ${d.brewery}</div>
-            <div><strong>ABV:</strong> ${d.abv}</div>
-            <div><strong>Notes:</strong> ${d.notes}</div>
+            <div><strong>Style / Type:</strong> ${item.style || "N/A"}</div>
+            <div><strong>ABV:</strong> ${item.abv || "N/A"}</div>
+            <div><strong>Origin:</strong> ${item.origin || "N/A"}</div>
+            <div><strong>Notes:</strong> ${item.details || "N/A"}</div>
           </div>
         </div>
       `).join("");
     }
 
-    init();
+    loadDataAndInit();
   </script>
 </body>
 </html>
