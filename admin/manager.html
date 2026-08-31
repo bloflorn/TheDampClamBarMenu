@@ -483,11 +483,18 @@
       }
     }
 
-    function getBottleSizes(item) {
-      if (item.sizes && typeof item.sizes === "object") return item.sizes;
-      const defaultSize = item.size || "750 mL";
-      const defaultQty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-      return { [defaultSize]: defaultQty };
+    // Helper: Normalize item unit sizes / counts (Spirits, Beer, Wine)
+    function getItemUnits(item, col) {
+      if (item.sizes && typeof item.sizes === "object" && Object.keys(item.sizes).length > 0) {
+        return item.sizes;
+      }
+      const qty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
+      let defaultUnit = "750 mL";
+      if (col === "beer_wine") {
+        const cat = (item.category || "").toLowerCase();
+        defaultUnit = cat.includes("wine") ? "Bottle" : "Can";
+      }
+      return { [item.size || defaultUnit]: qty };
     }
 
     function renderList() {
@@ -506,33 +513,21 @@
         let isOutOfStock = false;
         let stepperHtml = '';
 
-        if (activeCol === 'spirits') {
-          const sizesObj = getBottleSizes(item);
-          const totalQty = Object.values(sizesObj).reduce((a, b) => a + b, 0);
+        if (activeCol === 'spirits' || activeCol === 'beer_wine') {
+          const unitsObj = getItemUnits(item, activeCol);
+          const totalQty = Object.values(unitsObj).reduce((a, b) => a + b, 0);
           isOutOfStock = !item.inStock || totalQty === 0;
 
           stepperHtml = `
             <div class="size-steppers">
-              ${Object.entries(sizesObj).map(([sz, count]) => `
-                <div class="size-stepper-box" title="${sz}">
-                  <span class="size-label">${sz}</span>
-                  <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', -1)">−</button>
+              ${Object.entries(unitsObj).map(([unitName, count]) => `
+                <div class="size-stepper-box" title="${unitName}">
+                  <span class="size-label">${unitName}</span>
+                  <button class="qty-btn" onclick="stepUnitQty(${item._idx}, '${unitName}', -1)">−</button>
                   <span class="qty-val">${count}</span>
-                  <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', 1)">+</button>
+                  <button class="qty-btn" onclick="stepUnitQty(${item._idx}, '${unitName}', 1)">+</button>
                 </div>
               `).join('')}
-            </div>
-          `;
-        } else if (activeCol === 'beer_wine') {
-          const qty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-          isOutOfStock = !item.inStock || qty === 0;
-
-          stepperHtml = `
-            <div class="size-stepper-box" title="Stock Count">
-              <span class="size-label">In Stock</span>
-              <button class="qty-btn" onclick="stepBeerWineQty(${item._idx}, -1)">−</button>
-              <span class="qty-val">${qty}</span>
-              <button class="qty-btn" onclick="stepBeerWineQty(${item._idx}, 1)">+</button>
             </div>
           `;
         }
@@ -566,61 +561,41 @@
       `}).join("");
     }
 
-    // Step Beer / Wine count up or down
-    async function stepBeerWineQty(index, delta) {
+    // Step a specific unit (e.g. Can, Bottle, 750 mL) up or down
+    async function stepUnitQty(index, unitKey, delta) {
       const item = activeData.items[index];
-      let currentQty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-      let newQty = currentQty + delta;
-      if (newQty < 0) newQty = 0;
+      if (!item.sizes) item.sizes = getItemUnits(item, activeCol);
 
-      item.quantity = newQty;
-      item.inStock = newQty > 0;
-
-      renderList();
-      await pushDataToGithub(`Adjust ${item.name} stock to ${newQty}`);
-    }
-
-    // Step a specific spirit size up or down
-    async function stepSizeQty(index, sizeKey, delta) {
-      const item = activeData.items[index];
-      if (!item.sizes) item.sizes = getBottleSizes(item);
-
-      let currentVal = item.sizes[sizeKey] || 0;
+      let currentVal = item.sizes[unitKey] || 0;
       let newVal = currentVal + delta;
       if (newVal < 0) newVal = 0;
 
-      item.sizes[sizeKey] = newVal;
+      item.sizes[unitKey] = newVal;
 
       const total = Object.values(item.sizes).reduce((a, b) => a + b, 0);
       item.quantity = total;
       item.inStock = total > 0;
 
-      const activeSizes = Object.keys(item.sizes).filter(k => item.sizes[k] > 0);
-      item.size = activeSizes.length > 0 ? activeSizes.join(", ") : Object.keys(item.sizes)[0];
+      const activeUnits = Object.keys(item.sizes).filter(k => item.sizes[k] > 0);
+      item.size = activeUnits.length > 0 ? activeUnits.join(", ") : Object.keys(item.sizes)[0];
 
       renderList();
-      await pushDataToGithub(`Adjust ${item.name} (${sizeKey}) to ${newVal}`);
+      await pushDataToGithub(`Adjust ${item.name} (${unitKey}) to ${newVal}`);
     }
 
     async function toggleStock(index, newStatus) {
       const item = activeData.items[index];
       item.inStock = newStatus;
 
-      if (activeCol === 'spirits') {
-        if (!item.sizes) item.sizes = getBottleSizes(item);
+      if (activeCol === 'spirits' || activeCol === 'beer_wine') {
+        if (!item.sizes) item.sizes = getItemUnits(item, activeCol);
         if (!newStatus) {
           Object.keys(item.sizes).forEach(k => item.sizes[k] = 0);
           item.quantity = 0;
         } else {
-          const firstKey = Object.keys(item.sizes)[0] || "750 mL";
+          const firstKey = Object.keys(item.sizes)[0] || (activeCol === 'spirits' ? "750 mL" : "Can");
           item.sizes[firstKey] = Math.max(item.sizes[firstKey], 1);
           item.quantity = Object.values(item.sizes).reduce((a, b) => a + b, 0);
-        }
-      } else if (activeCol === 'beer_wine') {
-        if (!newStatus) {
-          item.quantity = 0;
-        } else if (!item.quantity || item.quantity === 0) {
-          item.quantity = 1;
         }
       }
 
@@ -686,13 +661,13 @@
     function buildFormFields(data) {
       const container = document.getElementById("dynamicFields");
       if (activeCol === "spirits") {
-        const sizes = data.sizes ? JSON.stringify(data.sizes).replace(/[{}"\s]/g, '').replace(/:/g, ': ').replace(/,/g, ', ') : (data.size || '750 mL: 1');
+        const sizesStr = data.sizes ? Object.entries(data.sizes).map(([k, v]) => `${k}: ${v}`).join(', ') : (data.size ? `${data.size}: 1` : '750 mL: 1');
         container.innerHTML = `
           <div class="form-group"><label>Bottle Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
           <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Bourbon & American Whiskey'}" required /></div>
           <div class="form-group"><label>Sub-Category</label><input type="text" id="f_sub" value="${data.subCategory || ''}" /></div>
           <div class="form-group"><label>Proof / ABV</label><input type="text" id="f_proof" value="${data.proof || ''}" /></div>
-          <div class="form-group"><label>Sizes & Counts (e.g. 750 mL: 1, 375 mL: 1)</label><input type="text" id="f_sizes" value="${sizes}" /></div>
+          <div class="form-group"><label>Sizes & Counts (e.g. 750 mL: 1, 375 mL: 1)</label><input type="text" id="f_sizes" value="${sizesStr}" /></div>
           <div class="form-group"><label>Details</label><input type="text" id="f_details" value="${data.details || ''}" /></div>
           <div class="form-group"><label>Tasting Notes</label><textarea id="f_notes" rows="2">${data.extra?.notes || ''}</textarea></div>
         `;
@@ -707,15 +682,18 @@
           <div class="form-group"><label>Garnish</label><input type="text" id="f_garnish" value="${data.garnish || ''}" /></div>
         `;
       } else if (activeCol === "beer_wine") {
-        const currentQty = data.quantity !== undefined ? data.quantity : (data.inStock !== false ? 1 : 0);
+        const isWine = (data.category || "").toLowerCase().includes("wine");
+        const defaultExample = isWine ? "Bottle: 1" : "Can: 4";
+        const sizesStr = data.sizes ? Object.entries(data.sizes).map(([k, v]) => `${k}: ${v}`).join(', ') : (data.quantity !== undefined ? (isWine ? `Bottle: ${data.quantity}` : `Can: ${data.quantity}`) : defaultExample);
+
         container.innerHTML = `
           <div class="form-group"><label>Item Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
           <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Beer'}" required /></div>
           <div class="form-group"><label>Style / Type</label><input type="text" id="f_style" value="${data.style || ''}" /></div>
-          <div class="form-group"><label>Quantity in Stock</label><input type="number" id="f_qty" value="${currentQty}" min="0" /></div>
+          <div class="form-group"><label>Inventory Units & Counts (e.g. Can: 6, 16 oz: 2 OR Bottle: 1)</label><input type="text" id="f_sizes" value="${sizesStr}" /></div>
           <div class="form-group"><label>ABV</label><input type="text" id="f_abv" value="${data.abv || ''}" /></div>
           <div class="form-group"><label>Origin</label><input type="text" id="f_origin" value="${data.origin || ''}" /></div>
-          <div class="form-group"><label>Notes</label><textarea id="f_details" rows="2">${data.details || ''}</textarea></div>
+          <div class="form-group"><label>Notes / Details</label><textarea id="f_details" rows="2">${data.details || ''}</textarea></div>
         `;
       } else if (activeCol === "merch") {
         container.innerHTML = `
@@ -736,11 +714,25 @@
       updatedObj.name = document.getElementById("f_name").value.trim();
       updatedObj.category = document.getElementById("f_cat").value.trim();
 
-      if (activeCol === "spirits") {
-        updatedObj.subCategory = document.getElementById("f_sub").value.trim();
-        updatedObj.proof = document.getElementById("f_proof").value.trim();
-        updatedObj.details = document.getElementById("f_details").value.trim();
+      if (activeCol === "spirits" || activeCol === "beer_wine") {
+        if (activeCol === "spirits") {
+          updatedObj.subCategory = document.getElementById("f_sub").value.trim();
+          updatedObj.proof = document.getElementById("f_proof").value.trim();
+          updatedObj.details = document.getElementById("f_details").value.trim();
 
+          const notes = document.getElementById("f_notes").value.trim();
+          if (notes) {
+            if (!updatedObj.extra) updatedObj.extra = {};
+            updatedObj.extra.notes = notes;
+          }
+        } else {
+          updatedObj.style = document.getElementById("f_style").value.trim();
+          updatedObj.abv = document.getElementById("f_abv").value.trim();
+          updatedObj.origin = document.getElementById("f_origin").value.trim();
+          updatedObj.details = document.getElementById("f_details").value.trim();
+        }
+
+        // Parse custom counts string (e.g. "Can: 4, 16 oz: 2" or "Bottle: 2")
         const rawSizes = document.getElementById("f_sizes").value.split(",");
         const sizesMap = {};
         let totalCount = 0;
@@ -749,36 +741,28 @@
           if (parts.length === 2) {
             const sz = parts[0].trim();
             const cnt = parseInt(parts[1].trim()) || 0;
-            sizesMap[sz] = cnt;
-            totalCount += cnt;
+            if (sz) {
+              sizesMap[sz] = cnt;
+              totalCount += cnt;
+            }
           } else if (parts[0].trim()) {
-            sizesMap[parts[0].trim()] = 1;
+            const unit = parts[0].trim();
+            sizesMap[unit] = 1;
             totalCount += 1;
           }
         });
+
         updatedObj.sizes = sizesMap;
         updatedObj.quantity = totalCount;
         updatedObj.inStock = totalCount > 0;
         updatedObj.size = Object.keys(sizesMap).join(", ");
 
-        const notes = document.getElementById("f_notes").value.trim();
-        if (notes) {
-          if (!updatedObj.extra) updatedObj.extra = {};
-          updatedObj.extra.notes = notes;
-        }
       } else if (activeCol === "cocktails") {
         updatedObj.desc = document.getElementById("f_desc").value.trim();
         updatedObj.recipe = document.getElementById("f_recipe").value.trim();
         updatedObj.ingredients = document.getElementById("f_ing").value.trim();
         updatedObj.glass = document.getElementById("f_glass").value.trim();
         updatedObj.garnish = document.getElementById("f_garnish").value.trim();
-      } else if (activeCol === "beer_wine") {
-        updatedObj.style = document.getElementById("f_style").value.trim();
-        updatedObj.quantity = parseInt(document.getElementById("f_qty").value) || 0;
-        updatedObj.inStock = updatedObj.quantity > 0;
-        updatedObj.abv = document.getElementById("f_abv").value.trim();
-        updatedObj.origin = document.getElementById("f_origin").value.trim();
-        updatedObj.details = document.getElementById("f_details").value.trim();
       } else if (activeCol === "merch") {
         updatedObj.desc = document.getElementById("f_desc").value.trim();
         updatedObj.price = document.getElementById("f_price").value.trim();
