@@ -112,6 +112,29 @@
         "mash": "Michigan, USA / Cherry wine base with natural fruit flavors",
         "barrel": "N/A"
       }
+    },
+    {
+      "name": "Zlatan Plavac",
+      "category": "Wine",
+      "subCategory": "Plavac Mali",
+      "style": "Plavac Mali",
+      "proof": "13% ABV",
+      "abv": "13% ABV",
+      "size": "750 mL",
+      "sizes": {
+        "750 mL": 1
+      },
+      "quantity": 1,
+      "details": "Zlatan Plenkovic Winery",
+      "origin": "Dalmatia, Croatia / Plavac Mali",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Rich notes of dark berries, plum, Mediterranean herbs, earthy spice, and well-integrated tannins.",
+        "mash": "Dalmatia, Croatia / Plavac Mali",
+        "barrel": "Aged in large oak vats and stainless steel"
+      }
     }
   ]
 }
