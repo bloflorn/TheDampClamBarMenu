@@ -44,6 +44,29 @@
       "origin": "Veneto, Italy",
       "details": "Effervescent green apple, fresh pear, and floral aromas.",
       "inStock": false
+    },
+    {
+      "name": "St. Julian Michigander Red Wine",
+      "category": "Wine",
+      "subCategory": "Sweet Red Wine",
+      "style": "Sweet Red Wine",
+      "proof": "12% ABV",
+      "abv": "12% ABV",
+      "size": "750 mL",
+      "sizes": {
+        "750 mL": 2
+      },
+      "quantity": 2,
+      "details": "St. Julian Winery, Paw Paw, Michigan",
+      "origin": "Michigan, United States",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "A sweet, easy-drinking red wine filled with juicy flavors of fresh berries and ripe Concord grapes, showcasing Michigan heritage.",
+        "mash": "Michigan, United States",
+        "barrel": "N/A"
+      }
     }
   ]
 }
