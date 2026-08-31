@@ -93,6 +93,37 @@
       text-transform: uppercase;
     }
 
+    .store-cta-box {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-storefront {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      color: #03140f;
+      background: var(--neon-cyan);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.6rem 1.5rem;
+      border-radius: 25px;
+      box-shadow: 0 0 14px rgba(0, 247, 255, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-storefront:hover {
+      background: #fff;
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
     .stats {
       font-size: 0.85rem;
       color: var(--gold-amber);
@@ -285,6 +316,13 @@
     <header>
       <h1>Speakeasy Merch</h1>
       <div class="header-subtext">Official Damp Clam Apparel & Barware</div>
+      
+      <div class="store-cta-box">
+        <a href="https://www.etsy.com/shop/AshAndAuroraStudio" target="_blank" rel="noopener noreferrer" class="btn-storefront">
+          Visit Ash & Aurora Studio on Etsy ↗
+        </a>
+      </div>
+
       <div class="stats" id="totalCount">Total Items: <strong>0</strong></div>
     </header>
 
@@ -296,27 +334,29 @@
   </div>
 
   <script>
+    const ETSY_STORE_URL = "https://www.etsy.com/shop/AshAndAuroraStudio";
+
     const merchItems = [
       {
-        name: "The Damp Clam Premium Tee",
+        name: "The Damp Clam Premium Pocket Tee",
         category: "T-Shirts",
-        desc: "Ultra-soft ring-spun cotton tee featuring The Damp Clam insignia across the chest.",
-        logoOptions: ["Neon Colorway", "Monochrome White", "Monochrome Black"],
-        materials: "100% Airlume Combed & Ring-Spun Cotton",
+        desc: "Ultra-soft ring-spun cotton tee featuring The Damp Clam insignia across the chest pocket.",
+        logoOptions: ["Full Color Neon", "Monochrome White", "Monochrome Black"],
+        materials: "100% Airlume Combed & Ring-Spun Cotton (Bella+Canvas 3001)",
         fit: "Unisex Tailored Fit",
         price: "$28.00",
-        etsyUrl: "https://www.etsy.com", // Replace with your Etsy listing URL
+        etsyUrl: ETSY_STORE_URL,
         inStock: true
       },
       {
         name: "Speakeasy Heavyweight Pullover Hoodie",
         category: "Sweatshirts",
-        desc: "Plush fleece pullover built for cool evenings with the clam sign emblem on the front or back.",
-        logoOptions: ["Neon Colorway", "Monochrome White"],
+        desc: "Plush fleece pullover built for cool evenings with the clam sign emblem across the chest.",
+        logoOptions: ["Full Color Neon", "Monochrome White"],
         materials: "80% Cotton / 20% Polyester Heavyweight Fleece",
         fit: "Standard Unisex Relaxed Fit",
         price: "$48.00",
-        etsyUrl: "https://www.etsy.com",
+        etsyUrl: ETSY_STORE_URL,
         inStock: true
       },
       {
@@ -327,7 +367,7 @@
         materials: "100% Chino Cotton Twill with Brass Buckle Closure",
         fit: "Adjustable One Size Fits Most",
         price: "$26.00",
-        etsyUrl: "https://www.etsy.com",
+        etsyUrl: ETSY_STORE_URL,
         inStock: true
       },
       {
@@ -338,7 +378,7 @@
         materials: "Cotton Poly Front / Breathable Poly Mesh Back",
         fit: "Classic Snapback Closure",
         price: "$28.00",
-        etsyUrl: "https://www.etsy.com",
+        etsyUrl: ETSY_STORE_URL,
         inStock: true
       },
       {
@@ -349,7 +389,7 @@
         materials: "Heavy Duty Molded Non-Slip PVC Rubber",
         fit: "6\" x 24\" Standard Bar Rail Dimensions",
         price: "$24.00",
-        etsyUrl: "https://www.etsy.com",
+        etsyUrl: ETSY_STORE_URL,
         inStock: true
       }
     ];
@@ -406,7 +446,7 @@
               </div>
             </div>
             <a href="${item.etsyUrl}" target="_blank" rel="noopener noreferrer" class="btn-buy ${!item.inStock ? 'disabled' : ''}">
-              ${item.inStock ? 'Order on Etsy ↗' : 'Out of Stock'}
+              ${item.inStock ? 'Shop on Etsy ↗' : 'Out of Stock'}
             </a>
           </div>
         </div>
