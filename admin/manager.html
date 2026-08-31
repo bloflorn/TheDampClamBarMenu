@@ -133,7 +133,6 @@
 
     .item-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
-    /* Responsive Mobile Card */
     .item-row {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -159,7 +158,6 @@
 
     .item-info { flex: 1; min-width: 0; }
     
-    /* Full title display without forced ellipsis */
     .item-title {
       font-family: var(--font-serif);
       font-size: 1.05rem;
@@ -182,7 +180,6 @@
     }
     .item-meta span { color: var(--gold-amber); }
 
-    /* Action Controls */
     .item-controls {
       display: flex;
       align-items: center;
@@ -207,7 +204,7 @@
       gap: 0.5rem;
     }
 
-    /* Size Steppers */
+    /* Steppers */
     .size-steppers {
       display: flex;
       gap: 0.4rem;
@@ -489,7 +486,7 @@
     function getBottleSizes(item) {
       if (item.sizes && typeof item.sizes === "object") return item.sizes;
       const defaultSize = item.size || "750 mL";
-      const defaultQty = item.quantity || (item.inStock ? 1 : 0);
+      const defaultQty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
       return { [defaultSize]: defaultQty };
     }
 
@@ -506,37 +503,59 @@
       }
 
       container.innerHTML = filtered.map(item => {
-        const sizesObj = activeCol === 'spirits' ? getBottleSizes(item) : null;
-        const totalQty = sizesObj ? Object.values(sizesObj).reduce((a, b) => a + b, 0) : (item.inStock ? 1 : 0);
+        let isOutOfStock = false;
+        let stepperHtml = '';
+
+        if (activeCol === 'spirits') {
+          const sizesObj = getBottleSizes(item);
+          const totalQty = Object.values(sizesObj).reduce((a, b) => a + b, 0);
+          isOutOfStock = !item.inStock || totalQty === 0;
+
+          stepperHtml = `
+            <div class="size-steppers">
+              ${Object.entries(sizesObj).map(([sz, count]) => `
+                <div class="size-stepper-box" title="${sz}">
+                  <span class="size-label">${sz}</span>
+                  <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', -1)">−</button>
+                  <span class="qty-val">${count}</span>
+                  <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', 1)">+</button>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (activeCol === 'beer_wine') {
+          const qty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
+          isOutOfStock = !item.inStock || qty === 0;
+
+          stepperHtml = `
+            <div class="size-stepper-box" title="Stock Count">
+              <span class="size-label">In Stock</span>
+              <button class="qty-btn" onclick="stepBeerWineQty(${item._idx}, -1)">−</button>
+              <span class="qty-val">${qty}</span>
+              <button class="qty-btn" onclick="stepBeerWineQty(${item._idx}, 1)">+</button>
+            </div>
+          `;
+        }
 
         return `
-        <div class="item-row ${!item.inStock || totalQty === 0 ? 'out-of-stock' : ''}">
+        <div class="item-row ${isOutOfStock ? 'out-of-stock' : ''}">
           <div class="item-info">
             <div class="item-title">${item.name}</div>
             <div class="item-meta">
               <span>${item.category || ''}</span>
               ${item.subCategory ? `• ${item.subCategory}` : ''}
-              ${item.proof ? `• ${item.proof}` : ''}
               ${item.style ? `• ${item.style}` : ''}
+              ${item.proof ? `• ${item.proof}` : ''}
+              ${item.abv ? `• ${item.abv}` : ''}
+              ${item.origin ? `• ${item.origin}` : ''}
               ${item.price ? `• ${item.price}` : ''}
             </div>
           </div>
           <div class="item-controls">
-            ${activeCol === 'spirits' ? `
-              <div class="size-steppers">
-                ${Object.entries(sizesObj).map(([sz, count]) => `
-                  <div class="size-stepper-box" title="${sz}">
-                    <span class="size-label">${sz}</span>
-                    <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', -1)">−</button>
-                    <span class="qty-val">${count}</span>
-                    <button class="qty-btn" onclick="stepSizeQty(${item._idx}, '${sz}', 1)">+</button>
-                  </div>
-                `).join('')}
-              </div>
-            ` : '<div></div>'}
+            ${stepperHtml || '<div></div>'}
             <div class="control-actions">
               <label class="switch" title="Toggle Stock">
-                <input type="checkbox" ${item.inStock && totalQty > 0 ? 'checked' : ''} onchange="toggleStock(${item._idx}, this.checked)" />
+                <input type="checkbox" ${item.inStock && !isOutOfStock ? 'checked' : ''} onchange="toggleStock(${item._idx}, this.checked)" />
                 <span class="slider"></span>
               </label>
               <button class="icon-btn" onclick="openEditModal(${item._idx})" title="Edit Details">✏️</button>
@@ -547,6 +566,21 @@
       `}).join("");
     }
 
+    // Step Beer / Wine count up or down
+    async function stepBeerWineQty(index, delta) {
+      const item = activeData.items[index];
+      let currentQty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
+      let newQty = currentQty + delta;
+      if (newQty < 0) newQty = 0;
+
+      item.quantity = newQty;
+      item.inStock = newQty > 0;
+
+      renderList();
+      await pushDataToGithub(`Adjust ${item.name} stock to ${newQty}`);
+    }
+
+    // Step a specific spirit size up or down
     async function stepSizeQty(index, sizeKey, delta) {
       const item = activeData.items[index];
       if (!item.sizes) item.sizes = getBottleSizes(item);
@@ -571,6 +605,7 @@
     async function toggleStock(index, newStatus) {
       const item = activeData.items[index];
       item.inStock = newStatus;
+
       if (activeCol === 'spirits') {
         if (!item.sizes) item.sizes = getBottleSizes(item);
         if (!newStatus) {
@@ -581,7 +616,14 @@
           item.sizes[firstKey] = Math.max(item.sizes[firstKey], 1);
           item.quantity = Object.values(item.sizes).reduce((a, b) => a + b, 0);
         }
+      } else if (activeCol === 'beer_wine') {
+        if (!newStatus) {
+          item.quantity = 0;
+        } else if (!item.quantity || item.quantity === 0) {
+          item.quantity = 1;
+        }
       }
+
       renderList();
       await pushDataToGithub(`Update stock status for ${item.name}`);
     }
@@ -665,10 +707,12 @@
           <div class="form-group"><label>Garnish</label><input type="text" id="f_garnish" value="${data.garnish || ''}" /></div>
         `;
       } else if (activeCol === "beer_wine") {
+        const currentQty = data.quantity !== undefined ? data.quantity : (data.inStock !== false ? 1 : 0);
         container.innerHTML = `
           <div class="form-group"><label>Item Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
           <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Beer'}" required /></div>
           <div class="form-group"><label>Style / Type</label><input type="text" id="f_style" value="${data.style || ''}" /></div>
+          <div class="form-group"><label>Quantity in Stock</label><input type="number" id="f_qty" value="${currentQty}" min="0" /></div>
           <div class="form-group"><label>ABV</label><input type="text" id="f_abv" value="${data.abv || ''}" /></div>
           <div class="form-group"><label>Origin</label><input type="text" id="f_origin" value="${data.origin || ''}" /></div>
           <div class="form-group"><label>Notes</label><textarea id="f_details" rows="2">${data.details || ''}</textarea></div>
@@ -730,6 +774,8 @@
         updatedObj.garnish = document.getElementById("f_garnish").value.trim();
       } else if (activeCol === "beer_wine") {
         updatedObj.style = document.getElementById("f_style").value.trim();
+        updatedObj.quantity = parseInt(document.getElementById("f_qty").value) || 0;
+        updatedObj.inStock = updatedObj.quantity > 0;
         updatedObj.abv = document.getElementById("f_abv").value.trim();
         updatedObj.origin = document.getElementById("f_origin").value.trim();
         updatedObj.details = document.getElementById("f_details").value.trim();
