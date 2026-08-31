@@ -5,9 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Damp Clam — Content Manager</title>
   <link rel="icon" type="image/jpeg" href="../logo.jpg" />
+  <style>
+    /* Clean fallback styling if token prompt is needed */
+    #token-login-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 20, 15, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .modal-box {
+      background: #0d2822;
+      border: 1px solid #00f7ff;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 440px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 25px rgba(0, 247, 255, 0.25);
+    }
+    .modal-box h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      color: #00f7ff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .modal-box p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 1.25rem;
+      line-height: 1.45;
+    }
+    .modal-box input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #16382c;
+      background: #021611;
+      color: #fff;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .modal-box input:focus {
+      outline: none;
+      border-color: #00f7ff;
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.4);
+    }
+    .modal-box button {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: none;
+      background: #00f7ff;
+      color: #03140f;
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .modal-box button:hover {
+      background: #fff;
+      box-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
+    }
+  </style>
 </head>
 <body>
-  <!-- Decap CMS Core Engine -->
+  <div id="token-login-modal">
+    <div class="modal-box">
+      <h2>The Damp Clam Admin</h2>
+      <p>Enter your GitHub Personal Access Token to manage inventory and menus directly.</p>
+      <input type="password" id="gh-token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+      <button id="gh-token-save-btn">Log In to Dashboard</button>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+    (function() {
+      const STORAGE_KEY = "decap-cms-user";
+      const user = localStorage.getItem(STORAGE_KEY);
+
+      // If no valid session is present, show the token modal
+      if (!user || !JSON.parse(user).token) {
+        const modal = document.getElementById("token-login-modal");
+        modal.style.display = "flex";
+
+        document.getElementById("gh-token-save-btn").addEventListener("click", function() {
+          const token = document.getElementById("gh-token-input").value.trim();
+          if (token) {
+            // Save the token in Decap's required session format
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ token: token, backendName: "github" }));
+            modal.style.display = "none";
+            window.location.reload();
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
