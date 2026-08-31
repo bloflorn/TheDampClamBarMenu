@@ -132,7 +132,7 @@
       font-size: 0.7rem;
       font-weight: bold;
       text-transform: uppercase;
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 12px;
       border: none;
       cursor: pointer;
@@ -172,7 +172,7 @@
     <form id="bottle-form" class="card" style="display: none;">
       <!-- Similar Match Container -->
       <div class="match-box" id="similar-matches-box">
-        <div class="match-header">🔍 Similar Inventory Found</div>
+        <div class="match-header">🔍 Existing Bottle Match Found</div>
         <div id="matches-list"></div>
       </div>
 
@@ -202,7 +202,7 @@
           <input type="text" id="b-proof" placeholder="e.g. 90 Proof (45% ABV)" />
         </div>
         <div>
-          <label>Size</label>
+          <label>Bottle Size</label>
           <input type="text" id="b-size" value="750 mL" />
         </div>
         <div>
@@ -239,7 +239,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-save" id="save-btn">✓ Save as Unique Entry</button>
+      <button type="submit" class="btn btn-save" id="save-btn">✓ Save as New Card</button>
       <a href="manager.html" class="btn btn-secondary">Go to Bar Manager</a>
     </form>
   </div>
@@ -250,7 +250,6 @@
     
     let existingSpirits = [];
 
-    // Auto-load cached credentials
     const storedGemini = localStorage.getItem("damp_clam_gemini_key");
     if (storedGemini) document.getElementById("gemini-key").value = storedGemini;
 
@@ -262,7 +261,6 @@
       } catch (e) {}
     }
 
-    // Pre-fetch existing inventory for instant similarity checks
     async function preloadInventory() {
       try {
         const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${FILE_PATH}`);
@@ -432,7 +430,6 @@
       }
     }
 
-    // Similarity Checker Algorithm
     function checkForSimilarBottles(targetName) {
       const matchBox = document.getElementById("similar-matches-box");
       const list = document.getElementById("matches-list");
@@ -457,26 +454,33 @@
         return { item, idx, score };
       }).filter(m => m.score >= 20).sort((a, b) => b.score - a.score).slice(0, 3);
 
+      const currentInputSize = document.getElementById("b-size").value.trim() || "750 mL";
+
       if (matches.length > 0) {
         matchBox.style.display = "block";
-        list.innerHTML = matches.map(m => `
+        list.innerHTML = matches.map(m => {
+          const currentSizesDesc = m.item.sizes ? Object.entries(m.item.sizes).map(([sz, c]) => `${c}× ${sz}`).join(", ") : `${m.item.quantity || 1}× ${m.item.size || '750 mL'}`;
+          return `
           <div class="match-item">
             <div>
               <div class="match-name">${m.item.name}</div>
-              <div class="match-sub">${m.item.category || ''} • Current Qty: ${m.item.quantity || 1} • ${m.item.inStock ? 'In Stock' : 'Out of Stock'}</div>
+              <div class="match-sub">${m.item.category || ''} • Current: ${currentSizesDesc}</div>
             </div>
-            <button type="button" class="btn-match-action" onclick="incrementExistingBottle(${m.idx})">➕ Add Bottle to This</button>
+            <button type="button" class="btn-match-action" onclick="addSizeToExistingEntry(${m.idx})">➕ Add ${currentInputSize} to This Entry</button>
           </div>
-        `).join("");
+        `}).join("");
       } else {
         matchBox.style.display = "none";
       }
     }
 
-    // Add bottle quantity to existing entry
-    window.incrementExistingBottle = async function(index) {
+    // Add size to existing card
+    window.addSizeToExistingEntry = async function(index) {
       const targetBottle = existingSpirits[index];
-      if (!confirm(`Add an additional bottle of "${targetBottle.name}" and mark In Stock?`)) return;
+      const sizeToAdd = document.getElementById("b-size").value.trim() || "750 mL";
+      const qtyToAdd = parseInt(document.getElementById("b-qty").value) || 1;
+
+      if (!confirm(`Add ${qtyToAdd}× ${sizeToAdd} to existing card "${targetBottle.name}"?`)) return;
 
       const ghToken = getAuthToken();
       if (!ghToken) return;
@@ -484,7 +488,7 @@
       const saveBtn = document.getElementById("save-btn");
       saveBtn.disabled = true;
       statusDisplay.className = "status-msg loading";
-      statusDisplay.textContent = `Updating inventory count for ${targetBottle.name}...`;
+      statusDisplay.textContent = `Updating inventory for ${targetBottle.name}...`;
 
       try {
         const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
@@ -496,10 +500,17 @@
         const fileData = await getRes.json();
         const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
 
-        // Increment count and mark in stock
         const cur = currentContent.items[index];
-        cur.quantity = (cur.quantity || 1) + 1;
+        if (!cur.sizes) {
+          const oldSize = cur.size || "750 mL";
+          const oldQty = cur.quantity || (cur.inStock ? 1 : 0);
+          cur.sizes = { [oldSize]: oldQty };
+        }
+
+        cur.sizes[sizeToAdd] = (cur.sizes[sizeToAdd] || 0) + qtyToAdd;
+        cur.quantity = Object.values(cur.sizes).reduce((a, b) => a + b, 0);
         cur.inStock = true;
+        cur.size = Object.keys(cur.sizes).join(", ");
 
         const updatedBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
         const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
@@ -509,7 +520,7 @@
             "Authorization": `Bearer ${ghToken}`
           },
           body: JSON.stringify({
-            message: `Restock / Add bottle to ${cur.name} (Qty: ${cur.quantity})`,
+            message: `Add ${qtyToAdd}x ${sizeToAdd} to ${cur.name}`,
             content: updatedBase64,
             sha: fileData.sha,
             branch: "main"
@@ -518,7 +529,7 @@
 
         if (putRes.ok) {
           statusDisplay.className = "status-msg success";
-          statusDisplay.textContent = `✓ Successfully updated ${cur.name} (New Qty: ${cur.quantity})!`;
+          statusDisplay.textContent = `✓ Successfully added ${sizeToAdd} to ${cur.name}!`;
           bottleForm.reset();
           preview.style.display = "none";
           bottleForm.style.display = "none";
@@ -546,28 +557,32 @@
       return ghToken;
     }
 
-    // Save as Unique Entry
+    // Save as distinct new card
     bottleForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       saveKeys();
       const saveBtn = document.getElementById("save-btn");
       saveBtn.disabled = true;
-      saveBtn.textContent = "Saving Unique Entry...";
+      saveBtn.textContent = "Saving New Card...";
 
       const ghToken = getAuthToken();
       if (!ghToken) {
         saveBtn.disabled = false;
-        saveBtn.textContent = "✓ Save as Unique Entry";
+        saveBtn.textContent = "✓ Save as New Card";
         return;
       }
+
+      const inputSize = document.getElementById("b-size").value.trim() || "750 mL";
+      const inputQty = parseInt(document.getElementById("b-qty").value) || 1;
 
       const newBottle = {
         name: document.getElementById("b-name").value.trim(),
         category: document.getElementById("b-category").value,
         subCategory: document.getElementById("b-sub").value.trim(),
         proof: document.getElementById("b-proof").value.trim(),
-        size: document.getElementById("b-size").value.trim(),
-        quantity: parseInt(document.getElementById("b-qty").value) || 1,
+        size: inputSize,
+        sizes: { [inputSize]: inputQty },
+        quantity: inputQty,
         details: document.getElementById("b-details").value.trim(),
         isSpecial: document.getElementById("b-special").checked,
         isGifted: document.getElementById("b-gifted").checked,
@@ -606,7 +621,7 @@
             "Authorization": `Bearer ${ghToken}`
           },
           body: JSON.stringify({
-            message: `Add ${newBottle.name} as unique entry`,
+            message: `Add ${newBottle.name} as new card`,
             content: updatedBase64,
             sha: fileData.sha,
             branch: "main"
@@ -628,7 +643,7 @@
         alert(`Error saving bottle to GitHub: ${err.message}`);
       } finally {
         saveBtn.disabled = false;
-        saveBtn.textContent = "✓ Save as Unique Entry";
+        saveBtn.textContent = "✓ Save as New Card";
       }
     });
   </script>
