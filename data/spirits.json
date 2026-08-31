@@ -920,7 +920,7 @@
       "proof": "90 Proof (45% ABV)",
       "name": "Eagle Rare 10-Year Kentucky Straight Bourbon",
       "isSpecial": false,
-      "inStock": true,
+      "inStock": false,
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
       "subCategory": "Straight Bourbon"
