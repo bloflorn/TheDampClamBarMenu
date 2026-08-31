@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Damp Clam — AI Bottle Scanner</title>
+  <title>The Damp Clam — Quick Bottle Ingestion</title>
   <link rel="icon" type="image/jpeg" href="../logo.jpg" />
   <style>
     :root {
@@ -29,7 +29,7 @@
     }
     .container { max-width: 600px; margin: 0 auto; }
     header { text-align: center; margin-bottom: 1.25rem; }
-    h1 { font-family: var(--font-serif); font-size: 1.6rem; color: #fff; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px var(--neon-cyan); }
+    h1 { font-family: var(--font-serif); font-size: 1.5rem; color: #fff; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px var(--neon-cyan); }
     .sub { font-size: 0.8rem; color: var(--gold-amber); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
     
     .card {
@@ -53,25 +53,35 @@
     }
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 8px rgba(0,247,255,0.4); }
     
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 25px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       cursor: pointer;
       border: none;
       transition: all 0.2s ease;
       text-decoration: none;
+      text-align: center;
     }
-    .btn-camera { background: var(--neon-cyan); color: #03140f; box-shadow: 0 0 12px rgba(0,247,255,0.4); margin-bottom: 0.75rem; }
+    .btn-camera { background: var(--neon-cyan); color: #03140f; box-shadow: 0 0 12px rgba(0,247,255,0.4); }
     .btn-camera:hover { background: #fff; box-shadow: 0 0 18px rgba(0,247,255,0.8); }
-    .btn-save { background: var(--neon-green); color: #03140f; box-shadow: 0 0 12px rgba(57,255,20,0.4); }
+    .btn-manual { background: rgba(0, 247, 255, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
+    .btn-manual:hover { background: rgba(0, 247, 255, 0.25); }
+    
+    .btn-save { background: var(--neon-green); color: #03140f; box-shadow: 0 0 12px rgba(57,255,20,0.4); margin-top: 0.5rem; }
     .btn-save:hover { background: #fff; box-shadow: 0 0 18px rgba(57,255,20,0.8); }
     .btn-secondary { background: transparent; color: var(--gold-amber); border: 1px solid var(--gold-amber); margin-top: 0.5rem; }
     
@@ -90,32 +100,37 @@
 <body>
   <div class="container">
     <header>
-      <h1>AI Bottle Scanner</h1>
-      <div class="sub">Direct Inventory Ingestion for The Damp Clam</div>
+      <h1>Quick Bottle Ingestion</h1>
+      <div class="sub">Direct Bar Inventory Manager</div>
     </header>
 
     <div class="card">
-      <label for="gemini-key">Gemini AI Studio API Key</label>
-      <input type="password" id="gemini-key" placeholder="AIzaSy..." />
+      <div style="margin-bottom: 0.75rem;">
+        <label for="gemini-key">Gemini AI Studio Key (For Photo Scan)</label>
+        <input type="password" id="gemini-key" placeholder="AIzaSy..." />
 
-      <label for="gh-token">GitHub Personal Access Token (for saving to repo)</label>
-      <input type="password" id="gh-token" placeholder="ghp_..." />
+        <label for="gh-token">GitHub Token (For Saving to Site)</label>
+        <input type="password" id="gh-token" placeholder="ghp_..." />
+      </div>
+
+      <div class="action-grid">
+        <button class="btn btn-camera" id="capture-btn">📷 Scan Photo</button>
+        <button class="btn btn-manual" id="manual-btn">✍️ Manual Add</button>
+      </div>
 
       <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;" />
-      <button class="btn btn-camera" id="capture-btn">📷 Snap Bottle Label Photo</button>
-      
       <img id="image-preview" class="preview-img" alt="Bottle Label" />
       <div id="status-display" class="status-msg"></div>
     </div>
 
-    <!-- Review Form -->
+    <!-- Review / Manual Form -->
     <form id="bottle-form" class="card" style="display: none;">
-      <h2 style="font-family: var(--font-serif); font-size: 1.1rem; color: #fff; margin-bottom: 1rem; text-transform: uppercase;">Review & Confirm Data</h2>
+      <h2 style="font-family: var(--font-serif); font-size: 1.1rem; color: #fff; margin-bottom: 1rem; text-transform: uppercase;">Bottle Details</h2>
       
       <div class="form-grid">
         <div class="full-width">
-          <label>Bottle Name</label>
-          <input type="text" id="b-name" required />
+          <label>Bottle Name *</label>
+          <input type="text" id="b-name" placeholder="e.g. Eagle Rare 10-Year" required />
         </div>
         <div>
           <label>Category</label>
@@ -129,11 +144,11 @@
         </div>
         <div>
           <label>Sub-Category</label>
-          <input type="text" id="b-sub" />
+          <input type="text" id="b-sub" placeholder="e.g. Straight Bourbon" />
         </div>
         <div>
           <label>Proof / ABV</label>
-          <input type="text" id="b-proof" />
+          <input type="text" id="b-proof" placeholder="e.g. 90 Proof (45% ABV)" />
         </div>
         <div>
           <label>Size</label>
@@ -141,23 +156,31 @@
         </div>
         <div class="full-width">
           <label>Details / Bottler / Distiller</label>
-          <input type="text" id="b-details" />
+          <input type="text" id="b-details" placeholder="e.g. Kentucky Straight Bourbon, Aged 10 Years" />
         </div>
         <div class="full-width">
           <label>Tasting Notes</label>
-          <textarea id="b-notes" rows="2"></textarea>
+          <textarea id="b-notes" rows="2" placeholder="Toasted oak, vanilla, rich caramel, and cherries."></textarea>
         </div>
         <div>
           <label>Mashbill / Botanicals (Optional)</label>
-          <input type="text" id="b-mash" />
+          <input type="text" id="b-mash" placeholder="e.g. Buffalo Trace Mash #1" />
         </div>
         <div>
           <label>Barrel / Cask (Optional)</label>
-          <input type="text" id="b-barrel" />
+          <input type="text" id="b-barrel" placeholder="e.g. Barrel #14, Rickhouse K" />
         </div>
         <div class="full-width checkbox-row">
           <input type="checkbox" id="b-special" />
           <label for="b-special" style="margin-bottom:0; cursor:pointer;">Mark as Special / Reserve Bottle?</label>
+        </div>
+        <div class="full-width checkbox-row">
+          <input type="checkbox" id="b-gifted" />
+          <label for="b-gifted" style="margin-bottom:0; cursor:pointer;">Mark as Gifted Bottle?</label>
+        </div>
+        <div class="full-width" id="gift-notes-row" style="display: none;">
+          <label>Gift Story / Occasion</label>
+          <input type="text" id="b-giftnotes" placeholder="e.g. Gifted by Kyle for André's birthday." />
         </div>
       </div>
 
@@ -170,7 +193,7 @@
     const REPO = "thedampclam/TheDampClamBarMenu";
     const FILE_PATH = "data/spirits.json";
     
-    // Auto-load cached keys
+    // Auto-load cached credentials
     const storedGemini = localStorage.getItem("damp_clam_gemini_key");
     if (storedGemini) document.getElementById("gemini-key").value = storedGemini;
 
@@ -183,24 +206,42 @@
     }
 
     const captureBtn = document.getElementById("capture-btn");
+    const manualBtn = document.getElementById("manual-btn");
     const cameraInput = document.getElementById("camera-input");
     const preview = document.getElementById("image-preview");
     const statusDisplay = document.getElementById("status-display");
     const bottleForm = document.getElementById("bottle-form");
+    const giftedCheckbox = document.getElementById("b-gifted");
+    const giftNotesRow = document.getElementById("gift-notes-row");
+
+    giftedCheckbox.addEventListener("change", () => {
+      giftNotesRow.style.display = giftedCheckbox.checked ? "block" : "none";
+    });
+
+    manualBtn.addEventListener("click", () => {
+      saveKeys();
+      bottleForm.style.display = "block";
+      statusDisplay.textContent = "";
+      preview.style.display = "none";
+      bottleForm.scrollIntoView({ behavior: 'smooth' });
+    });
 
     captureBtn.addEventListener("click", () => {
       const gKey = document.getElementById("gemini-key").value.trim();
-      const ghKey = document.getElementById("gh-token").value.trim();
       if (!gKey) {
         alert("Please paste your Gemini API Key first.");
         return;
       }
-      localStorage.setItem("damp_clam_gemini_key", gKey);
-      if (ghKey) {
-        localStorage.setItem("decap-cms-user", JSON.stringify({ token: ghKey, backendName: "github" }));
-      }
+      saveKeys();
       cameraInput.click();
     });
+
+    function saveKeys() {
+      const gKey = document.getElementById("gemini-key").value.trim();
+      const ghKey = document.getElementById("gh-token").value.trim();
+      if (gKey) localStorage.setItem("damp_clam_gemini_key", gKey);
+      if (ghKey) localStorage.setItem("decap-cms-user", JSON.stringify({ token: ghKey, backendName: "github" }));
+    }
 
     cameraInput.addEventListener("change", async (e) => {
       const file = e.target.files[0];
@@ -209,24 +250,58 @@
       preview.src = URL.createObjectURL(file);
       preview.style.display = "block";
       statusDisplay.className = "status-msg loading";
-      statusDisplay.textContent = "Analyzing bottle label with AI Vision...";
+      statusDisplay.textContent = "Resizing & analyzing bottle label...";
 
-      const base64Data = await fileToBase64(file);
-      analyzeBottleLabel(base64Data, file.type || "image/jpeg");
+      try {
+        // Automatically downscale photo so mobile memory & API limits never fail
+        const base64Data = await resizeImageToBase64(file, 1200);
+        analyzeBottleLabel(base64Data);
+      } catch (err) {
+        console.error(err);
+        statusDisplay.className = "status-msg error";
+        statusDisplay.textContent = "Image processing failed. You can use Manual Add below.";
+        bottleForm.style.display = "block";
+      }
     });
 
-    function fileToBase64(file) {
+    function resizeImageToBase64(file, maxDimension) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
+        reader.onload = (readerEvent) => {
+          const image = new Image();
+          image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+            if (width > height) {
+              if (width > maxDimension) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              }
+            } else {
+              if (height > maxDimension) {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(image, 0, 0, width, height);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+            resolve(dataUrl.split(",")[1]);
+          };
+          image.onerror = reject;
+          image.src = readerEvent.target.result;
+        };
+        reader.onerror = reject;
         reader.readAsDataURL(file);
       });
     }
 
-    async function analyzeBottleLabel(base64Data, mimeType) {
+    async function analyzeBottleLabel(base64Data) {
       const gKey = document.getElementById("gemini-key").value.trim();
-      const prompt = `Analyze this liquor bottle photo. Extract details and return ONLY a valid JSON object matching this schema without any markdown wrapping:
+      const prompt = `Analyze this liquor bottle photo. Extract details and return ONLY a valid JSON object matching this schema without any markdown formatting:
       {
         "name": "Full Bottle Name",
         "category": "One of: Bourbon & American Whiskey, Scotch Whisky, Irish Whiskey, Rum & Aquavit, Gin, Vodka & Liqueurs",
@@ -240,14 +315,14 @@
       }`;
 
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${gKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{
               parts: [
                 { text: prompt },
-                { inline_data: { mime_type: mimeType, data: base64Data } }
+                { inline_data: { mime_type: "image/jpeg", data: base64Data } }
               ]
             }],
             generationConfig: { response_mime_type: "application/json" }
@@ -255,10 +330,12 @@
         });
 
         const data = await res.json();
+        if (data.error) throw new Error(data.error.message || "Gemini API Error");
+
         const rawJson = data.candidates[0].content.parts[0].text;
         const bottle = JSON.parse(rawJson);
 
-        // Pre-fill form
+        // Pre-fill form fields
         document.getElementById("b-name").value = bottle.name || "";
         document.getElementById("b-category").value = bottle.category || "Bourbon & American Whiskey";
         document.getElementById("b-sub").value = bottle.subCategory || "";
@@ -271,18 +348,19 @@
 
         bottleForm.style.display = "block";
         statusDisplay.className = "status-msg success";
-        statusDisplay.textContent = "Label analyzed! Confirm the details below.";
+        statusDisplay.textContent = "✓ Label analyzed! Review or edit the details below.";
         bottleForm.scrollIntoView({ behavior: 'smooth' });
       } catch (err) {
         console.error(err);
         statusDisplay.className = "status-msg error";
-        statusDisplay.textContent = "Could not parse label automatically. You can enter details manually below.";
+        statusDisplay.textContent = `Scan notice: ${err.message}. You can enter details manually below.`;
         bottleForm.style.display = "block";
       }
     }
 
     bottleForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      saveKeys();
       const saveBtn = document.getElementById("save-btn");
       saveBtn.disabled = true;
       saveBtn.textContent = "Saving to GitHub...";
@@ -308,7 +386,7 @@
         size: document.getElementById("b-size").value.trim(),
         details: document.getElementById("b-details").value.trim(),
         isSpecial: document.getElementById("b-special").checked,
-        isGifted: false,
+        isGifted: document.getElementById("b-gifted").checked,
         inStock: true,
         extra: {}
       };
@@ -316,10 +394,12 @@
       const notes = document.getElementById("b-notes").value.trim();
       const mash = document.getElementById("b-mash").value.trim();
       const barrel = document.getElementById("b-barrel").value.trim();
+      const giftNotes = document.getElementById("b-giftnotes").value.trim();
 
       if (notes) newBottle.extra.notes = notes;
       if (mash) newBottle.extra.mash = mash;
       if (barrel) newBottle.extra.barrel = barrel;
+      if (newBottle.isGifted && giftNotes) newBottle.extra.giftNotes = giftNotes;
       if (Object.keys(newBottle.extra).length === 0) delete newBottle.extra;
 
       try {
@@ -342,7 +422,7 @@
             "Authorization": `Bearer ${ghToken}`
           },
           body: JSON.stringify({
-            message: `Add ${newBottle.name} via AI Scanner`,
+            message: `Add ${newBottle.name} via Quick Form`,
             content: updatedBase64,
             sha: fileData.sha,
             branch: "main"
@@ -356,11 +436,11 @@
           preview.style.display = "none";
           bottleForm.style.display = "none";
         } else {
-          throw new Error("GitHub commit failed.");
+          throw new Error("GitHub commit failed. Check your token permissions.");
         }
       } catch (err) {
         console.error(err);
-        alert("Error saving bottle to GitHub. Check console for details.");
+        alert(`Error saving bottle to GitHub: ${err.message}`);
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = "✓ Save & Push to Website";
