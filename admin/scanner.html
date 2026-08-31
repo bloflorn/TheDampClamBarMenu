@@ -185,7 +185,7 @@
       </div>
 
       <button type="submit" class="btn btn-save" id="save-btn">✓ Save & Push to Website</button>
-      <a href="index.html" class="btn btn-secondary">Go to Admin Dashboard</a>
+      <a href="manager.html" class="btn btn-secondary">Go to Bar Manager</a>
     </form>
   </div>
 
@@ -253,7 +253,6 @@
       statusDisplay.textContent = "Resizing & analyzing bottle label...";
 
       try {
-        // Automatically downscale photo so mobile memory & API limits never fail
         const base64Data = await resizeImageToBase64(file, 1200);
         analyzeBottleLabel(base64Data);
       } catch (err) {
@@ -335,7 +334,6 @@
         const rawJson = data.candidates[0].content.parts[0].text;
         const bottle = JSON.parse(rawJson);
 
-        // Pre-fill form fields
         document.getElementById("b-name").value = bottle.name || "";
         document.getElementById("b-category").value = bottle.category || "Bourbon & American Whiskey";
         document.getElementById("b-sub").value = bottle.subCategory || "";
