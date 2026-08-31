@@ -43,7 +43,7 @@
       "abv": "11.0% ABV",
       "origin": "Veneto, Italy",
       "details": "Effervescent green apple, fresh pear, and floral aromas.",
-      "inStock": true
+      "inStock": false
     }
   ]
 }
