@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Damp Clam — Cocktail Menu</title>
- <!-- Website Favicon -->
-<link rel="icon" type="image/jpeg" href="logo.jpg" />
-<link rel="apple-touch-icon" href="logo.jpg" />
- <style>
+  
+  <!-- Website Favicon -->
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <link rel="apple-touch-icon" href="logo.jpg" />
+
+  <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
       --card-bg: rgba(2, 22, 17, 0.75);
@@ -159,6 +161,11 @@
       border-color: rgba(255, 51, 68, 0.35);
     }
 
+    .card.out-of-stock:hover {
+      border-color: var(--neon-red);
+      box-shadow: 0 0 15px rgba(255, 51, 68, 0.25);
+    }
+
     .card-top {
       display: flex;
       justify-content: space-between;
@@ -184,6 +191,7 @@
       padding: 1px 7px;
       border-radius: 10px;
       font-weight: bold;
+      text-shadow: 0 0 5px var(--neon-red);
     }
 
     .card-title {
@@ -208,8 +216,35 @@
       padding-top: 0.75rem;
     }
 
-    .card-details div { margin-bottom: 0.35rem; }
+    .card-details div { margin-bottom: 0.4rem; }
     .card-details strong { color: var(--gold-amber); }
+
+    .recipe-box {
+      background: rgba(0, 0, 0, 0.28);
+      border-left: 2px solid var(--neon-cyan);
+      padding: 0.45rem 0.65rem;
+      border-radius: 4px;
+      margin: 0.4rem 0;
+      font-family: inherit;
+      color: #e2e8f0;
+      font-size: 0.82rem;
+    }
+
+    .recipe-box strong {
+      color: var(--neon-cyan);
+      display: block;
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+    }
+
+    .missing-alert {
+      color: var(--neon-red);
+      font-size: 0.78rem;
+      font-style: italic;
+      margin-top: 0.35rem;
+    }
   </style>
 </head>
 <body>
@@ -241,7 +276,8 @@
         name: "Lizzy Special",
         category: "House Signatures",
         desc: "A gin and tonic but with way more gin than is probably good for you. Just the way Lizzy likes it.",
-        ingredients: "A very heavy pour of The Botanist Islay Dry Gin (or Empress 1908), Tonic Water, Fresh Lime Juice",
+        recipe: "3 oz The Botanist Gin (or Empress 1908), 3 oz Tonic Water, 0.5 oz Fresh Lime Juice",
+        ingredients: "Heavy pour of Gin, Tonic Water, Fresh Lime Juice",
         glass: "Highball Glass over Ice",
         garnish: "Double Lime Wheel",
         inStock: true
@@ -250,159 +286,264 @@
         name: "Skeleton Key",
         category: "House Signatures",
         desc: "A bold, aromatic modern classic crowned with a dramatic float of dark aromatic bitters.",
-        ingredients: "Baker's 7-Year Single Barrel Bourbon, St. Elder Natural Elderflower Liqueur, Fresh Lemon Juice, Spicy Ginger Beer, Heavy Angostura Bitters Float",
+        recipe: "1.5 oz Baker's 7-Year Bourbon (or any House Bourbon), 0.75 oz St. Elder Elderflower Liqueur, 0.5 oz Fresh Lemon Juice, 3-4 oz Ginger Beer, 0.5 oz Angostura Bitters float",
+        ingredients: "Bourbon, St. Elder Natural Elderflower Liqueur, Fresh Lemon Juice, Ginger Beer, Angostura Bitters",
         glass: "Collins Glass with Cubed Ice",
         garnish: "Expressed Lemon Wheel & Aromatic Bitters Crown",
         inStock: true
       },
       {
+        name: "Blackberry Bramble (House Bar Spec)",
+        category: "House Signatures",
+        desc: "Tart, refreshing gin cocktail laced with sweet dark berry liqueur over ice.",
+        recipe: "2 oz The Botanist Islay Dry Gin, 1 oz Fresh Lemon Juice, 0.5 oz Simple Syrup, 0.75 oz Crown Royal Blackberry float",
+        ingredients: "The Botanist Gin, Fresh Lemon Juice, Simple Syrup, Crown Royal Blackberry Whisky",
+        glass: "Rocks Glass over Ice",
+        garnish: "Fresh Lemon Wheel",
+        inStock: true
+      },
+      {
         name: "Solstice Empress Sour",
         category: "House Signatures",
-        desc: "Bright floral citrus with a silky foam cap that naturally transforms color in the glass.",
+        desc: "Bright floral citrus that naturally transforms color in the glass.",
+        recipe: "2 oz Empress 1908 Indigo Gin, 1 oz Fresh Lemon Juice, 0.75 oz Simple Syrup, 1 Egg White (or Aqua Faba)",
         ingredients: "Empress 1908 Indigo Gin, Fresh Lemon Juice, Simple Syrup, Egg White Foam",
         glass: "Coupe",
         garnish: "Dehydrated Lemon Wheel & Lavender Bitters",
-        inStock: true
-      },
-      {
-        name: "Blackberry Bramble",
-        category: "House Signatures",
-        desc: "Tart, refreshing gin cocktail laced with sweet dark berry liqueur over crushed ice.",
-        ingredients: "The Botanist Islay Dry Gin, Fresh Lemon Juice, Simple Syrup, Crown Royal Blackberry Float",
-        glass: "Rocks Glass with Crushed Ice",
-        garnish: "Fresh Blackberry & Mint Sprig",
-        inStock: true
+        inStock: false,
+        missingReason: "Out of Stock: Requires Egg White / Lavender Bitters"
       },
 
-      // Classics & Spritzes
-      {
-        name: "Pusser's Painkiller®",
-        category: "Classics",
-        desc: "The authentic British Virgin Islands recipe: a rich blend of Pusser's Rum, pineapple juice, orange juice, and cream of coconut served on the rocks.",
-        ingredients: "2 oz Pusser's Rum (or Planteray/Sailor Jerry), 4 oz Pineapple Juice, 1 oz Orange Juice, 1 oz Cream of Coconut",
-        glass: "Big Glass or Goblet filled with Ice",
-        garnish: "Freshly Grated Nutmeg, Orange Slice & Cherry",
-        inStock: true
-      },
-      {
-        name: "Gold Rush",
-        category: "Classics",
-        desc: "Modern speakeasy favorite delivering a rich, silky marriage of high-proof bourbon, golden clover honey syrup, and fresh lemon juice.",
-        ingredients: "Baker's 7-Year Single Barrel Bourbon (or Maker's Mark), Honey Syrup (3:1 Honey to Warm Water), Fresh Lemon Juice",
-        glass: "Rocks Glass with Large Clear Ice Cube",
-        garnish: "Expressed Lemon Peel Twist",
-        inStock: true
-      },
+      // Classics & Highballs
       {
         name: "Classic Gin & Tonic",
         category: "Classics",
-        desc: "Crisp, aromatic, and timeless botanicals balanced with effervescent premium tonic water.",
-        ingredients: "The Botanist Islay Dry Gin (or Empress 1908 Indigo Gin), Premium Tonic Water, Fresh Lime Juice",
-        glass: "Highball Glass over Ice",
-        garnish: "Fresh Lime Wheel & Juniper Berries",
-        inStock: true
-      },
-      {
-        name: "Hugo Spritz",
-        category: "Classics",
-        desc: "Light, floral, and ultra-refreshing Northern Italian spritz infused with delicate elderflower and fresh garden mint.",
-        ingredients: "St. Elder Natural Elderflower Liqueur, Prosecco / Dry Sparkling Wine, Club Soda",
-        glass: "Wine Glass over Ice",
-        garnish: "Fresh Mint Bouquet & Lime Wheel",
-        inStock: true
-      },
-      {
-        name: "Limoncello Spritz",
-        category: "Classics",
-        desc: "Effervescent, sunshine-bright Italian aperitivo with sweet lemon zest and crisp bubbles.",
-        ingredients: "Caravella Limoncello Originale d'Italia, Prosecco / Dry Sparkling Wine, Club Soda",
-        glass: "Wine Glass over Ice",
-        garnish: "Lemon Wheel & Fresh Mint Sprig",
-        inStock: true
-      },
-      {
-        name: "Dark & Stormy",
-        category: "Classics",
-        desc: "Rich, stormy dark cane rum layered over fiery ginger beer and fresh tart lime.",
-        ingredients: "Planteray Barbados Aged Rum / Sailor Jerry Spiced Rum, Fresh Lime Juice, Fiery Ginger Beer",
+        desc: "Crisp, aromatic, and timeless botanicals balanced with effervescent tonic water.",
+        recipe: "2 oz The Botanist Gin (or Empress 1908), 4-5 oz Tonic Water, 0.5 oz Fresh Lime Juice",
+        ingredients: "Dry Gin, Tonic Water, Fresh Lime Juice",
         glass: "Highball Glass over Ice",
         garnish: "Fresh Lime Wheel",
         inStock: true
       },
       {
-        name: "Maple Boulevardier",
+        name: "Dark & Stormy",
         category: "Classics",
-        desc: "A northern twist on the classic bittersweet stirred whiskey cocktail.",
-        ingredients: "Iron Fish Maple Bourbon, Campari, Sweet Vermouth",
-        glass: "Nick & Nora",
-        garnish: "Expressed Orange Twist",
+        desc: "Rich dark cane rum layered over fiery ginger beer and fresh tart lime.",
+        recipe: "2 oz Planteray 5-Year Rum (or Sailor Jerry), 4 oz Ginger Beer, 0.5 oz Fresh Lime Juice",
+        ingredients: "Planteray Aged Rum / Sailor Jerry Spiced Rum, Fresh Lime Juice, Ginger Beer",
+        glass: "Highball Glass over Ice",
+        garnish: "Fresh Lime Wheel",
         inStock: true
       },
       {
-        name: "Smoked Old Fashioned",
+        name: "Old Fashioned",
         category: "Classics",
-        desc: "Rich, spirit-forward, and finished under charred Michigan applewood smoke.",
-        ingredients: "Baker's 7-Year Single Barrel Bourbon, Demerara Syrup, Angostura & Orange Bitters",
-        glass: "Rocks Glass with Large Clear Ice Sphere",
-        garnish: "Expressed Orange Peel & Luxardo Cherry",
+        desc: "Spirit-forward staple balancing rich whiskey, simple syrup sweetness, and aromatic bitters.",
+        recipe: "2 oz Bourbon or Rye (Baker's, Blanton's, Journeyman), 0.25 oz Simple Syrup, 2-3 Dashes Angostura Bitters",
+        ingredients: "Bourbon or Rye Whiskey, Simple Syrup, Angostura Bitters, Expressed Orange Peel",
+        glass: "Rocks Glass with Large Ice Cube",
+        garnish: "Expressed Orange Peel",
         inStock: true
+      },
+      {
+        name: "Whiskey Sour",
+        category: "Classics",
+        desc: "The timeless balance of bold American whiskey, freshly squeezed lemon juice, and pure sugar.",
+        recipe: "2 oz Bourbon or Rye Whiskey, 0.75 oz Fresh Lemon Juice, 0.75 oz Simple Syrup",
+        ingredients: "Bourbon or Rye Whiskey, Fresh Lemon Juice, Simple Syrup",
+        glass: "Rocks Glass over Ice",
+        garnish: "Lemon Wheel or Expressed Orange Twist",
+        inStock: true
+      },
+      {
+        name: "Tom Collins",
+        category: "Classics",
+        desc: "Effervescent, sparkling botanical lemonade made with dry gin and crisp club soda.",
+        recipe: "2 oz The Botanist Gin (or Empress 1908), 1 oz Fresh Lemon Juice, 0.5 oz Simple Syrup, 3-4 oz Club Soda",
+        ingredients: "Dry Gin, Fresh Lemon Juice, Simple Syrup, Club Soda",
+        glass: "Collins / Highball Glass over Ice",
+        garnish: "Lemon Wheel",
+        inStock: true
+      },
+      {
+        name: "Vodka Collins / Club Highball",
+        category: "Classics",
+        desc: "Clean, ultra-crisp highball with refreshing citrus and club soda effervescence.",
+        recipe: "2 oz Kirkland Signature Vodka, 1 oz Fresh Lemon or Lime Juice, 0.5 oz Simple Syrup, 4 oz Club Soda",
+        ingredients: "Vodka, Fresh Lemon or Lime Juice, Simple Syrup, Club Soda",
+        glass: "Highball Glass over Ice",
+        garnish: "Lemon or Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Rum Swizzle Highball",
+        category: "Classics",
+        desc: "Refreshing Caribbean-inspired highball built with spiced and aged rum, citrus, and club soda.",
+        recipe: "1.5 oz Planteray 5-Year Rum, 0.5 oz Sailor Jerry Spiced Rum, 0.75 oz Fresh Lime Juice, 0.5 oz Simple Syrup, 2 Dashes Angostura Bitters, Top with Club Soda",
+        ingredients: "Planteray Rum, Sailor Jerry Spiced Rum, Fresh Lime Juice, Simple Syrup, Angostura Bitters, Club Soda",
+        glass: "Highball Glass over Ice",
+        garnish: "Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Gold Rush",
+        category: "Classics",
+        desc: "Modern speakeasy classic marrying rich bourbon with sweet honey and lemon.",
+        recipe: "2 oz Bourbon, 0.75 oz Honey Syrup (3:1 honey to warm water), 0.75 oz Fresh Lemon Juice",
+        ingredients: "Bourbon, Honey Syrup, Fresh Lemon Juice",
+        glass: "Rocks Glass over Ice",
+        garnish: "Expressed Lemon Twist",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Honey"
+      },
+      {
+        name: "Pusser's Painkiller®",
+        category: "Classics",
+        desc: "Tropical British Virgin Islands staple with pineapple, orange, coconut, and dark rum.",
+        recipe: "2 oz Rum, 4 oz Pineapple Juice, 1 oz Orange Juice, 1 oz Cream of Coconut, Grated Nutmeg",
+        ingredients: "Rum, Pineapple Juice, Orange Juice, Cream of Coconut, Nutmeg",
+        glass: "Goblet or Tall Glass over Ice",
+        garnish: "Nutmeg, Orange Slice & Cherry",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Pineapple Juice, Cream of Coconut & Nutmeg"
+      },
+      {
+        name: "Limoncello Spritz",
+        category: "Classics",
+        desc: "Effervescent Italian sparkling wine and lemon aperitivo.",
+        recipe: "2 oz Caravella Limoncello, 3 oz Prosecco / Sparkling Wine, 1 oz Club Soda",
+        ingredients: "Caravella Limoncello, Prosecco, Club Soda",
+        glass: "Wine Glass over Ice",
+        garnish: "Lemon Wheel",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Prosecco / Sparkling Wine"
+      },
+      {
+        name: "Hugo Spritz",
+        category: "Classics",
+        desc: "Floral alpine aperitivo spritz with elderflower and sparkling wine.",
+        recipe: "1.5 oz St. Elder Elderflower, 3 oz Prosecco, 1 oz Club Soda, Fresh Mint",
+        ingredients: "St. Elder Elderflower, Prosecco, Club Soda, Mint",
+        glass: "Wine Glass over Ice",
+        garnish: "Mint Bouquet & Lime Wheel",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Prosecco & Fresh Mint"
+      },
+      {
+        name: "Maple Boulevardier",
+        category: "Classics",
+        desc: "Bittersweet northern stirred whiskey cocktail.",
+        recipe: "1.5 oz Iron Fish Maple Bourbon, 1 oz Campari, 1 oz Sweet Vermouth",
+        ingredients: "Iron Fish Maple Bourbon, Campari, Sweet Vermouth",
+        glass: "Nick & Nora",
+        garnish: "Orange Twist",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Campari & Sweet Vermouth"
       },
 
       // Mule Collection
       {
         name: "Moscow Mule",
         category: "Mule Collection",
-        desc: "The timeless 1941 classic: clean, crisp, and served biting cold in solid copper.",
-        ingredients: "Kirkland Signature American Vodka, Fresh Lime Juice, Fiery Ginger Beer",
-        glass: "Copper Mug with Crushed Ice",
-        garnish: "Fresh Lime Wheel & Mint Sprig",
+        desc: "The classic 1941 original: clean vodka, tart lime juice, and fiery ginger beer.",
+        recipe: "2 oz Kirkland Signature Vodka, 0.75 oz Fresh Lime Juice, 4-5 oz Ginger Beer",
+        ingredients: "Vodka, Fresh Lime Juice, Ginger Beer",
+        glass: "Copper Mug (or Highball) with Ice",
+        garnish: "Fresh Lime Wheel",
         inStock: true
       },
       {
         name: "Kentucky Mule",
         category: "Mule Collection",
-        desc: "Warm caramel and oak sweetness balanced by zesty lime and sharp ginger heat.",
-        ingredients: "Maker's Mark Kentucky Straight Bourbon, Fresh Lime Juice, Fiery Ginger Beer",
-        glass: "Copper Mug with Crushed Ice",
-        garnish: "Fresh Lime Wheel & Mint Sprig",
-        inStock: true
-      },
-      {
-        name: "Michigan Mule",
-        category: "Mule Collection",
-        desc: "Local Traverse City spirit enriched with tart Michigan Montmorency cherry sweetness.",
-        ingredients: "Traverse City Straight Bourbon, Tart Michigan Cherry Juice, Fresh Lime Juice, Fiery Ginger Beer",
-        glass: "Copper Mug with Crushed Ice",
-        garnish: "Brandied Cherry & Lime Wheel",
-        inStock: true
-      },
-      {
-        name: "Washington Mule",
-        category: "Mule Collection",
-        desc: "Crisp green apple warmth backed by zesty lime and fiery ginger effervescence.",
-        ingredients: "Crown Royal Regal Apple Whisky, Fresh Lime Juice, Fiery Ginger Beer, Splash of Cranberry",
-        glass: "Copper Mug with Crushed Ice",
-        garnish: "Crisp Apple Slice & Lime Wheel",
+        desc: "Oak and vanilla caramel notes paired with zesty lime and sharp ginger heat.",
+        recipe: "2 oz Bourbon (Maker's Mark, New Riff, Baker's), 0.75 oz Fresh Lime Juice, 4-5 oz Ginger Beer",
+        ingredients: "Bourbon Whiskey, Fresh Lime Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Fresh Lime Wheel",
         inStock: true
       },
       {
         name: "Transylvanian Mule",
         category: "Mule Collection",
-        desc: "Unique botanical regional spirit from Romania paired with spicy ginger beer.",
-        ingredients: "Dracula Băutură Spirtoasă, Fresh Lime Juice, Fiery Ginger Beer",
-        glass: "Copper Mug with Crushed Ice",
-        garnish: "Lime Wheel & Candied Ginger",
+        desc: "Unique regional European botanical spirit paired with spicy ginger beer and fresh lime.",
+        recipe: "2 oz Dracula Băutură Spirtoasă, 0.75 oz Fresh Lime Juice, 4 oz Ginger Beer",
+        ingredients: "Dracula Băutură Spirtoasă, Fresh Lime Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Fresh Lime Wheel",
         inStock: true
+      },
+      {
+        name: "Spanish Mule",
+        category: "Mule Collection",
+        desc: "Rich Mediterranean vanilla and citrus liqueur spiked with fiery ginger beer and fresh lime.",
+        recipe: "2 oz Licor 43 Liqueur, 0.75 oz Fresh Lime Juice, 4 oz Ginger Beer, 1 Dash Angostura Bitters",
+        ingredients: "Licor 43, Fresh Lime Juice, Ginger Beer, Angostura Bitters",
+        glass: "Copper Mug with Ice",
+        garnish: "Fresh Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Nordic Mule (Brennivín Mule)",
+        category: "Mule Collection",
+        desc: "Caraway and anise aromatics cutting through crisp ginger beer and lime.",
+        recipe: "2 oz Brennivín Icelandic Aquavit, 0.75 oz Fresh Lime Juice, 4 oz Ginger Beer",
+        ingredients: "Brennivín Aquavit, Fresh Lime Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Fresh Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "London Mule (Gin Buck)",
+        category: "Mule Collection",
+        desc: "Botanical dry gin paired with sharp effervescent ginger beer and fresh citrus.",
+        recipe: "2 oz The Botanist Islay Dry Gin, 0.75 oz Fresh Lime Juice, 4 oz Ginger Beer",
+        ingredients: "The Botanist Dry Gin, Fresh Lime Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Fresh Lime Wheel",
+        inStock: true
+      },
+      {
+        name: "Michigan Mule",
+        category: "Mule Collection",
+        desc: "Bourbon mule fortified with tart Michigan cherry.",
+        recipe: "2 oz Traverse City Bourbon, 1 oz Tart Cherry Juice, 0.5 oz Lime Juice, 4 oz Ginger Beer",
+        ingredients: "Traverse City Bourbon, Tart Cherry Juice, Lime Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Brandied Cherry & Lime Wheel",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Tart Cherry Juice & Brandied Cherries"
+      },
+      {
+        name: "Washington Mule",
+        category: "Mule Collection",
+        desc: "Apple whisky mule balanced with cranberry juice and lime.",
+        recipe: "2 oz Crown Royal Apple, 0.5 oz Lime Juice, 1 oz Cranberry Juice, 4 oz Ginger Beer",
+        ingredients: "Crown Royal Apple, Lime Juice, Cranberry Juice, Ginger Beer",
+        glass: "Copper Mug with Ice",
+        garnish: "Apple Slice & Lime Wheel",
+        inStock: false,
+        missingReason: "Out of Stock: Requires Cranberry Juice & Apples"
       },
 
       // Mocktails & Zero-Proof
       {
-        name: "Wild Botanical Zero-Proof Fizz",
+        name: "Sparkling Citrus Cooler",
         category: "Mocktails & Zero-Proof",
-        desc: "Crisp, sparkling herbal cooler with cooling garden botanicals and no alcohol.",
-        ingredients: "St. Elder Elderflower Essence, Fresh Lime Juice, Cucumber Ribbons, Club Soda",
-        glass: "Highball Glass",
-        garnish: "Mint Bouquet & Lime Wheel",
+        desc: "Bright, sparkling non-alcoholic cooler balancing fresh lime and lemon with club soda.",
+        recipe: "1 oz Fresh Lemon Juice, 0.75 oz Fresh Lime Juice, 0.75 oz Simple Syrup, 4-5 oz Club Soda, 1 Dash Angostura Bitters",
+        ingredients: "Fresh Lemon Juice, Fresh Lime Juice, Simple Syrup, Club Soda, Angostura Bitters",
+        glass: "Highball Glass over Ice",
+        garnish: "Lemon and Lime Wheels",
+        inStock: true
+      },
+      {
+        name: "Ginger Lime Fizz",
+        category: "Mocktails & Zero-Proof",
+        desc: "Crisp and fiery non-alcoholic mocktail with spicy ginger effervescence and tart lime.",
+        recipe: "1 oz Fresh Lime Juice, 0.5 oz Simple Syrup, 4 oz Ginger Beer, 2 oz Club Soda",
+        ingredients: "Fresh Lime Juice, Simple Syrup, Ginger Beer, Club Soda",
+        glass: "Highball Glass or Copper Mug over Ice",
+        garnish: "Fresh Lime Wheel",
         inStock: true
       }
     ];
@@ -447,9 +588,14 @@
             <div class="card-desc">${c.desc}</div>
           </div>
           <div class="card-details">
+            <div class="recipe-box">
+              <strong>Spec / Recipe:</strong>
+              ${c.recipe}
+            </div>
             <div><strong>Ingredients:</strong> ${c.ingredients}</div>
             <div><strong>Glassware:</strong> ${c.glass}</div>
             <div><strong>Garnish:</strong> ${c.garnish}</div>
+            ${c.missingReason ? `<div class="missing-alert">${c.missingReason}</div>` : ''}
           </div>
         </div>
       `).join("");
