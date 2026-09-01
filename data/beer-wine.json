@@ -21,11 +21,11 @@
       "abv": "4.8% ABV",
       "origin": "Domestic Craft",
       "details": "Clean, light, and refreshing golden lager served ice cold.",
-      "inStock": true,
+      "inStock": false,
       "sizes": {
-        "Can": 1
+        "Can": 0
       },
-      "quantity": 1
+      "quantity": 0
     },
     {
       "name": "Cabernet Sauvignon",
