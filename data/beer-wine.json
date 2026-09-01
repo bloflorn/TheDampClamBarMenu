@@ -7,11 +7,11 @@
       "abv": "6.8% ABV",
       "origin": "Michigan, USA",
       "details": "Crisp citrus notes with a balanced pine and hop bitterness.",
-      "inStock": true,
+      "inStock": false,
       "sizes": {
-        "Can": 6
+        "Can": 0
       },
-      "quantity": 6,
+      "quantity": 0,
       "size": "Can"
     },
     {
