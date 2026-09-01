@@ -49,7 +49,11 @@
       "inStock": true,
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
-      "subCategory": "Single Barrel"
+      "subCategory": "Single Barrel",
+      "sizes": {
+        "750 mL": 1
+      },
+      "quantity": 1
     },
     {
       "size": "750 mL",
