@@ -1,794 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Damp Clam — Bar Inventory Manager</title>
-  <link rel="icon" type="image/jpeg" href="../logo.jpg" />
-
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
-      --card-bg: rgba(2, 22, 17, 0.88);
-      --input-bg: #01130d;
-      --neon-cyan: #00f7ff;
-      --neon-green: #39ff14;
-      --neon-gold: #ffd700;
-      --neon-red: #ff3344;
-      --gold-amber: #e5b567;
-      --off-white: #f8fafc;
-      --border: #16382c;
-      --font-serif: "Georgia", Times, serif;
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-sans);
-      background-image: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--off-white);
-      padding: 1rem 1rem 3rem;
-      min-height: 100vh;
-    }
-
-    .container { max-width: 1000px; margin: 0 auto; }
-
-    header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      gap: 0.35rem;
-    }
-
-    h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(1.6rem, 5vw, 2.2rem);
-      font-weight: 700;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      text-shadow: 0 0 10px var(--neon-cyan);
-    }
-
-    .subtext {
-      font-size: 0.8rem;
-      color: var(--gold-amber);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .tab-btn {
-      background: rgba(0, 0, 0, 0.35);
-      color: var(--gold-amber);
-      border: 1px solid var(--border);
-      padding: 0.5rem 1.2rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
-    .tab-btn.active {
-      background: rgba(0, 247, 255, 0.12);
-      color: var(--neon-cyan);
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-
-    .search-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 0.6rem 1rem;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--input-bg);
-      color: #fff;
-      font-size: 0.85rem;
-    }
-    .search-input:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 8px rgba(0, 247, 255, 0.3); }
-
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.55rem 1.1rem;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-    .btn-add { background: var(--neon-green); color: #03140f; box-shadow: 0 0 10px rgba(57, 255, 20, 0.3); }
-    .btn-add:hover { background: #fff; box-shadow: 0 0 15px rgba(57, 255, 20, 0.7); }
-    .btn-scanner { background: var(--neon-cyan); color: #03140f; box-shadow: 0 0 10px rgba(0, 247, 255, 0.3); }
-
-    .item-list { display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .item-row {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.9rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      transition: all 0.2s ease;
-    }
-
-    @media (min-width: 680px) {
-      .item-row {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-      }
-    }
-
-    .item-row:hover { border-color: rgba(0, 247, 255, 0.35); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); }
-    .item-row.out-of-stock { opacity: 0.55; border-color: rgba(255, 51, 68, 0.3); }
-
-    .item-info { flex: 1; min-width: 0; }
-    
-    .item-title {
-      font-family: var(--font-serif);
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.25rem;
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.3;
-    }
-    
-    .item-meta {
-      font-size: 0.76rem;
-      color: #94a3b8;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      align-items: center;
-      line-height: 1.4;
-    }
-    .item-meta span { color: var(--gold-amber); }
-
-    .item-controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      padding-top: 0.4rem;
-      border-top: 1px solid rgba(22, 56, 44, 0.6);
-    }
-
-    @media (min-width: 680px) {
-      .item-controls {
-        padding-top: 0;
-        border-top: none;
-        justify-content: flex-end;
-      }
-    }
-
-    .control-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    /* Steppers */
-    .size-steppers {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-    .size-stepper-box {
-      display: inline-flex;
-      align-items: center;
-      background: #01130d;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 2px 6px;
-      gap: 4px;
-    }
-    .size-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--neon-cyan);
-      padding: 0 2px;
-    }
-    .qty-btn {
-      background: transparent;
-      border: none;
-      color: var(--gold-amber);
-      font-size: 0.9rem;
-      font-weight: bold;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-    }
-    .qty-btn:hover { background: rgba(0, 247, 255, 0.2); color: #fff; }
-    .qty-val {
-      font-size: 0.8rem;
-      font-weight: 700;
-      min-width: 16px;
-      text-align: center;
-      color: #fff;
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 38px;
-      height: 20px;
-    }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #16382c;
-      transition: .25s;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 14px;
-      width: 14px;
-      left: 2px;
-      bottom: 2px;
-      background-color: #94a3b8;
-      transition: .25s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: rgba(57, 255, 20, 0.25);
-      border-color: var(--neon-green);
-    }
-    input:checked + .slider:before {
-      transform: translateX(18px);
-      background-color: var(--neon-green);
-      box-shadow: 0 0 6px var(--neon-green);
-    }
-
-    .icon-btn {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      border-radius: 6px;
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-    }
-    .icon-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
-    .icon-btn.delete:hover { color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 8px rgba(255,51,68,0.4); }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-    .modal-card {
-      background: #0d2822;
-      border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 540px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 1.5rem;
-      box-shadow: 0 0 25px rgba(0, 247, 255, 0.25);
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.5rem;
-    }
-    .modal-title { font-family: var(--font-serif); font-size: 1.2rem; color: #fff; }
-    .btn-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
-    .btn-close:hover { color: #fff; }
-
-    .form-group { margin-bottom: 0.75rem; }
-    .form-group label {
-      display: block;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      color: var(--gold-amber);
-      margin-bottom: 3px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 7px 10px;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.85rem;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 8px rgba(0, 247, 255, 0.3);
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
-    }
-    .btn-save-modal { flex: 1; background: var(--neon-green); color: #03140f; padding: 9px; border-radius: 20px; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-    .btn-save-modal:hover { background: #fff; }
-
-    #toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #021611;
-      border: 1px solid var(--neon-cyan);
-      color: var(--neon-cyan);
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      box-shadow: 0 0 15px rgba(0, 247, 255, 0.4);
-      display: none;
-      z-index: 2000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Damp Clam | Inventory Manager</title>
+    <meta name="theme-color" content="#0f1424">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Outfit:wght@300;400;600;800&display=swap');
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0d17;
+        }
+        .font-mono {
+            font-family: 'JetBrains+Mono', monospace;
+        }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Inventory Manager</h1>
-      <div class="subtext">The Damp Clam Control Center</div>
+<body class="text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="bg-[#0f1424] border-b border-cyan-500/30 px-4 py-3 sticky top-0 z-30 shadow-lg shadow-cyan-950/40">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-fuchsia-600 to-cyan-500 flex items-center justify-center font-extrabold text-white text-lg shadow-md shadow-fuchsia-500/50">
+                    C
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-pink-500 tracking-wider">
+                        THE DAMP CLAM
+                    </h1>
+                    <p class="text-[10px] text-slate-400 font-mono tracking-tight">Stock & Inventory Manager</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openTokenModal()" class="px-2.5 py-1 text-xs rounded border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                    <span>Token</span>
+                </button>
+                <button onclick="loadInventory()" class="p-1.5 rounded border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.038 8.038 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-col="spirits">🥃 Spirits</button>
-      <button class="tab-btn" data-col="cocktails">🍸 Cocktails</button>
-      <button class="tab-btn" data-col="beer_wine">🍷 Beer & Wine</button>
-      <button class="tab-btn" data-col="merch">👕 Merch</button>
-    </div>
-
-    <div class="toolbar">
-      <input type="text" id="searchBox" class="search-input" placeholder="Search inventory..." />
-      <div style="display: flex; gap: 0.5rem;">
-        <button class="btn-action btn-add" id="addItemBtn">➕ Add Item</button>
-        <a href="scanner.html" class="btn-action btn-scanner">📷 AI Scanner</a>
-      </div>
-    </div>
-
-    <div class="item-list" id="itemsContainer"></div>
-  </div>
-
-  <div class="modal-overlay" id="editModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle">Edit Item</div>
-        <button class="btn-close" id="closeModalBtn">&times;</button>
-      </div>
-      <form id="itemForm">
-        <div id="dynamicFields"></div>
-        <div class="modal-actions">
-          <button type="submit" class="btn-save-modal" id="modalSaveBtn">Save Changes</button>
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 space-y-4">
+        
+        <!-- Controls: Search & Category Filter -->
+        <div class="bg-[#0f1424]/90 border border-slate-800 rounded-xl p-3 space-y-3">
+            <div class="relative">
+                <input type="text" id="searchInput" oninput="renderItems()" placeholder="Search spirits, wine, beer, mixers..." 
+                    class="w-full bg-[#0b0d17] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+            </div>
+            
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono">
+                <button onclick="setCategory('all')" class="cat-filter-btn px-3 py-1 rounded-full border border-cyan-500 bg-cyan-500/20 text-cyan-300 whitespace-nowrap" data-cat="all">All</button>
+                <button onclick="setCategory('spirits')" class="cat-filter-btn px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-slate-400 whitespace-nowrap" data-cat="spirits">Spirits</button>
+                <button onclick="setCategory('liqueurs')" class="cat-filter-btn px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-slate-400 whitespace-nowrap" data-cat="liqueurs">Liqueurs</button>
+                <button onclick="setCategory('wine')" class="cat-filter-btn px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-slate-400 whitespace-nowrap" data-cat="wine">Wine</button>
+                <button onclick="setCategory('mixers')" class="cat-filter-btn px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-slate-400 whitespace-nowrap" data-cat="mixers">Mixers</button>
+            </div>
         </div>
-      </form>
-    </div>
-  </div>
 
-  <div id="toast">Saving to GitHub...</div>
+        <!-- Notification Banner -->
+        <div id="statusToast" class="hidden rounded-lg p-3 text-xs font-mono border transition-all"></div>
 
-  <script>
-    const REPO = "thedampclam/TheDampClamBarMenu";
-    const COLLECTIONS = {
-      spirits: { file: "data/spirits.json", label: "Bottle" },
-      cocktails: { file: "data/cocktails.json", label: "Cocktail" },
-      beer_wine: { file: "data/beer-wine.json", label: "Beer/Wine Item" },
-      merch: { file: "data/merch.json", label: "Merch Product" }
-    };
-
-    let activeCol = "spirits";
-    let activeData = { items: [] };
-    let activeSha = "";
-    let editingIndex = -1;
-
-    function getGhToken() {
-      const stored = localStorage.getItem("decap-cms-user");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (parsed.token) return parsed.token;
-        } catch(e) {}
-      }
-      return prompt("Enter your GitHub Personal Access Token (ghp_...):");
-    }
-
-    const token = getGhToken();
-    if (token) localStorage.setItem("decap-cms-user", JSON.stringify({ token: token, backendName: "github" }));
-
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeCol = btn.dataset.col;
-        loadCollectionData();
-      });
-    });
-
-    async function loadCollectionData() {
-      showToast("Loading data...");
-      try {
-        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${COLLECTIONS[activeCol].file}?ref=main`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        const json = await res.json();
-        activeSha = json.sha;
-        activeData = JSON.parse(decodeURIComponent(escape(atob(json.content))));
-        renderList();
-        hideToast();
-      } catch (err) {
-        console.error(err);
-        showToast("Error loading dataset.");
-      }
-    }
-
-    // Helper: Normalize item unit sizes / counts (Spirits, Beer, Wine)
-    function getItemUnits(item, col) {
-      if (item.sizes && typeof item.sizes === "object" && Object.keys(item.sizes).length > 0) {
-        return item.sizes;
-      }
-      const qty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-      let defaultUnit = "750 mL";
-      if (col === "beer_wine") {
-        const cat = (item.category || "").toLowerCase();
-        defaultUnit = cat.includes("wine") ? "Bottle" : "Can";
-      }
-      return { [item.size || defaultUnit]: qty };
-    }
-
-    function renderList() {
-      const container = document.getElementById("itemsContainer");
-      const query = (document.getElementById("searchBox").value || "").toLowerCase();
-
-      const filtered = activeData.items.map((item, idx) => ({ ...item, _idx: idx }))
-        .filter(item => (item.name || "").toLowerCase().includes(query) || (item.category || "").toLowerCase().includes(query));
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--gold-amber);">No items found.</div>`;
-        return;
-      }
-
-      container.innerHTML = filtered.map(item => {
-        let isOutOfStock = false;
-        let stepperHtml = '';
-
-        if (activeCol === 'spirits' || activeCol === 'beer_wine') {
-          const unitsObj = getItemUnits(item, activeCol);
-          const totalQty = Object.values(unitsObj).reduce((a, b) => a + b, 0);
-          isOutOfStock = !item.inStock || totalQty === 0;
-
-          stepperHtml = `
-            <div class="size-steppers">
-              ${Object.entries(unitsObj).map(([unitName, count]) => `
-                <div class="size-stepper-box" title="${unitName}">
-                  <span class="size-label">${unitName}</span>
-                  <button class="qty-btn" onclick="stepUnitQty(${item._idx}, '${unitName}', -1)">−</button>
-                  <span class="qty-val">${count}</span>
-                  <button class="qty-btn" onclick="stepUnitQty(${item._idx}, '${unitName}', 1)">+</button>
-                </div>
-              `).join('')}
+        <!-- Inventory List -->
+        <div id="inventoryContainer" class="space-y-2">
+            <div class="text-center py-12 text-slate-500 font-mono text-sm">
+                Loading inventory from GitHub...
             </div>
-          `;
-        }
-
-        return `
-        <div class="item-row ${isOutOfStock ? 'out-of-stock' : ''}">
-          <div class="item-info">
-            <div class="item-title">${item.name}</div>
-            <div class="item-meta">
-              <span>${item.category || ''}</span>
-              ${item.subCategory ? `• ${item.subCategory}` : ''}
-              ${item.style ? `• ${item.style}` : ''}
-              ${item.proof ? `• ${item.proof}` : ''}
-              ${item.abv ? `• ${item.abv}` : ''}
-              ${item.origin ? `• ${item.origin}` : ''}
-              ${item.price ? `• ${item.price}` : ''}
-            </div>
-          </div>
-          <div class="item-controls">
-            ${stepperHtml || '<div></div>'}
-            <div class="control-actions">
-              <label class="switch" title="Toggle Stock">
-                <input type="checkbox" ${item.inStock && !isOutOfStock ? 'checked' : ''} onchange="toggleStock(${item._idx}, this.checked)" />
-                <span class="slider"></span>
-              </label>
-              <button class="icon-btn" onclick="openEditModal(${item._idx})" title="Edit Details">✏️</button>
-              <button class="icon-btn delete" onclick="deleteItem(${item._idx})" title="Delete Item">🗑️</button>
-            </div>
-          </div>
         </div>
-      `}).join("");
-    }
 
-    // Step a specific unit (e.g. Can, Bottle, 750 mL) up or down
-    async function stepUnitQty(index, unitKey, delta) {
-      const item = activeData.items[index];
-      if (!item.sizes) item.sizes = getItemUnits(item, activeCol);
+    </main>
 
-      let currentVal = item.sizes[unitKey] || 0;
-      let newVal = currentVal + delta;
-      if (newVal < 0) newVal = 0;
+    <!-- GitHub Token Modal -->
+    <div id="tokenModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#0f1424] border border-slate-800 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+            <div>
+                <h3 class="font-bold text-base text-cyan-400">GitHub Access Token</h3>
+                <p class="text-xs text-slate-400 mt-1">Requires a Personal Access Token (PAT) with <code class="text-fuchsia-400">repo</code> and <code class="text-fuchsia-400">workflow</code> permissions.</p>
+            </div>
+            <div>
+                <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" 
+                    class="w-full bg-[#0b0d17] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-cyan-500">
+            </div>
+            <div class="flex justify-end gap-2 text-xs font-mono">
+                <button onclick="closeTokenModal()" class="px-4 py-2 rounded border border-slate-700 text-slate-400 hover:bg-slate-800">Cancel</button>
+                <button onclick="saveToken()" class="px-4 py-2 rounded bg-gradient-to-r from-fuchsia-600 to-cyan-500 text-white font-bold">Save Token</button>
+            </div>
+        </div>
+    </div>
 
-      item.sizes[unitKey] = newVal;
+    <!-- Script Logic -->
+    <script>
+        const REPO_OWNER = 'thedampclam';
+        const REPO_NAME = 'TheDampClamBarMenu';
+        const FILE_PATH = 'spirits.json';
+        const BRANCH = 'main';
 
-      const total = Object.values(item.sizes).reduce((a, b) => a + b, 0);
-      item.quantity = total;
-      item.inStock = total > 0;
+        let inventory = [];
+        let activeCategory = 'all';
 
-      const activeUnits = Object.keys(item.sizes).filter(k => item.sizes[k] > 0);
-      item.size = activeUnits.length > 0 ? activeUnits.join(", ") : Object.keys(item.sizes)[0];
-
-      renderList();
-      await pushDataToGithub(`Adjust ${item.name} (${unitKey}) to ${newVal}`);
-    }
-
-    async function toggleStock(index, newStatus) {
-      const item = activeData.items[index];
-      item.inStock = newStatus;
-
-      if (activeCol === 'spirits' || activeCol === 'beer_wine') {
-        if (!item.sizes) item.sizes = getItemUnits(item, activeCol);
-        if (!newStatus) {
-          Object.keys(item.sizes).forEach(k => item.sizes[k] = 0);
-          item.quantity = 0;
-        } else {
-          const firstKey = Object.keys(item.sizes)[0] || (activeCol === 'spirits' ? "750 mL" : "Can");
-          item.sizes[firstKey] = Math.max(item.sizes[firstKey], 1);
-          item.quantity = Object.values(item.sizes).reduce((a, b) => a + b, 0);
-        }
-      }
-
-      renderList();
-      await pushDataToGithub(`Update stock status for ${item.name}`);
-    }
-
-    async function deleteItem(index) {
-      const name = activeData.items[index].name;
-      if (!confirm(`Are you sure you want to permanently delete "${name}"?`)) return;
-      activeData.items.splice(index, 1);
-      renderList();
-      await pushDataToGithub(`Delete ${name}`);
-    }
-
-    async function pushDataToGithub(commitMsg) {
-      showToast("Syncing with GitHub...");
-      try {
-        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(activeData, null, 2))));
-        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${COLLECTIONS[activeCol].file}`, {
-          method: "PUT",
-          headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            message: commitMsg || `Update ${activeCol} via Web Manager`,
-            content: updatedContent,
-            sha: activeSha,
-            branch: "main"
-          })
-        });
-        const result = await res.json();
-        activeSha = result.content.sha;
-        showToast("✓ Saved & Published!");
-        setTimeout(hideToast, 2000);
-      } catch (err) {
-        console.error(err);
-        showToast("❌ Commit failed. Check permissions.");
-      }
-    }
-
-    const modal = document.getElementById("editModal");
-    document.getElementById("closeModalBtn").onclick = () => modal.style.display = "none";
-    document.getElementById("addItemBtn").onclick = () => openAddModal();
-    document.getElementById("searchBox").oninput = () => renderList();
-
-    function openAddModal() {
-      editingIndex = -1;
-      document.getElementById("modalTitle").textContent = `Add New ${COLLECTIONS[activeCol].label}`;
-      buildFormFields({});
-      modal.style.display = "flex";
-    }
-
-    function openEditModal(index) {
-      editingIndex = index;
-      const item = activeData.items[index];
-      document.getElementById("modalTitle").textContent = `Edit ${item.name}`;
-      buildFormFields(item);
-      modal.style.display = "flex";
-    }
-
-    function buildFormFields(data) {
-      const container = document.getElementById("dynamicFields");
-      if (activeCol === "spirits") {
-        const sizesStr = data.sizes ? Object.entries(data.sizes).map(([k, v]) => `${k}: ${v}`).join(', ') : (data.size ? `${data.size}: 1` : '750 mL: 1');
-        container.innerHTML = `
-          <div class="form-group"><label>Bottle Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
-          <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Bourbon & American Whiskey'}" required /></div>
-          <div class="form-group"><label>Sub-Category</label><input type="text" id="f_sub" value="${data.subCategory || ''}" /></div>
-          <div class="form-group"><label>Proof / ABV</label><input type="text" id="f_proof" value="${data.proof || ''}" /></div>
-          <div class="form-group"><label>Sizes & Counts (e.g. 750 mL: 1, 375 mL: 1)</label><input type="text" id="f_sizes" value="${sizesStr}" /></div>
-          <div class="form-group"><label>Details</label><input type="text" id="f_details" value="${data.details || ''}" /></div>
-          <div class="form-group"><label>Tasting Notes</label><textarea id="f_notes" rows="2">${data.extra?.notes || ''}</textarea></div>
-        `;
-      } else if (activeCol === "cocktails") {
-        container.innerHTML = `
-          <div class="form-group"><label>Cocktail Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
-          <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'House Signatures'}" required /></div>
-          <div class="form-group"><label>Description</label><textarea id="f_desc" rows="2">${data.desc || ''}</textarea></div>
-          <div class="form-group"><label>Recipe / Spec</label><textarea id="f_recipe" rows="2">${data.recipe || ''}</textarea></div>
-          <div class="form-group"><label>Ingredients</label><input type="text" id="f_ing" value="${data.ingredients || ''}" /></div>
-          <div class="form-group"><label>Glassware</label><input type="text" id="f_glass" value="${data.glass || ''}" /></div>
-          <div class="form-group"><label>Garnish</label><input type="text" id="f_garnish" value="${data.garnish || ''}" /></div>
-        `;
-      } else if (activeCol === "beer_wine") {
-        const isWine = (data.category || "").toLowerCase().includes("wine");
-        const defaultExample = isWine ? "Bottle: 1" : "Can: 4";
-        const sizesStr = data.sizes ? Object.entries(data.sizes).map(([k, v]) => `${k}: ${v}`).join(', ') : (data.quantity !== undefined ? (isWine ? `Bottle: ${data.quantity}` : `Can: ${data.quantity}`) : defaultExample);
-
-        container.innerHTML = `
-          <div class="form-group"><label>Item Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
-          <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'Beer'}" required /></div>
-          <div class="form-group"><label>Style / Type</label><input type="text" id="f_style" value="${data.style || ''}" /></div>
-          <div class="form-group"><label>Inventory Units & Counts (e.g. Can: 6, 16 oz: 2 OR Bottle: 1)</label><input type="text" id="f_sizes" value="${sizesStr}" /></div>
-          <div class="form-group"><label>ABV</label><input type="text" id="f_abv" value="${data.abv || ''}" /></div>
-          <div class="form-group"><label>Origin</label><input type="text" id="f_origin" value="${data.origin || ''}" /></div>
-          <div class="form-group"><label>Notes / Details</label><textarea id="f_details" rows="2">${data.details || ''}</textarea></div>
-        `;
-      } else if (activeCol === "merch") {
-        container.innerHTML = `
-          <div class="form-group"><label>Product Name</label><input type="text" id="f_name" value="${data.name || ''}" required /></div>
-          <div class="form-group"><label>Category</label><input type="text" id="f_cat" value="${data.category || 'T-Shirts'}" required /></div>
-          <div class="form-group"><label>Description</label><textarea id="f_desc" rows="2">${data.desc || ''}</textarea></div>
-          <div class="form-group"><label>Price Range</label><input type="text" id="f_price" value="${data.price || ''}" /></div>
-          <div class="form-group"><label>Etsy Direct URL</label><input type="text" id="f_url" value="${data.etsyUrl || ''}" /></div>
-        `;
-      }
-    }
-
-    document.getElementById("itemForm").onsubmit = async (e) => {
-      e.preventDefault();
-      modal.style.display = "none";
-
-      const updatedObj = editingIndex >= 0 ? activeData.items[editingIndex] : { inStock: true, extra: {} };
-      updatedObj.name = document.getElementById("f_name").value.trim();
-      updatedObj.category = document.getElementById("f_cat").value.trim();
-
-      if (activeCol === "spirits" || activeCol === "beer_wine") {
-        if (activeCol === "spirits") {
-          updatedObj.subCategory = document.getElementById("f_sub").value.trim();
-          updatedObj.proof = document.getElementById("f_proof").value.trim();
-          updatedObj.details = document.getElementById("f_details").value.trim();
-
-          const notes = document.getElementById("f_notes").value.trim();
-          if (notes) {
-            if (!updatedObj.extra) updatedObj.extra = {};
-            updatedObj.extra.notes = notes;
-          }
-        } else {
-          updatedObj.style = document.getElementById("f_style").value.trim();
-          updatedObj.abv = document.getElementById("f_abv").value.trim();
-          updatedObj.origin = document.getElementById("f_origin").value.trim();
-          updatedObj.details = document.getElementById("f_details").value.trim();
-        }
-
-        // Parse custom counts string (e.g. "Can: 4, 16 oz: 2" or "Bottle: 2")
-        const rawSizes = document.getElementById("f_sizes").value.split(",");
-        const sizesMap = {};
-        let totalCount = 0;
-        rawSizes.forEach(pair => {
-          const parts = pair.split(":");
-          if (parts.length === 2) {
-            const sz = parts[0].trim();
-            const cnt = parseInt(parts[1].trim()) || 0;
-            if (sz) {
-              sizesMap[sz] = cnt;
-              totalCount += cnt;
+        // Check Token & Init
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('dampclam_pat');
+            if (!token) {
+                openTokenModal();
+            } else {
+                loadInventory();
             }
-          } else if (parts[0].trim()) {
-            const unit = parts[0].trim();
-            sizesMap[unit] = 1;
-            totalCount += 1;
-          }
         });
 
-        updatedObj.sizes = sizesMap;
-        updatedObj.quantity = totalCount;
-        updatedObj.inStock = totalCount > 0;
-        updatedObj.size = Object.keys(sizesMap).join(", ");
+        function showStatus(message, isError = false) {
+            const toast = document.getElementById('statusToast');
+            toast.className = `rounded-lg p-3 text-xs font-mono border transition-all ${
+                isError 
+                ? 'bg-rose-950/80 border-rose-600 text-rose-200' 
+                : 'bg-cyan-950/80 border-cyan-600 text-cyan-200'
+            }`;
+            toast.textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 4000);
+        }
 
-      } else if (activeCol === "cocktails") {
-        updatedObj.desc = document.getElementById("f_desc").value.trim();
-        updatedObj.recipe = document.getElementById("f_recipe").value.trim();
-        updatedObj.ingredients = document.getElementById("f_ing").value.trim();
-        updatedObj.glass = document.getElementById("f_glass").value.trim();
-        updatedObj.garnish = document.getElementById("f_garnish").value.trim();
-      } else if (activeCol === "merch") {
-        updatedObj.desc = document.getElementById("f_desc").value.trim();
-        updatedObj.price = document.getElementById("f_price").value.trim();
-        updatedObj.etsyUrl = document.getElementById("f_url").value.trim();
-      }
+        function openTokenModal() {
+            document.getElementById('tokenInput').value = localStorage.getItem('dampclam_pat') || '';
+            document.getElementById('tokenModal').classList.remove('hidden');
+        }
 
-      if (editingIndex >= 0) {
-        activeData.items[editingIndex] = updatedObj;
-      } else {
-        activeData.items.push(updatedObj);
-      }
+        function closeTokenModal() {
+            document.getElementById('tokenModal').classList.add('hidden');
+        }
 
-      renderList();
-      await pushDataToGithub(`Update ${updatedObj.name}`);
-    };
+        function saveToken() {
+            const token = document.getElementById('tokenInput').value.trim();
+            if (token) {
+                localStorage.setItem('dampclam_pat', token);
+                closeTokenModal();
+                showStatus('Access Token stored locally.');
+                loadInventory();
+            }
+        }
 
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.textContent = msg;
-      toast.style.display = "block";
-    }
-    function hideToast() {
-      document.getElementById("toast").style.display = "none";
-    }
+        function setCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-filter-btn px-3 py-1 rounded-full border border-cyan-500 bg-cyan-500/20 text-cyan-300 whitespace-nowrap';
+                } else {
+                    btn.className = 'cat-filter-btn px-3 py-1 rounded-full border border-slate-700 bg-slate-800/40 text-slate-400 whitespace-nowrap';
+                }
+            });
+            renderItems();
+        }
 
-    loadCollectionData();
-  </script>
+        // Fresh SHA Fetch & Load
+        async function loadInventory() {
+            const token = localStorage.getItem('dampclam_pat');
+            const container = document.getElementById('inventoryContainer');
+            container.innerHTML = `<div class="text-center py-12 text-slate-500 font-mono text-sm">Syncing latest stock from GitHub...</div>`;
+
+            try {
+                const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}&_t=${Date.now()}`;
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                    }
+                });
+
+                if (res.status === 401 || res.status === 403) {
+                    throw new Error('Access denied. Please verify your Personal Access Token.');
+                }
+                if (!res.ok) {
+                    throw new Error(`GitHub API Error: ${res.statusText}`);
+                }
+
+                const data = await res.json();
+                const decodedJson = decodeURIComponent(escape(atob(data.content)));
+                inventory = JSON.parse(decodedJson);
+                renderItems();
+                showStatus('Inventory loaded successfully.');
+            } catch (err) {
+                container.innerHTML = `<div class="bg-rose-950/40 border border-rose-800 rounded-xl p-6 text-center text-rose-300 font-mono text-xs">${err.message}</div>`;
+                showStatus(err.message, true);
+            }
+        }
+
+        function renderItems() {
+            const container = document.getElementById('inventoryContainer');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = inventory.filter(item => {
+                const matchesCat = (activeCategory === 'all') || (item.category && item.category.toLowerCase() === activeCategory.toLowerCase());
+                const matchesSearch = item.name.toLowerCase().includes(query) || (item.brand && item.brand.toLowerCase().includes(query));
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-600 font-mono text-sm">No items found matching criteria.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map((item, idx) => {
+                const inStock = item.in_stock !== false;
+                return `
+                    <div class="bg-[#0f1424] border ${inStock ? 'border-slate-800' : 'border-rose-900/40 opacity-60'} rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-sm transition-all">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-bold text-sm text-slate-100 truncate">${item.name}</h4>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded ${inStock ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800' : 'bg-rose-950/80 text-rose-300 border border-rose-800'}">
+                                    ${inStock ? 'IN STOCK' : 'OUT'}
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 truncate mt-0.5">${item.brand || item.category || 'Bar Supply'}</p>
+                        </div>
+                        <button onclick="toggleStock('${item.name.replace(/'/g, "\\'")}')" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all border ${
+                                inStock 
+                                ? 'bg-rose-950/50 hover:bg-rose-900 border-rose-700/50 text-rose-300' 
+                                : 'bg-emerald-950/50 hover:bg-emerald-900 border-emerald-700/50 text-emerald-300'
+                            }">
+                            ${inStock ? 'Mark Out' : 'Restock'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Conflict-Free Save Mechanism (Always gets newest SHA right before PUT)
+        async function commitInventoryToGitHub(updatedInventory, commitMessage) {
+            const token = localStorage.getItem('dampclam_pat');
+            const repoUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+
+            // 1. ALWAYS retrieve freshest SHA
+            const getRes = await fetch(`${repoUrl}?ref=${BRANCH}&_t=${Date.now()}`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                }
+            });
+
+            if (!getRes.ok) {
+                const err = await getRes.json();
+                throw new Error(err.message || 'Failed to query latest repository file state.');
+            }
+
+            const fileMeta = await getRes.json();
+            const freshSha = fileMeta.sha;
+
+            // 2. Safe Base64 Encoding for UTF-8
+            const utf8Bytes = new TextEncoder().encode(JSON.stringify(updatedInventory, null, 2));
+            const binaryStr = Array.from(utf8Bytes, byte => String.fromCharCode(byte)).join('');
+            const base64Content = btoa(binaryStr);
+
+            // 3. Dispatch the commit with verified SHA
+            const putRes = await fetch(repoUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: commitMessage,
+                    content: base64Content,
+                    sha: freshSha,
+                    branch: BRANCH
+                })
+            });
+
+            if (!putRes.ok) {
+                const err = await putRes.json();
+                throw new Error(err.message || 'GitHub commit rejected.');
+            }
+
+            return await putRes.json();
+        }
+
+        async function toggleStock(itemName) {
+            const target = inventory.find(i => i.name === itemName);
+            if (!target) return;
+
+            const previousState = target.in_stock;
+            target.in_stock = (target.in_stock === false) ? true : false;
+            
+            // Immediate UI update
+            renderItems();
+            showStatus(`Updating ${itemName}...`);
+
+            try {
+                await commitInventoryToGitHub(inventory, `Update stock status for ${itemName}`);
+                showStatus(`Saved: ${itemName} is now ${target.in_stock ? 'In Stock' : 'Out of Stock'}`);
+            } catch (err) {
+                // Revert on error
+                target.in_stock = previousState;
+                renderItems();
+                showStatus(`Failed: ${err.message}`, true);
+            }
+        }
+    </script>
 </body>
 </html>
