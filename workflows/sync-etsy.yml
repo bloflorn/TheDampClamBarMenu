@@ -2,8 +2,8 @@ name: Sync Etsy Merch to Site
 
 on:
   schedule:
-    - cron: '0 */1 * * *' # Runs every 1 hour
-  workflow_dispatch: # Allows manual one-click sync from GitHub Actions tab
+    - cron: '0 */12 * * *' # Automatically runs every 12 hours
+  workflow_dispatch: # Allows one-click manual sync anytime
 
 jobs:
   sync:
