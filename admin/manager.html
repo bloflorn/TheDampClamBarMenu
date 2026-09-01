@@ -13,7 +13,7 @@
             background-color: #0b0d17;
         }
         .font-mono {
-            font-family: 'JetBrains+Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
         }
     </style>
 </head>
@@ -34,6 +34,7 @@
                 </div>
             </div>
             <div class="flex items-center space-x-2">
+                <a href="/" class="px-2.5 py-1 text-xs rounded border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono flex items-center gap-1">Menu</a>
                 <button onclick="openTokenModal()" class="px-2.5 py-1 text-xs rounded border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-mono flex items-center gap-1">
                     <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                     <span>Token</span>
@@ -84,7 +85,7 @@
                 <p class="text-xs text-slate-400 mt-1">Requires a Personal Access Token (PAT) with <code class="text-fuchsia-400">repo</code> and <code class="text-fuchsia-400">workflow</code> permissions.</p>
             </div>
             <div>
-                <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" 
+                <input type="password" id="tokenInput" placeholder="github_pat_xxxx or ghp_xxxx" 
                     class="w-full bg-[#0b0d17] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-cyan-500">
             </div>
             <div class="flex justify-end gap-2 text-xs font-mono">
@@ -104,7 +105,6 @@
         let inventory = [];
         let activeCategory = 'all';
 
-        // Check Token & Init
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('dampclam_pat');
             if (!token) {
@@ -159,7 +159,11 @@
             renderItems();
         }
 
-        // Fresh SHA Fetch & Load
+        function getAuthHeader(token) {
+            if (!token) return '';
+            return token.startsWith('Bearer ') || token.startsWith('token ') ? token : `token ${token}`;
+        }
+
         async function loadInventory() {
             const token = localStorage.getItem('dampclam_pat');
             const container = document.getElementById('inventoryContainer');
@@ -167,23 +171,28 @@
 
             try {
                 const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}&_t=${Date.now()}`;
-                const res = await fetch(url, {
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
-                    }
-                });
+                const headers = {
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                };
+                if (token) {
+                    headers['Authorization'] = getAuthHeader(token);
+                }
+
+                const res = await fetch(url, { headers });
 
                 if (res.status === 401 || res.status === 403) {
-                    throw new Error('Access denied. Please verify your Personal Access Token.');
+                    throw new Error('Access denied. Please check your Personal Access Token in settings.');
                 }
                 if (!res.ok) {
-                    throw new Error(`GitHub API Error: ${res.statusText}`);
+                    throw new Error(`GitHub API Error: ${res.status} ${res.statusText}`);
                 }
 
                 const data = await res.json();
-                const decodedJson = decodeURIComponent(escape(atob(data.content)));
+                const binString = atob(data.content.replace(/\s/g, ''));
+                const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
+                const decodedJson = new TextDecoder().decode(bytes);
+                
                 inventory = JSON.parse(decodedJson);
                 renderItems();
                 showStatus('Inventory loaded successfully.');
@@ -234,15 +243,18 @@
             }).join('');
         }
 
-        // Conflict-Free Save Mechanism (Always gets newest SHA right before PUT)
         async function commitInventoryToGitHub(updatedInventory, commitMessage) {
             const token = localStorage.getItem('dampclam_pat');
+            if (!token) {
+                openTokenModal();
+                throw new Error('Personal Access Token required for saving changes.');
+            }
             const repoUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
-            // 1. ALWAYS retrieve freshest SHA
+            // 1. Get freshest SHA immediately before committing
             const getRes = await fetch(`${repoUrl}?ref=${BRANCH}&_t=${Date.now()}`, {
                 headers: {
-                    'Authorization': `token ${token}`,
+                    'Authorization': getAuthHeader(token),
                     'Accept': 'application/vnd.github.v3+json',
                     'Cache-Control': 'no-cache, no-store, must-revalidate'
                 }
@@ -256,16 +268,16 @@
             const fileMeta = await getRes.json();
             const freshSha = fileMeta.sha;
 
-            // 2. Safe Base64 Encoding for UTF-8
+            // 2. UTF-8 Safe Base64 Encoding
             const utf8Bytes = new TextEncoder().encode(JSON.stringify(updatedInventory, null, 2));
             const binaryStr = Array.from(utf8Bytes, byte => String.fromCharCode(byte)).join('');
             const base64Content = btoa(binaryStr);
 
-            // 3. Dispatch the commit with verified SHA
+            // 3. PUT Commit
             const putRes = await fetch(repoUrl, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${token}`,
+                    'Authorization': getAuthHeader(token),
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json'
                 },
@@ -292,7 +304,6 @@
             const previousState = target.in_stock;
             target.in_stock = (target.in_stock === false) ? true : false;
             
-            // Immediate UI update
             renderItems();
             showStatus(`Updating ${itemName}...`);
 
@@ -300,7 +311,6 @@
                 await commitInventoryToGitHub(inventory, `Update stock status for ${itemName}`);
                 showStatus(`Saved: ${itemName} is now ${target.in_stock ? 'In Stock' : 'Out of Stock'}`);
             } catch (err) {
-                // Revert on error
                 target.in_stock = previousState;
                 renderItems();
                 showStatus(`Failed: ${err.message}`, true);
