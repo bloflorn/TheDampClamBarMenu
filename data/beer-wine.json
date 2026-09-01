@@ -52,7 +52,11 @@
       "abv": "11.0% ABV",
       "origin": "Veneto, Italy",
       "details": "Effervescent green apple, fresh pear, and floral aromas.",
-      "inStock": false
+      "inStock": true,
+      "sizes": {
+        "Bottle": 1
+      },
+      "quantity": 1
     },
     {
       "name": "St. Julian Michigander Red Wine",
