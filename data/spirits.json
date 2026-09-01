@@ -46,14 +46,14 @@
         "dumpDate": "Dumped 7-29-24",
         "notes": "Sweet citrus, caramel, baking spices, creamy vanilla, and light tobacco."
       },
-      "inStock": false,
+      "inStock": true,
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
       "subCategory": "Single Barrel",
       "sizes": {
-        "750 mL": 0
+        "750 mL": 1
       },
-      "quantity": 0
+      "quantity": 1
     },
     {
       "size": "750 mL",
