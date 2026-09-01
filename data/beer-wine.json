@@ -135,6 +135,29 @@
         "mash": "Dalmatia, Croatia / Plavac Mali",
         "barrel": "Aged in large oak vats and stainless steel"
       }
+    },
+    {
+      "name": "Rodney Strong Sonoma County Cabernet Sauvignon 2019",
+      "category": "Wine",
+      "subCategory": "Cabernet Sauvignon",
+      "style": "Cabernet Sauvignon",
+      "proof": "14.5% ABV",
+      "abv": "14.5% ABV",
+      "size": "750 mL",
+      "sizes": {
+        "750 mL": 1
+      },
+      "quantity": 1,
+      "details": "Rodney Strong Vineyards, Est. 1959, Certified Sustainable Winery, Vintage 2019",
+      "origin": "Sonoma County, California",
+      "isSpecial": false,
+      "isGifted": false,
+      "inStock": true,
+      "extra": {
+        "notes": "Rich aromas of dark cherry, plum, and cassis with hints of cocoa, vanilla, and spice on a velvety finish.",
+        "mash": "Sonoma County, California",
+        "barrel": "Aged in French and American oak barrels"
+      }
     }
   ]
 }
