@@ -26,14 +26,14 @@
       "proof": "80 Proof (40% ABV)",
       "name": "Basil Hayden Kentucky Straight Bourbon",
       "isSpecial": false,
-      "inStock": false,
+      "inStock": true,
       "isGifted": false,
       "category": "Bourbon & American Whiskey",
       "subCategory": "Straight Bourbon",
       "sizes": {
-        "750 mL": 0
+        "750 mL": 1
       },
-      "quantity": 0
+      "quantity": 1
     },
     {
       "size": "750 mL",
