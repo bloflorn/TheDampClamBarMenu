@@ -7,7 +7,12 @@
       "abv": "6.8% ABV",
       "origin": "Michigan, USA",
       "details": "Crisp citrus notes with a balanced pine and hop bitterness.",
-      "inStock": true
+      "inStock": true,
+      "sizes": {
+        "Can": 6
+      },
+      "quantity": 6,
+      "size": "Can"
     },
     {
       "name": "Classic Craft Lager",
