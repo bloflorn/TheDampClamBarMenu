@@ -1,373 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Damp Clam | Speakeasy Cocktail Menu</title>
-    <meta name="theme-color" content="#0a0a0c">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0a0c;
-            --bg-card: #121318;
-            --border-color: #262836;
-            --accent-gold: #d4af37;
-            --accent-gold-dim: rgba(212, 175, 55, 0.15);
-            --text-main: #e2e8f0;
-            --text-muted: #8e95a5;
-            --status-green: #10b981;
-            --status-red: #ef4444;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damp Clam — Home</title>
+  <!-- Website Favicon -->
+<link rel="icon" type="image/jpeg" href="logo.jpg" />
+<link rel="apple-touch-icon" href="logo.jpg" />  
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d2822 0%, #03140f 100%);
+      --card-bg: rgba(2, 22, 17, 0.75);
+      --neon-cyan: #00f7ff;
+      --neon-green: #39ff14;
+      --neon-purple: #c042ff;
+      --neon-pink: #ff2a8d;
+      --neon-gold: #ffd700;
+      --gold-amber: #e5b567;
+      --off-white: #f8fafc;
+      --border: #16382c;
+      --font: "Georgia", Times, serif;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+      font-family: var(--font);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--off-white);
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
 
-        .font-speakeasy {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 0.08em;
-        }
+    .container { max-width: 1000px; margin: 0 auto; }
 
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
+    /* Top Global Navigation Bar */
+    nav.site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
 
-        /* Header */
-        header {
-            background: linear-gradient(180deg, #14151e 0%, rgba(10, 10, 12, 0.95) 100%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
-            padding: 20px 16px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(12px);
-        }
+    .nav-link {
+      text-decoration: none;
+      color: var(--gold-amber);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
 
-        .brand-title {
-            color: var(--accent-gold);
-            font-size: 1.4rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            text-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
-        }
+    .nav-link:hover, .nav-link.active {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 247, 255, 0.35);
+      background: rgba(0, 247, 255, 0.08);
+    }
 
-        .brand-subtitle {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
+    /* Header */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
 
-        /* Container */
-        main {
-            flex: 1;
-            max-width: 720px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+    .logo-circle-container {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      padding: 3px;
+      background: radial-gradient(circle, rgba(0, 247, 255, 0.25) 0%, transparent 70%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan), 0 0 25px rgba(0, 247, 255, 0.45);
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
 
-        /* Search & Filter Bar */
-        .search-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    .logo-circle-container img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;
+    }
 
-        .search-input {
-            width: 100%;
-            background: #0a0a0c;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-        .search-input:focus {
-            border-color: var(--accent-gold);
-        }
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #fff, 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-purple);
+    }
 
-        .category-nav {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-        }
-        .category-nav::-webkit-scrollbar { display: none; }
+    .header-subtext {
+      font-size: 0.95rem;
+      color: var(--gold-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
 
-        .cat-chip {
-            background: #181922;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-family: 'JetBrains Mono', monospace;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+    /* Navigation Hub Cards */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
 
-        .cat-chip.active {
-            background: var(--accent-gold-dim);
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-            font-weight: 600;
-        }
+    .hub-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
 
-        /* Spirits List */
-        .spirits-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    .hub-card:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+      transform: translateY(-4px);
+    }
 
-        .spirit-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            transition: border-color 0.2s;
-        }
+    .hub-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
 
-        .spirit-card.out-of-stock {
-            opacity: 0.45;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
+    .hub-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
-        .spirit-info {
-            flex: 1;
-            min-width: 0;
-        }
+    .hub-desc {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
 
-        .spirit-name {
-            font-weight: 600;
-            font-size: 1rem;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .hub-btn {
+      align-self: center;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-amber);
+      border: 1px solid var(--gold-amber);
+      padding: 0.4rem 1.25rem;
+      border-radius: 20px;
+      background: rgba(229, 181, 103, 0.08);
+      transition: all 0.2s ease;
+    }
 
-        .spirit-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .spirit-tag {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .status-indicator {
-            font-size: 0.65rem;
-            font-family: 'JetBrains Mono', monospace;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .status-indicator.in {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--status-green);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .status-indicator.out {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--status-red);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            margin-top: auto;
-            padding: 28px 16px 20px;
-            border-top: 1px solid rgba(38, 40, 54, 0.6);
-            text-align: center;
-        }
-
-        .footer-staff-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: #64748b;
-            text-decoration: none;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            opacity: 0.6;
-            transition: all 0.2s;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .footer-staff-link:hover, .footer-staff-link:active {
-            opacity: 1;
-            color: var(--accent-gold);
-        }
-    </style>
+    .hub-card:hover .hub-btn {
+      color: #fff;
+      border-color: var(--neon-cyan);
+      background: rgba(0, 247, 255, 0.2);
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="spirits.html" class="nav-link">Spirits & Whiskeys</a>
+      <a href="cocktails.html" class="nav-link">Cocktail Menu</a>
+      <a href="beer-wine.html" class="nav-link">Beer & Wine</a>
+      <a href="merch.html" class="nav-link">Merch</a>
+    </nav>
 
-    <!-- Header -->
     <header>
-        <h1 class="brand-title font-speakeasy">The Damp Clam</h1>
-        <p class="brand-subtitle font-mono">Curated Spirits & Cocktails</p>
+      <div class="logo-circle-container">
+        <img src="logo.jpg" alt="The Damp Clam Logo" />
+      </div>
+      <h1>The Damp Clam</h1>
+      <div class="header-subtext">Speakeasy & Lounge</div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <div class="search-box">
-            <input type="text" id="menuSearch" class="search-input" placeholder="Search spirits, cocktails, brands..." oninput="renderMenu()">
-            <div class="category-nav" id="categoryNav">
-                <button class="cat-chip active" onclick="filterCategory('all')">ALL</button>
-            </div>
+    <main class="hub-grid">
+      <a href="spirits.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🥃</div>
+          <div class="hub-title">Spirits & Whiskeys</div>
+          <div class="hub-desc">Explore single barrels, rare Scotch regions, custom stave recipes, and allocated reserve pours.</div>
         </div>
+        <span class="hub-btn">View Spirits</span>
+      </a>
 
-        <div id="menuContainer" class="spirits-grid">
-            <div style="text-align:center; padding: 40px 0; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
-                Pouring spirits menu...
-            </div>
+      <a href="cocktails.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🍸</div>
+          <div class="hub-title">Craft Cocktails</div>
+          <div class="hub-desc">House signatures, speakeasy classics, seasonal specials, and zero-proof mocktails.</div>
         </div>
+        <span class="hub-btn">View Cocktails</span>
+      </a>
+
+      <a href="beer-wine.html" class="hub-card">
+        <div>
+          <div class="hub-icon">🍺</div>
+          <div class="hub-title">Beer & Wine</div>
+          <div class="hub-desc">Craft drafts, crisp lagers, IPAs, ciders, and rotating wine selections.</div>
+        </div>
+        <span class="hub-btn">View Taps & Cans</span>
+      </a>
     </main>
-
-    <!-- Footer with Staff Portal Access -->
-    <footer>
-        <a href="manager.html" class="footer-staff-link">
-            <span>🔒 Staff Portal</span>
-        </a>
-    </footer>
-
-    <script>
-        let menuItems = [];
-        let selectedCategory = 'all';
-
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchMenu();
-        });
-
-        async function fetchMenu() {
-            const container = document.getElementById('menuContainer');
-            try {
-                const res = await fetch(`./spirits.json?_t=${Date.now()}`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                
-                const data = await res.json();
-                normalizeMenuData(data);
-                renderMenu();
-            } catch (err) {
-                container.innerHTML = `
-                    <div style="text-align:center; padding: 30px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
-                        Menu temporarily offline. Please ask your bartender.
-                    </div>
-                `;
-            }
-        }
-
-        function normalizeMenuData(data) {
-            menuItems = [];
-            if (Array.isArray(data)) {
-                menuItems = data;
-            } else if (typeof data === 'object' && data !== null) {
-                Object.keys(data).forEach(cat => {
-                    if (Array.isArray(data[cat])) {
-                        data[cat].forEach(item => {
-                            menuItems.push({
-                                ...item,
-                                category: item.category || cat
-                            });
-                        });
-                    }
-                });
-            }
-            buildCategories();
-        }
-
-        function buildCategories() {
-            const categories = ['all', ...new Set(menuItems.map(i => i.category || 'Other').filter(Boolean))];
-            const nav = document.getElementById('categoryNav');
-            nav.innerHTML = categories.map(cat => `
-                <button class="cat-chip ${cat === selectedCategory ? 'active' : ''}" onclick="filterCategory('${cat}')">
-                    ${cat.toUpperCase()}
-                </button>
-            `).join('');
-        }
-
-        function filterCategory(cat) {
-            selectedCategory = cat;
-            buildCategories();
-            renderMenu();
-        }
-
-        function renderMenu() {
-            const container = document.getElementById('menuContainer');
-            const search = document.getElementById('menuSearch').value.toLowerCase();
-
-            const filtered = menuItems.filter(item => {
-                const cat = (item.category || 'Other').toLowerCase();
-                const matchCat = (selectedCategory === 'all') || (cat === selectedCategory.toLowerCase());
-                const matchSearch = (item.name && item.name.toLowerCase().includes(search)) ||
-                                    (item.brand && item.brand.toLowerCase().includes(search)) ||
-                                    (item.type && item.type.toLowerCase().includes(search));
-                return matchCat && matchSearch;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding: 40px 0; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">No selections available.</div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(item => {
-                const inStock = item.in_stock !== false;
-                const desc = item.brand || item.type || item.category || 'House Selection';
-
-                return `
-                    <div class="spirit-card ${inStock ? '' : 'out-of-stock'}">
-                        <div class="spirit-info">
-                            <div class="spirit-name">${item.name || 'Unnamed Bottle'}</div>
-                            <div class="spirit-meta">
-                                <span class="spirit-tag">${desc}</span>
-                            </div>
-                        </div>
-                        <span class="status-indicator ${inStock ? 'in' : 'out'}">
-                            ${inStock ? 'Available' : 'Out'}
-                        </span>
-                    </div>
-                `;
-            }).join('');
-        }
-    </script>
+  </div>
+</body>
+<!-- Footer / Staff Quick Link -->
+<div style="margin-top: 32px; padding: 16px 0; text-align: center; font-family: monospace; font-size: 11px; opacity: 0.45;">
+        <a href="admin/manager.html" style="color: #94a3b8; text-decoration: none;">🔒 Staff Portal</a>
+    </div>
 </body>
 </html>
